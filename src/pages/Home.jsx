@@ -5,6 +5,8 @@ import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
   ArrowRight, Zap, Smartphone, Clock, ChevronRight
 } from 'lucide-react'
+import { SplineScene } from '@/components/ui/splite'
+import { Spotlight } from '@/components/ui/spotlight'
 
 const heroWords = ['We', 'Build', 'Websites', 'That', 'Win', 'Clients.']
 
@@ -88,121 +90,155 @@ export default function Home() {
           pointerEvents: 'none',
         }} />
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', position: 'relative' }}>
-          {/* Eyebrow */}
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          width: '100%',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '48px',
+          flexWrap: 'wrap',
+        }}>
+          {/* Left: text content */}
+          <div style={{ flex: '1 1 380px', minWidth: 0 }}>
+            {/* Eyebrow */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(59,130,246,0.08)',
+                border: '1px solid rgba(59,130,246,0.2)',
+                borderRadius: '100px',
+                padding: '6px 14px',
+                marginBottom: '32px',
+              }}
+            >
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3B82F6', display: 'inline-block' }} />
+              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#3B82F6', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>
+                Johannesburg Web Design Studio
+              </span>
+            </motion.div>
+
+            {/* Hero headline */}
+            <h1 style={{
+              fontFamily: 'Syne, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(2.4rem, 6vw, 5rem)',
+              lineHeight: 1.0,
+              letterSpacing: '-0.03em',
+              color: '#F0F0F0',
+              marginBottom: '28px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.22em',
+            }}>
+              {heroWords.map((word, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ display: 'inline-block', color: i === 5 ? '#3B82F6' : '#F0F0F0' }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h1>
+
+            {/* Subheading */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.9 }}
+              style={{
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: 'clamp(1rem, 2vw, 1.15rem)',
+                color: '#A0A0A0',
+                maxWidth: '480px',
+                lineHeight: 1.65,
+                marginBottom: '44px',
+              }}
+            >
+              Athea Digital crafts premium websites for Johannesburg businesses — from salons to trades. We build it first. You love it, then you pay.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.1 }}
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}
+            >
+              <Link to="/portfolio" style={{ textDecoration: 'none' }}>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700,
+                    fontSize: '0.95rem',
+                    background: '#3B82F6',
+                    color: '#0A0A0A',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '14px 28px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 0 24px rgba(59,130,246,0.3)',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  See Our Work <ArrowRight size={16} />
+                </motion.button>
+              </Link>
+              <Link to="/contact" style={{ textDecoration: 'none' }}>
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700,
+                    fontSize: '0.95rem',
+                    background: 'transparent',
+                    color: '#F0F0F0',
+                    border: '1px solid rgba(240,240,240,0.15)',
+                    borderRadius: '8px',
+                    padding: '14px 28px',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  Get In Touch
+                </motion.button>
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Right: Spline 3D scene */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'rgba(59,130,246,0.08)',
-              border: '1px solid rgba(59,130,246,0.2)',
-              borderRadius: '100px',
-              padding: '6px 14px',
-              marginBottom: '32px',
+              flex: '1 1 400px',
+              height: '520px',
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: '20px',
+              border: '1px solid rgba(255,255,255,0.06)',
+              background: 'rgba(0,0,0,0.4)',
             }}
           >
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3B82F6', display: 'inline-block' }} />
-            <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#3B82F6', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>
-              Johannesburg Web Design Studio
-            </span>
-          </motion.div>
-
-          {/* Hero headline */}
-          <h1 style={{
-            fontFamily: 'Syne, sans-serif',
-            fontWeight: 800,
-            fontSize: 'clamp(3rem, 8vw, 6.5rem)',
-            lineHeight: 1.0,
-            letterSpacing: '-0.03em',
-            color: '#F0F0F0',
-            marginBottom: '28px',
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '0.22em',
-          }}>
-            {heroWords.map((word, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                style={{ display: 'inline-block', color: i === 5 ? '#3B82F6' : '#F0F0F0' }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-
-          {/* Subheading */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.9 }}
-            style={{
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
-              color: '#A0A0A0',
-              maxWidth: '560px',
-              lineHeight: 1.65,
-              marginBottom: '44px',
-            }}
-          >
-            Athea Digital crafts premium websites for Johannesburg businesses — from salons to trades. We build it first. You love it, then you pay.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.1 }}
-            style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}
-          >
-            <Link to="/portfolio" style={{ textDecoration: 'none' }}>
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 700,
-                  fontSize: '0.95rem',
-                  background: '#3B82F6',
-                  color: '#0A0A0A',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '14px 28px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  boxShadow: '0 0 24px rgba(59,130,246,0.3)',
-                  letterSpacing: '0.01em',
-                }}
-              >
-                See Our Work <ArrowRight size={16} />
-              </motion.button>
-            </Link>
-            <Link to="/contact" style={{ textDecoration: 'none' }}>
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 700,
-                  fontSize: '0.95rem',
-                  background: 'transparent',
-                  color: '#F0F0F0',
-                  border: '1px solid rgba(240,240,240,0.15)',
-                  borderRadius: '8px',
-                  padding: '14px 28px',
-                  letterSpacing: '0.01em',
-                }}
-              >
-                Get In Touch
-              </motion.button>
-            </Link>
+            <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+            <SplineScene
+              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+              className="w-full h-full"
+            />
           </motion.div>
         </div>
       </section>
