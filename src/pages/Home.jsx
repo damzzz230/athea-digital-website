@@ -1,12 +1,10 @@
-import { useRef } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
   ArrowRight, Zap, Smartphone, Clock, ChevronRight
 } from 'lucide-react'
-import { SplineScene } from '@/components/ui/splite'
-import { Spotlight } from '@/components/ui/spotlight'
 
 const heroWords = ['We', 'Build', 'Websites', 'That', 'Win', 'Clients.']
 
@@ -43,6 +41,126 @@ const portfolioPreviews = [
   { name: 'Iron & Ink Tattoo', niche: 'Tattoo Studio', gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1a1a 100%)' },
 ]
 
+function Logo3D() {
+  const containerRef = useRef(null)
+  const [isHovered, setIsHovered] = useState(false)
+
+  const rawX = useMotionValue(0)
+  const rawY = useMotionValue(0)
+
+  const springConfig = { stiffness: 150, damping: 20, mass: 0.5 }
+  const x = useSpring(rawX, springConfig)
+  const y = useSpring(rawY, springConfig)
+
+  const rotateX = useTransform(y, [-0.5, 0.5], ['12deg', '-12deg'])
+  const rotateY = useTransform(x, [-0.5, 0.5], ['-12deg', '12deg'])
+  const glowX = useTransform(x, [-0.5, 0.5], ['35%', '65%'])
+  const glowY = useTransform(y, [-0.5, 0.5], ['35%', '65%'])
+
+  const handleMouseMove = useCallback((e) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    rawX.set((e.clientX - rect.left) / rect.width - 0.5)
+    rawY.set((e.clientY - rect.top) / rect.height - 0.5)
+  }, [rawX, rawY])
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false)
+    rawX.set(0)
+    rawY.set(0)
+  }, [rawX, rawY])
+
+  return (
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        flex: '1 1 400px',
+        height: '520px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        perspective: '900px',
+      }}
+    >
+      {/* Animated glow that tracks the mouse */}
+      <motion.div
+        style={{
+          position: 'absolute',
+          width: '420px',
+          height: '420px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(59,130,246,0.35) 0%, rgba(59,130,246,0.12) 40%, transparent 70%)',
+          filter: 'blur(40px)',
+          left: glowX,
+          top: glowY,
+          transform: 'translate(-50%, -50%)',
+          pointerEvents: 'none',
+          transition: 'opacity 0.4s ease',
+          opacity: isHovered ? 1 : 0.6,
+        }}
+      />
+      {/* Outer static glow ring */}
+      <div style={{
+        position: 'absolute',
+        width: '340px',
+        height: '340px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 65%)',
+        filter: 'blur(24px)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* 3D tilting logo */}
+      <motion.div
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: 'preserve-3d',
+          willChange: 'transform',
+        }}
+        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, scale: 0.92 }}
+        transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {/* Drop shadow layer that moves opposite to tilt for depth */}
+        <motion.div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '16px',
+            background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.4) 0%, transparent 70%)',
+            filter: 'blur(32px)',
+            transform: 'translateZ(-60px) scale(0.85)',
+            opacity: isHovered ? 0.9 : 0.5,
+            transition: 'opacity 0.4s ease',
+          }}
+        />
+        <img
+          src="/images/Athea_Digital_3D_Logo.png"
+          alt="Athea Digital"
+          draggable={false}
+          style={{
+            width: '560px',
+            maxWidth: '90vw',
+            height: 'auto',
+            display: 'block',
+            userSelect: 'none',
+            transform: 'rotate(90deg)',
+            filter: isHovered
+              ? 'drop-shadow(0 0 32px rgba(59,130,246,0.6)) drop-shadow(0 0 8px rgba(59,130,246,0.4))'
+              : 'drop-shadow(0 0 20px rgba(59,130,246,0.4)) drop-shadow(0 0 6px rgba(59,130,246,0.25))',
+            transition: 'filter 0.4s ease',
+          }}
+        />
+      </motion.div>
+    </div>
+  )
+}
+
 function FadeUp({ children, delay = 0 }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
@@ -66,7 +184,7 @@ export default function Home() {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        padding: '120px 24px 80px',
+        padding: '140px 24px 80px',
         position: 'relative',
         overflow: 'hidden',
       }}>
@@ -219,27 +337,8 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Right: Spline 3D scene */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              flex: '1 1 400px',
-              height: '520px',
-              position: 'relative',
-              overflow: 'hidden',
-              borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.06)',
-              background: 'rgba(0,0,0,0.4)',
-            }}
-          >
-            <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
-            <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-              className="w-full h-full"
-            />
-          </motion.div>
+          {/* Right: interactive 3D logo */}
+          <Logo3D />
         </div>
       </section>
 
@@ -278,15 +377,17 @@ export default function Home() {
                   flexDirection: 'column',
                   alignItems: 'center',
                   gap: '10px',
-                  transition: 'border-color 0.25s ease, background 0.25s ease, transform 0.25s ease',
+                  transition: 'border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
                 }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'
+                    e.currentTarget.style.borderColor = '#3B82F6'
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
                     e.currentTarget.style.background = 'rgba(59,130,246,0.05)'
                     e.currentTarget.style.transform = 'translateY(-3px)'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.boxShadow = 'none'
                     e.currentTarget.style.background = '#111111'
                     e.currentTarget.style.transform = 'translateY(0)'
                   }}
@@ -333,8 +434,8 @@ export default function Home() {
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.transform = 'translateY(-6px)'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.1)'
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.2)'
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+                    e.currentTarget.style.borderColor = '#3B82F6'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.transform = 'translateY(0)'

@@ -167,8 +167,8 @@ export default function Services() {
                     transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.25)'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.1)'
+                    e.currentTarget.style.borderColor = '#3B82F6'
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'

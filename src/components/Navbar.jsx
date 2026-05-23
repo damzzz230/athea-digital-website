@@ -46,14 +46,14 @@ export default function Navbar() {
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '68px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '88px' }}>
           {/* Logo */}
           <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
             <img
               src="/images/Athea_Digital_logo_white_transparent.png"
               alt="Athea Digital"
               className="navbar-logo"
-              style={{ height: '52px', width: 'auto', display: 'block', minWidth: '120px' }}
+              style={{ height: '90px', width: 'auto', display: 'block', minWidth: '160px' }}
             />
           </Link>
 
