@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { motion, useInView, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
 import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
   ArrowRight, Zap, Smartphone, Clock, ChevronRight, ExternalLink
@@ -40,6 +40,44 @@ const portfolioPreviews = [
   { name: 'Arc Energy JHB', niche: 'Electrical', gradient: 'linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1f3a1f 100%)', url: 'https://www.arcenergy.co.za' },
   // { name: 'Iron & Ink Tattoo', niche: 'Tattoo Studio', gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1a1a 100%)' },
 ]
+
+const nicheContainerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+}
+
+const nicheCardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: 'spring', stiffness: 260, damping: 20 },
+  },
+}
+
+function HeroWord({ word, index, total, scrollYProgress }) {
+  const start = (index / total) * 0.6
+  const end = start + 0.15
+  const isBlue = index === total - 1
+
+  const color = useTransform(
+    scrollYProgress,
+    [start, end],
+    isBlue ? ['#3B82F6', '#3B82F6'] : ['#F0F0F0', 'rgba(240,240,240,0.15)']
+  )
+
+  return (
+    <motion.span
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.2 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      style={{ display: 'inline-block', color }}
+    >
+      {word}
+    </motion.span>
+  )
+}
 
 function Logo3D() {
   const containerRef = useRef(null)
@@ -167,8 +205,8 @@ function FadeUp({ children, delay = 0 }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+      animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
       transition={{ duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
@@ -177,10 +215,63 @@ function FadeUp({ children, delay = 0 }) {
 }
 
 export default function Home() {
+  const heroRef = useRef(null)
+  const nicheGridRef = useRef(null)
+  const whyAtheaRef = useRef(null)
+  const portfolioRef = useRef(null)
+  const ctaRef = useRef(null)
+
+  const heroInView = useInView(heroRef, { once: false })
+  const nicheGridInView = useInView(nicheGridRef, { once: true, margin: '-60px' })
+  const whyAtheaInView = useInView(whyAtheaRef, { once: false })
+  const portfolioInView = useInView(portfolioRef, { once: false })
+  const ctaInView = useInView(ctaRef, { once: false })
+
+  const sectionNum = ctaInView ? 3 : portfolioInView ? 2 : whyAtheaInView ? 1 : 0
+  const showCounter = !heroInView && sectionNum > 0
+
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  })
+
   return (
     <div style={{ background: '#0A0A0A' }}>
+
+      {/* ── Fixed section counter ── */}
+      <motion.div
+        animate={{ opacity: showCounter ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+        style={{
+          position: 'fixed',
+          right: '24px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 100,
+          pointerEvents: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '10px',
+        }}
+      >
+        <div style={{
+          writingMode: 'vertical-rl',
+          transform: 'rotate(180deg)',
+          fontFamily: 'Syne, sans-serif',
+          fontSize: '0.62rem',
+          fontWeight: 600,
+          letterSpacing: '0.14em',
+          color: '#A0A0A0',
+          userSelect: 'none',
+        }}>
+          {String(sectionNum).padStart(2, '0')} / 03
+        </div>
+        <div style={{ width: '1px', height: '28px', background: 'rgba(160,160,160,0.2)' }} />
+      </motion.div>
+
       {/* Hero */}
-      <section style={{
+      <section ref={heroRef} style={{
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
@@ -256,15 +347,13 @@ export default function Home() {
               gap: '0.22em',
             }}>
               {heroWords.map((word, i) => (
-                <motion.span
+                <HeroWord
                   key={i}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ display: 'inline-block', color: i === 5 ? '#3B82F6' : '#F0F0F0' }}
-                >
-                  {word}
-                </motion.span>
+                  word={word}
+                  index={i}
+                  total={heroWords.length}
+                  scrollYProgress={scrollYProgress}
+                />
               ))}
             </h1>
 
@@ -285,56 +374,68 @@ export default function Home() {
               Athea Digital crafts premium websites for Johannesburg businesses — from salons to trades. We build it first. You love it, then you pay.
             </motion.p>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.1 }}
-              style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}
-            >
-              <Link to="/portfolio" style={{ textDecoration: 'none' }}>
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  style={{
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: 700,
-                    fontSize: '0.95rem',
-                    background: '#3B82F6',
-                    color: '#0A0A0A',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '14px 28px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    boxShadow: '0 0 24px rgba(59,130,246,0.3)',
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  See Our Work <ArrowRight size={16} />
-                </motion.button>
-              </Link>
-              <Link to="/contact" style={{ textDecoration: 'none' }}>
-                <motion.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  style={{
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: 700,
-                    fontSize: '0.95rem',
-                    background: 'transparent',
-                    color: '#F0F0F0',
-                    border: '1px solid rgba(240,240,240,0.15)',
-                    borderRadius: '8px',
-                    padding: '14px 28px',
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  Get In Touch
-                </motion.button>
-              </Link>
-            </motion.div>
+{/* CTAs */}
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6, delay: 1.1 }}
+  style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}
+>
+  <Link to="/contact" style={{ textDecoration: 'none' }}>
+    <motion.button
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.97 }}
+      style={{
+        fontFamily: 'Syne, sans-serif',
+        fontWeight: 700,
+        fontSize: '0.95rem',
+        background: '#3B82F6',
+        color: '#0A0A0A',
+        border: 'none',
+        borderRadius: '8px',
+        padding: '14px 28px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        boxShadow: '0 0 24px rgba(59,130,246,0.35)',
+        letterSpacing: '0.01em',
+      }}
+    >
+      Get In Touch <ArrowRight size={16} />
+    </motion.button>
+  </Link>
+  <Link to="/portfolio" style={{ textDecoration: 'none' }}>
+    <motion.button
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.97 }}
+      style={{
+        fontFamily: 'Syne, sans-serif',
+        fontWeight: 600,
+        fontSize: '0.95rem',
+        background: 'transparent',
+        color: '#F0F0F0',
+        border: '1px solid rgba(240,240,240,0.15)',
+        borderRadius: '8px',
+        padding: '14px 28px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        letterSpacing: '0.01em',
+        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = '#3B82F6'
+        e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.25)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = 'rgba(240,240,240,0.15)'
+        e.currentTarget.style.boxShadow = 'none'
+      }}
+    >
+      See Our Work <ArrowRight size={16} />
+    </motion.button>
+  </Link>
+</motion.div>
           </div>
 
           {/* Right: interactive 3D logo */}
@@ -361,13 +462,19 @@ export default function Home() {
               Industries We Serve
             </p>
           </FadeUp>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-            gap: '12px',
-          }}>
-            {niches.map((n, i) => (
-              <FadeUp key={n.label} delay={i * 0.07}>
+          <motion.div
+            ref={nicheGridRef}
+            variants={nicheContainerVariants}
+            initial="hidden"
+            animate={nicheGridInView ? 'visible' : 'hidden'}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+              gap: '12px',
+            }}
+          >
+            {niches.map((n) => (
+              <motion.div key={n.label} variants={nicheCardVariants}>
                 <div style={{
                   background: '#111111',
                   border: '1px solid rgba(255,255,255,0.06)',
@@ -397,14 +504,14 @@ export default function Home() {
                     {n.label}
                   </span>
                 </div>
-              </FadeUp>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Why Athea */}
-      <section style={{ padding: '80px 24px', background: '#0D0D0D' }}>
+      <section ref={whyAtheaRef} style={{ padding: '80px 24px', background: '#0D0D0D' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{ textAlign: 'center', marginBottom: '60px' }}>
@@ -469,7 +576,7 @@ export default function Home() {
       </section>
 
       {/* Portfolio preview */}
-      <section style={{ padding: '80px 24px' }}>
+      <section ref={portfolioRef} style={{ padding: '80px 24px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px', flexWrap: 'wrap', gap: '16px' }}>
@@ -583,7 +690,7 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section style={{ padding: '80px 24px' }}>
+      <section ref={ctaRef} style={{ padding: '80px 24px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{
@@ -665,6 +772,15 @@ export default function Home() {
                       border: '1px solid rgba(240,240,240,0.15)',
                       borderRadius: '8px',
                       padding: '14px 28px',
+                      transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = '#3B82F6'
+                      e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.25)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = 'rgba(240,240,240,0.15)'
+                      e.currentTarget.style.boxShadow = 'none'
                     }}
                   >
                     Send a Message

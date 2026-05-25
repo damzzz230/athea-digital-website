@@ -132,6 +132,9 @@ function FAQ({ item }) {
 }
 
 export default function Pricing() {
+  const [selectedTier, setSelectedTier] = useState(null)
+  const [hoveredTier, setHoveredTier] = useState(null)
+
   return (
     <div style={{ background: '#0A0A0A' }}>
       {/* Hero */}
@@ -192,30 +195,37 @@ export default function Pricing() {
             gap: '24px',
             alignItems: 'start',
           }}>
-            {tiers.map((t, i) => (
+            {tiers.map((t, i) => {
+              const isSelected = selectedTier === t.name
+              const isHovered = hoveredTier === t.name
+              const isActive = isSelected || isHovered
+              const anotherSelected = selectedTier !== null && !isSelected
+
+              return (
               <FadeUp key={t.name} delay={i * 0.1}>
                 <div
-                  className={t.recommended ? 'pulse-border' : ''}
+                  className={t.recommended && !anotherSelected ? 'pulse-border' : ''}
                   style={{
-                    background: t.recommended ? '#111827' : '#111111',
-                    border: t.recommended ? '2px solid rgba(59,130,246,0.6)' : '1px solid rgba(255,255,255,0.06)',
+                    background: t.recommended
+                      ? (anotherSelected ? '#0d1117' : '#111827')
+                      : '#111111',
+                    border: t.recommended
+                      ? `2px solid ${anotherSelected ? 'rgba(59,130,246,0.15)' : 'rgba(59,130,246,0.6)'}`
+                      : `1px solid ${isActive ? '#3B82F6' : 'rgba(255,255,255,0.06)'}`,
                     borderRadius: '20px',
                     padding: '36px',
                     position: 'relative',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    cursor: 'pointer',
+                    transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+                    boxShadow: isActive
+                      ? '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+                      : 'none',
+                    opacity: anotherSelected && !isActive ? 0.5 : 1,
+                    transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, background 0.3s ease',
                   }}
-                  onMouseEnter={e => {
-                    if (!t.recommended) {
-                      e.currentTarget.style.borderColor = 'rgba(59,130,246,0.2)'
-                      e.currentTarget.style.transform = 'translateY(-4px)'
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!t.recommended) {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                      e.currentTarget.style.transform = 'translateY(0)'
-                    }
-                  }}
+                  onMouseEnter={() => setHoveredTier(t.name)}
+                  onMouseLeave={() => setHoveredTier(null)}
+                  onClick={() => setSelectedTier(prev => prev === t.name ? null : t.name)}
                 >
                   {t.recommended && (
                     <div style={{
@@ -291,7 +301,8 @@ export default function Pricing() {
                   </Link>
                 </div>
               </FadeUp>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>

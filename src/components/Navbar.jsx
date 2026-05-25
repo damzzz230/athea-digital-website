@@ -15,6 +15,7 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [hoveredLink, setHoveredLink] = useState(null)
   const location = useLocation()
 
   useEffect(() => {
@@ -62,6 +63,7 @@ export default function Navbar() {
             className="hidden-mobile">
             {links.map((l) => {
               const active = location.pathname === l.to
+              const hovered = hoveredLink === l.to
               return (
                 <Link
                   key={l.to}
@@ -71,26 +73,45 @@ export default function Navbar() {
                     fontSize: '0.875rem',
                     fontWeight: 500,
                     letterSpacing: '0.02em',
-                    color: active ? '#F0F0F0' : '#A0A0A0',
+                    color: active || hovered ? '#F0F0F0' : '#A0A0A0',
                     textDecoration: 'none',
                     transition: 'color 0.2s ease',
                     position: 'relative',
+                    paddingBottom: '4px',
                   }}
-                  onMouseEnter={e => { if (!active) e.target.style.color = '#F0F0F0' }}
-                  onMouseLeave={e => { if (!active) e.target.style.color = '#A0A0A0' }}
+                  onMouseEnter={() => setHoveredLink(l.to)}
+                  onMouseLeave={() => setHoveredLink(null)}
                 >
                   {l.label}
+                  {/* Active indicator — slides between links on navigation */}
                   {active && (
                     <motion.span
                       layoutId="nav-indicator"
                       style={{
                         position: 'absolute',
-                        bottom: '-4px',
+                        bottom: 0,
                         left: 0,
                         right: 0,
                         height: '2px',
                         background: '#3B82F6',
                         borderRadius: '1px',
+                      }}
+                    />
+                  )}
+                  {/* Hover underline — fills left to right */}
+                  {!active && (
+                    <motion.span
+                      animate={{ scaleX: hovered ? 1 : 0, opacity: hovered ? 1 : 0 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '2px',
+                        background: '#3B82F6',
+                        borderRadius: '1px',
+                        originX: 0,
                       }}
                     />
                   )}

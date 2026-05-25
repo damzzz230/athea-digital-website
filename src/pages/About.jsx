@@ -45,7 +45,7 @@ const team = [
     color: '#1e3a5f',
   },
   {
-    name: 'Dasendran',
+    name: 'Dasendhran Subramoney',
     title: 'Co-Founder & Lead Developer',
     bio: 'Dasendran drives the design direction and client experience. His eye for detail ensures every pixel earns its place on the screen.',
     initials: 'DS',
@@ -130,15 +130,17 @@ export default function About() {
                   border: '1px solid rgba(255,255,255,0.06)',
                   borderRadius: '20px',
                   padding: '36px',
-                  transition: 'border-color 0.3s ease, transform 0.3s ease',
+                  transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
                 }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.2)'
-                    e.currentTarget.style.transform = 'translateY(-4px)'
+                    e.currentTarget.style.borderColor = '#3B82F6'
+                    e.currentTarget.style.transform = 'translateY(-6px)'
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
                     e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
                   {/* Avatar */}
@@ -260,8 +262,8 @@ export default function About() {
                 }}
                   onMouseEnter={e => {
                     e.currentTarget.style.transform = 'translateY(-6px)'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.08)'
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.2)'
+                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+                    e.currentTarget.style.borderColor = '#3B82F6'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.transform = 'translateY(0)'
