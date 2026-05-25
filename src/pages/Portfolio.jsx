@@ -18,60 +18,61 @@ function FadeUp({ children, delay = 0 }) {
 }
 
 const projects = [
-  {
-    id: 1,
-    name: 'Luxe Hair Studio',
-    niche: 'Salons',
-    tag: 'Hair Salon',
-    description: 'A sleek booking-forward site for a premium Joburg salon. Gallery-led with WhatsApp booking integration.',
-    gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)',
-    accent: '#3B82F6',
-  },
+  // {
+  //   id: 1,
+  //   name: 'Luxe Hair Studio',
+  //   niche: 'Salons',
+  //   tag: 'Hair Salon',
+  //   description: 'A sleek booking-forward site for a premium Joburg salon. Gallery-led with WhatsApp booking integration.',
+  //   gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)',
+  //   accent: '#3B82F6',
+  // },
   {
     id: 2,
-    name: 'Volt Electrical JHB',
+    name: 'Arc Energy JHB',
     niche: 'Trades',
     tag: 'Electrical',
-    description: 'Emergency-call-first design for a Johannesburg electrician. One-tap call CTA above the fold.',
+    description: 'Call-first design for a Johannesburg electricians and Victron experts .',
     gradient: 'linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1f3a1f 100%)',
     accent: '#22c55e',
+    url: 'https://www.arcenergy.co.za',
   },
-  {
-    id: 3,
-    name: 'Iron & Ink Tattoo',
-    niche: 'Fitness',
-    tag: 'Tattoo Studio',
-    description: 'Portfolio-first site for a Sandton tattoo studio. Dark editorial aesthetic with artist profiles.',
-    gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1212 100%)',
-    accent: '#ef4444',
-  },
-  {
-    id: 4,
-    name: 'The Grind Cafe',
-    niche: 'Restaurants',
-    tag: 'Restaurant',
-    description: 'Warm, menu-focused site for a Parkhurst neighbourhood cafe. Online reservations via WhatsApp.',
-    gradient: 'linear-gradient(135deg, #1a1205 0%, #2d2210 50%, #1a1a0a 100%)',
-    accent: '#f59e0b',
-  },
-  {
-    id: 5,
-    name: 'Peak Performance PT',
-    niche: 'Fitness',
-    tag: 'Fitness',
-    description: 'Conversion-focused site for a personal trainer in Randburg. Package pricing and lead capture form.',
-    gradient: 'linear-gradient(135deg, #0a1a0a 0%, #0d2b0d 50%, #112211 100%)',
-    accent: '#10b981',
-  },
-  {
-    id: 6,
-    name: 'DetailCraft Auto',
-    niche: 'Trades',
-    tag: 'Auto Detailing',
-    description: 'Before/after gallery site for a premium auto detailer in Midrand. Package pricing with quote form.',
-    gradient: 'linear-gradient(135deg, #0d0d1a 0%, #151525 50%, #1a1a2e 100%)',
-    accent: '#8b5cf6',
-  },
+  // {
+  //   id: 3,
+  //   name: 'Iron & Ink Tattoo',
+  //   niche: 'Fitness',
+  //   tag: 'Tattoo Studio',
+  //   description: 'Portfolio-first site for a Sandton tattoo studio. Dark editorial aesthetic with artist profiles.',
+  //   gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1212 100%)',
+  //   accent: '#ef4444',
+  // },
+  // {
+  //   id: 4,
+  //   name: 'The Grind Cafe',
+  //   niche: 'Restaurants',
+  //   tag: 'Restaurant',
+  //   description: 'Warm, menu-focused site for a Parkhurst neighbourhood cafe. Online reservations via WhatsApp.',
+  //   gradient: 'linear-gradient(135deg, #1a1205 0%, #2d2210 50%, #1a1a0a 100%)',
+  //   accent: '#f59e0b',
+  // },
+  // {
+  //   id: 5,
+  //   name: 'Peak Performance PT',
+  //   niche: 'Fitness',
+  //   tag: 'Fitness',
+  //   description: 'Conversion-focused site for a personal trainer in Randburg. Package pricing and lead capture form.',
+  //   gradient: 'linear-gradient(135deg, #0a1a0a 0%, #0d2b0d 50%, #112211 100%)',
+  //   accent: '#10b981',
+  // },
+  // {
+  //   id: 6,
+  //   name: 'DetailCraft Auto',
+  //   niche: 'Trades',
+  //   tag: 'Auto Detailing',
+  //   description: 'Before/after gallery site for a premium auto detailer in Midrand. Package pricing with quote form.',
+  //   gradient: 'linear-gradient(135deg, #0d0d1a 0%, #151525 50%, #1a1a2e 100%)',
+  //   accent: '#8b5cf6',
+  // },
 ]
 
 const filters = ['All', 'Salons', 'Trades', 'Restaurants', 'Fitness']
@@ -266,7 +267,10 @@ export default function Portfolio() {
                     <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.85rem', color: '#A0A0A0', lineHeight: 1.65, marginBottom: '18px' }}>
                       {p.description}
                     </p>
-                    <motion.button
+                    <motion.a
+                      href={p.url || undefined}
+                      target={p.url ? '_blank' : undefined}
+                      rel={p.url ? 'noopener noreferrer' : undefined}
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
                       style={{
@@ -281,13 +285,17 @@ export default function Portfolio() {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '6px',
+                        textDecoration: 'none',
                         transition: 'color 0.2s ease, border-color 0.2s ease',
+                        cursor: p.url ? 'none' : 'default',
+                        pointerEvents: p.url ? 'auto' : 'none',
+                        opacity: p.url ? 1 : 0.4,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.color = '#3B82F6'; e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)' }}
+                      onMouseEnter={e => { if (p.url) { e.currentTarget.style.color = '#3B82F6'; e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)' } }}
                       onMouseLeave={e => { e.currentTarget.style.color = '#A0A0A0'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
                     >
                       View Project <ExternalLink size={13} />
-                    </motion.button>
+                    </motion.a>
                   </div>
                 </motion.div>
               ))}

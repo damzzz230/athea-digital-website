@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
-  ArrowRight, Zap, Smartphone, Clock, ChevronRight
+  ArrowRight, Zap, Smartphone, Clock, ChevronRight, ExternalLink
 } from 'lucide-react'
 
 const heroWords = ['We', 'Build', 'Websites', 'That', 'Win', 'Clients.']
@@ -36,9 +36,9 @@ const features = [
 ]
 
 const portfolioPreviews = [
-  { name: 'Luxe Hair Studio', niche: 'Hair Salon', gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' },
-  { name: 'Volt Electrical', niche: 'Trades', gradient: 'linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1f2937 100%)' },
-  { name: 'Iron & Ink Tattoo', niche: 'Tattoo Studio', gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1a1a 100%)' },
+  // { name: 'Luxe Hair Studio', niche: 'Hair Salon', gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' },
+  { name: 'Arc Energy JHB', niche: 'Electrical', gradient: 'linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1f3a1f 100%)', url: 'https://www.arcenergy.co.za' },
+  // { name: 'Iron & Ink Tattoo', niche: 'Tattoo Studio', gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1a1a 100%)' },
 ]
 
 function Logo3D() {
@@ -550,9 +550,30 @@ export default function Home() {
                     }}>
                       {p.niche}
                     </span>
-                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#F0F0F0' }}>
+                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#F0F0F0', marginBottom: p.url ? '12px' : 0 }}>
                       {p.name}
                     </h3>
+                    {p.url && (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '5px',
+                          fontFamily: 'DM Sans, sans-serif',
+                          fontSize: '0.8rem',
+                          fontWeight: 500,
+                          color: '#3B82F6',
+                          textDecoration: 'none',
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.textDecoration = 'underline' }}
+                        onMouseLeave={e => { e.currentTarget.style.textDecoration = 'none' }}
+                      >
+                        View Site <ExternalLink size={12} />
+                      </a>
+                    )}
                   </div>
                 </motion.div>
               </FadeUp>
