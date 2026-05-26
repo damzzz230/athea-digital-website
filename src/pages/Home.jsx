@@ -1,12 +1,12 @@
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useInView, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
+import { motion, useInView, useMotionValue, useTransform, useScroll, animate, useAnimation } from 'framer-motion'
 import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
   ArrowRight, Zap, Smartphone, Clock, ChevronRight, ExternalLink
 } from 'lucide-react'
 
-const heroWords = ['We', 'Build', 'Websites', 'That', 'Win', 'Clients.']
+const heroWords = ["We're So Good,", "We Build It", "First."]
 
 const niches = [
   { icon: Scissors, label: 'Hair Salons' },
@@ -41,21 +41,18 @@ const portfolioPreviews = [
   // { name: 'Iron & Ink Tattoo', niche: 'Tattoo Studio', gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1a1a 100%)' },
 ]
 
-const nicheContainerVariants = {
+// ── Stagger variants ─────────────────────────────────────────────────────────
+const staggerContainer = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.12 } },
 }
 
-const nicheCardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: 'spring', stiffness: 260, damping: 20 },
-  },
+const fadeUpItem = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 }
 
+// ── HeroWord ─────────────────────────────────────────────────────────────────
 function HeroWord({ word, index, total, scrollYProgress }) {
   const start = (index / total) * 0.6
   const end = start + 0.15
@@ -79,40 +76,110 @@ function HeroWord({ word, index, total, scrollYProgress }) {
   )
 }
 
+// ── Logo3D ───────────────────────────────────────────────────────────────────
 function Logo3D() {
   const containerRef = useRef(null)
   const [isHovered, setIsHovered] = useState(false)
 
-  const rawX = useMotionValue(0)
-  const rawY = useMotionValue(0)
+  const rotXMV  = useMotionValue(0)
+  const rotYMV  = useMotionValue(0)
+  const glowXMV = useMotionValue(50)
+  const glowYMV = useMotionValue(50)
 
-  const springConfig = { stiffness: 150, damping: 20, mass: 0.5 }
-  const x = useSpring(rawX, springConfig)
-  const y = useSpring(rawY, springConfig)
+  const glowControls = useAnimation()
 
-  const rotateX = useTransform(y, [-0.5, 0.5], ['12deg', '-12deg'])
-  const rotateY = useTransform(x, [-0.5, 0.5], ['-12deg', '12deg'])
-  const glowX = useTransform(x, [-0.5, 0.5], ['35%', '65%'])
-  const glowY = useTransform(y, [-0.5, 0.5], ['35%', '65%'])
+  const MAX  = 12
+  const LERP = 0.08
+
+  const lerpRef    = useRef({ tx: 0, ty: 0, cx: 0, cy: 0 })
+  const rafRef     = useRef(null)
+  const hovRef     = useRef(false)
+  const springsRef = useRef([])
+
+  const startBreathing = useCallback(() => {
+    glowControls.start({
+      scale:   [1, 1.08, 1],
+      opacity: [0.6, 0.85, 0.6],
+      transition: { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' },
+    })
+  }, [glowControls])
+
+  const tick = useCallback(() => {
+    const s = lerpRef.current
+    s.cx += (s.tx - s.cx) * LERP
+    s.cy += (s.ty - s.cy) * LERP
+
+    rotXMV.set(-s.cy * 2 * MAX)
+    rotYMV.set( s.cx * 2 * MAX)
+    glowXMV.set(50 + s.cx * 30)
+    glowYMV.set(50 + s.cy * 30)
+
+    if (hovRef.current) rafRef.current = requestAnimationFrame(tick)
+  }, [rotXMV, rotYMV, glowXMV, glowYMV])
 
   const handleMouseMove = useCallback((e) => {
     const rect = containerRef.current?.getBoundingClientRect()
     if (!rect) return
-    rawX.set((e.clientX - rect.left) / rect.width - 0.5)
-    rawY.set((e.clientY - rect.top) / rect.height - 0.5)
-  }, [rawX, rawY])
+    lerpRef.current.tx = Math.max(-0.5, Math.min(0.5, (e.clientX - rect.left) / rect.width  - 0.5))
+    lerpRef.current.ty = Math.max(-0.5, Math.min(0.5, (e.clientY - rect.top)  / rect.height - 0.5))
+  }, [])
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseEnter = useCallback(async () => {
+    springsRef.current.forEach(a => a?.stop?.())
+    springsRef.current = []
+    lerpRef.current.cx =  rotYMV.get() / (2 * MAX)
+    lerpRef.current.cy = -rotXMV.get() / (2 * MAX)
+    hovRef.current = true
+    setIsHovered(true)
+    cancelAnimationFrame(rafRef.current)
+    rafRef.current = requestAnimationFrame(tick)
+    await glowControls.start({
+      scale: 1.25, opacity: 1,
+      transition: { duration: 0.3, ease: 'easeOut' },
+    })
+    if (!hovRef.current) return
+    glowControls.start({
+      scale: 1.1, opacity: 0.9,
+      transition: { duration: 0.4, ease: 'easeInOut' },
+    })
+  }, [tick, rotXMV, rotYMV, glowControls])
+
+  const handleMouseLeave = useCallback(async () => {
+    springsRef.current.forEach(a => a?.stop?.())
+    hovRef.current = false
     setIsHovered(false)
-    rawX.set(0)
-    rawY.set(0)
-  }, [rawX, rawY])
+    lerpRef.current.tx = 0
+    lerpRef.current.ty = 0
+    cancelAnimationFrame(rafRef.current)
+    springsRef.current = [
+      animate(rotXMV,  0,  { type: 'spring', duration: 0.7, bounce: 0.15 }),
+      animate(rotYMV,  0,  { type: 'spring', duration: 0.7, bounce: 0.15 }),
+      animate(glowXMV, 50, { type: 'spring', duration: 0.7, bounce: 0.15 }),
+      animate(glowYMV, 50, { type: 'spring', duration: 0.7, bounce: 0.15 }),
+    ]
+    await glowControls.start({
+      scale: 1, opacity: 0.6,
+      transition: { duration: 0.6, ease: 'easeInOut' },
+    })
+    if (!hovRef.current) startBreathing()
+  }, [rotXMV, rotYMV, glowXMV, glowYMV, glowControls, startBreathing])
+
+  useEffect(() => {
+    startBreathing()
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      springsRef.current.forEach(a => a?.stop?.())
+    }
+  }, [startBreathing])
+
+  const glowLeft = useTransform(glowXMV, v => `${v}%`)
+  const glowTop  = useTransform(glowYMV, v => `${v}%`)
 
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
         flex: '1 1 400px',
@@ -124,8 +191,9 @@ function Logo3D() {
         perspective: '900px',
       }}
     >
-      {/* Animated glow that tracks the mouse */}
       <motion.div
+        animate={glowControls}
+        initial={{ scale: 1, opacity: 0.6 }}
         style={{
           position: 'absolute',
           width: '420px',
@@ -133,15 +201,13 @@ function Logo3D() {
           borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(59,130,246,0.35) 0%, rgba(59,130,246,0.12) 40%, transparent 70%)',
           filter: 'blur(40px)',
-          left: glowX,
-          top: glowY,
-          transform: 'translate(-50%, -50%)',
+          left: glowLeft,
+          top: glowTop,
+          x: '-50%',
+          y: '-50%',
           pointerEvents: 'none',
-          transition: 'opacity 0.4s ease',
-          opacity: isHovered ? 1 : 0.6,
         }}
       />
-      {/* Outer static glow ring */}
       <div style={{
         position: 'absolute',
         width: '340px',
@@ -152,11 +218,10 @@ function Logo3D() {
         pointerEvents: 'none',
       }} />
 
-      {/* 3D tilting logo */}
       <motion.div
         style={{
-          rotateX,
-          rotateY,
+          rotateX: rotXMV,
+          rotateY: rotYMV,
           transformStyle: 'preserve-3d',
           willChange: 'transform',
         }}
@@ -164,7 +229,6 @@ function Logo3D() {
         initial={{ opacity: 0, scale: 0.92 }}
         transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Drop shadow layer that moves opposite to tilt for depth */}
         <motion.div
           style={{
             position: 'absolute',
@@ -199,36 +263,216 @@ function Logo3D() {
   )
 }
 
+// ── FadeUp — whileInView, opacity + transform only ───────────────────────────
 function FadeUp({ children, delay = 0 }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
-      animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-      transition={{ duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
     >
       {children}
     </motion.div>
   )
 }
 
+// ── MaskReveal — word-by-word clip reveal for major headings ─────────────────
+function MaskReveal({ text }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const words = text.split(' ')
+  return (
+    <span
+      ref={ref}
+      aria-label={text}
+      style={{ display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', rowGap: 0 }}
+    >
+      {words.map((word, i) => (
+        <span
+          key={i}
+          style={{ overflow: 'hidden', display: 'inline-block', lineHeight: 'inherit' }}
+        >
+          <motion.span
+            style={{ display: 'inline-block', lineHeight: 'inherit' }}
+            initial={{ y: '105%' }}
+            animate={inView ? { y: 0 } : {}}
+            transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+// ── CountUp — number animates from 0 to target on scroll into view ───────────
+function CountUp({ to, suffix = '', duration = 1.5 }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const count = useMotionValue(0)
+  const rounded = useTransform(count, v => Math.round(v))
+
+  useEffect(() => {
+    if (inView) {
+      animate(count, to, { duration, ease: 'easeOut' })
+    }
+  }, [inView, count, to, duration])
+
+  return (
+    <span ref={ref} style={{ display: 'inline' }}>
+      <motion.span>{rounded}</motion.span>{suffix}
+    </span>
+  )
+}
+
+// ── NicheHorizontalScroll — pinned horizontal scroll for Industries section ──
+function NicheHorizontalScroll() {
+  const containerRef = useRef(null)
+  const trackRef = useRef(null)
+  // Initialise with a reasonable desktop default; recalculated after mount
+  const [translateXEnd, setTranslateXEnd] = useState(-800)
+  const [sectionHeight, setSectionHeight] = useState('250vh')
+
+  useEffect(() => {
+    const calc = () => {
+      if (!trackRef.current) return
+      const trackW = trackRef.current.scrollWidth
+      const viewW  = window.innerWidth
+      // How far we need to pull the strip left so the last card is fully visible
+      const translation = Math.max(0, trackW - viewW + 48)
+      setTranslateXEnd(-translation)
+      // Make scroll distance give a ~0.8× pan feel (comfortable, not too slow)
+      const scrollPx = Math.ceil(translation / 0.8)
+      setSectionHeight(`calc(100vh + ${scrollPx}px)`)
+    }
+    calc()
+    window.addEventListener('resize', calc)
+    return () => window.removeEventListener('resize', calc)
+  }, [])
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  })
+
+  const x = useTransform(scrollYProgress, [0, 1], [0, translateXEnd])
+
+  return (
+    <section
+      ref={containerRef}
+      style={{ height: sectionHeight, position: 'relative', marginBottom: '80px' }}
+    >
+      {/* Sticky viewport-height panel */}
+      <div style={{
+        position: 'sticky',
+        top: 0,
+        height: '100vh',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        gap: '32px',
+      }}>
+        {/* Section label fades in as panel enters view */}
+        <FadeUp>
+          <p style={{
+            fontFamily: 'DM Sans, sans-serif',
+            fontSize: '0.75rem',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'rgba(160,160,160,0.5)',
+            textAlign: 'center',
+            margin: 0,
+          }}>
+            Industries We Serve
+          </p>
+        </FadeUp>
+
+        {/* Horizontally-scrolling card strip */}
+        <motion.div
+          ref={trackRef}
+          style={{
+            x,
+            display: 'flex',
+            gap: '12px',
+            paddingLeft: '24px',
+            paddingRight: '24px',
+            willChange: 'transform',
+          }}
+        >
+          {niches.map((n) => (
+            <Link
+              key={n.label}
+              to="/services"
+              style={{ textDecoration: 'none', display: 'block', flex: '0 0 280px' }}
+            >
+              <div
+                style={{
+                  background: '#111111',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: '12px',
+                  padding: '20px 16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '10px',
+                  cursor: 'pointer',
+                  transition: 'border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = '#3B82F6'
+                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+                  e.currentTarget.style.background = 'rgba(59,130,246,0.05)'
+                  e.currentTarget.style.transform = 'translateY(-3px)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                  e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.background = '#111111'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }}
+              >
+                <n.icon size={22} style={{ color: '#3B82F6' }} />
+                <span style={{
+                  fontFamily: 'DM Sans, sans-serif',
+                  fontSize: '0.8rem',
+                  fontWeight: 500,
+                  color: '#A0A0A0',
+                  textAlign: 'center',
+                }}>
+                  {n.label}
+                </span>
+              </div>
+            </Link>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+// ── Feature body renderer — isolates CountUp for the 80% stat ────────────────
+function FeatureBody({ feature }) {
+  const bodyStyle = {
+    fontFamily: 'DM Sans, sans-serif',
+    fontSize: '0.9rem',
+    color: '#A0A0A0',
+    lineHeight: 1.7,
+  }
+  if (feature.title === 'Mobile-First Always') {
+    return (
+      <p style={bodyStyle}>
+        Over <CountUp to={80} />% of local business searches happen on mobile. Your site is designed for thumb-scrolling first — desktop second.
+      </p>
+    )
+  }
+  return <p style={bodyStyle}>{feature.body}</p>
+}
+
 export default function Home() {
   const heroRef = useRef(null)
-  const nicheGridRef = useRef(null)
-  const whyAtheaRef = useRef(null)
-  const portfolioRef = useRef(null)
-  const ctaRef = useRef(null)
-
-  const heroInView = useInView(heroRef, { once: false })
-  const nicheGridInView = useInView(nicheGridRef, { once: true, margin: '-60px' })
-  const whyAtheaInView = useInView(whyAtheaRef, { once: false })
-  const portfolioInView = useInView(portfolioRef, { once: false })
-  const ctaInView = useInView(ctaRef, { once: false })
-
-  const sectionNum = ctaInView ? 3 : portfolioInView ? 2 : whyAtheaInView ? 1 : 0
-  const showCounter = !heroInView && sectionNum > 0
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -238,39 +482,7 @@ export default function Home() {
   return (
     <div style={{ background: '#0A0A0A' }}>
 
-      {/* ── Fixed section counter ── */}
-      <motion.div
-        animate={{ opacity: showCounter ? 1 : 0 }}
-        transition={{ duration: 0.4 }}
-        style={{
-          position: 'fixed',
-          right: '24px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 100,
-          pointerEvents: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '10px',
-        }}
-      >
-        <div style={{
-          writingMode: 'vertical-rl',
-          transform: 'rotate(180deg)',
-          fontFamily: 'Syne, sans-serif',
-          fontSize: '0.62rem',
-          fontWeight: 600,
-          letterSpacing: '0.14em',
-          color: '#A0A0A0',
-          userSelect: 'none',
-        }}>
-          {String(sectionNum).padStart(2, '0')} / 03
-        </div>
-        <div style={{ width: '1px', height: '28px', background: 'rgba(160,160,160,0.2)' }} />
-      </motion.div>
-
-      {/* Hero */}
+      {/* ── Hero ── */}
       <section ref={heroRef} style={{
         minHeight: '100vh',
         display: 'flex',
@@ -343,8 +555,8 @@ export default function Home() {
               color: '#F0F0F0',
               marginBottom: '28px',
               display: 'flex',
-              flexWrap: 'wrap',
-              gap: '0.22em',
+              flexDirection: 'column',
+              gap: '0.04em',
             }}>
               {heroWords.map((word, i) => (
                 <HeroWord
@@ -371,71 +583,71 @@ export default function Home() {
                 marginBottom: '44px',
               }}
             >
-              Athea Digital crafts premium websites for Johannesburg businesses — from salons to trades. We build it first. You love it, then you pay.
+              See your finished website before you spend a cent. Custom-built for your business. Delivered in 5 days.
             </motion.p>
 
-{/* CTAs */}
-<motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6, delay: 1.1 }}
-  style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}
->
-  <Link to="/contact" style={{ textDecoration: 'none' }}>
-    <motion.button
-      whileHover={{ scale: 1.04 }}
-      whileTap={{ scale: 0.97 }}
-      style={{
-        fontFamily: 'Syne, sans-serif',
-        fontWeight: 700,
-        fontSize: '0.95rem',
-        background: '#3B82F6',
-        color: '#0A0A0A',
-        border: 'none',
-        borderRadius: '8px',
-        padding: '14px 28px',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '8px',
-        boxShadow: '0 0 24px rgba(59,130,246,0.35)',
-        letterSpacing: '0.01em',
-      }}
-    >
-      Get In Touch <ArrowRight size={16} />
-    </motion.button>
-  </Link>
-  <Link to="/portfolio" style={{ textDecoration: 'none' }}>
-    <motion.button
-      whileHover={{ scale: 1.04 }}
-      whileTap={{ scale: 0.97 }}
-      style={{
-        fontFamily: 'Syne, sans-serif',
-        fontWeight: 600,
-        fontSize: '0.95rem',
-        background: 'transparent',
-        color: '#F0F0F0',
-        border: '1px solid rgba(240,240,240,0.15)',
-        borderRadius: '8px',
-        padding: '14px 28px',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '8px',
-        letterSpacing: '0.01em',
-        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = '#3B82F6'
-        e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.25)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = 'rgba(240,240,240,0.15)'
-        e.currentTarget.style.boxShadow = 'none'
-      }}
-    >
-      See Our Work <ArrowRight size={16} />
-    </motion.button>
-  </Link>
-</motion.div>
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.1 }}
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}
+            >
+              <Link to="/contact" style={{ textDecoration: 'none' }}>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700,
+                    fontSize: '0.95rem',
+                    background: '#3B82F6',
+                    color: '#0A0A0A',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '14px 28px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 0 24px rgba(59,130,246,0.35)',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  Get In Touch <ArrowRight size={16} />
+                </motion.button>
+              </Link>
+              <Link to="/portfolio" style={{ textDecoration: 'none' }}>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 600,
+                    fontSize: '0.95rem',
+                    background: 'transparent',
+                    color: '#F0F0F0',
+                    border: '1px solid rgba(240,240,240,0.15)',
+                    borderRadius: '8px',
+                    padding: '14px 28px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    letterSpacing: '0.01em',
+                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = '#3B82F6'
+                    e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.25)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'rgba(240,240,240,0.15)'
+                    e.currentTarget.style.boxShadow = 'none'
+                  }}
+                >
+                  See Our Work <ArrowRight size={16} />
+                </motion.button>
+              </Link>
+            </motion.div>
           </div>
 
           {/* Right: interactive 3D logo */}
@@ -443,93 +655,52 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Niche strip */}
-      <section style={{
-        padding: '0 24px',
-        marginBottom: '80px',
-      }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <FadeUp>
-            <p style={{
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: '0.75rem',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'rgba(160,160,160,0.5)',
-              textAlign: 'center',
-              marginBottom: '24px',
-            }}>
-              Industries We Serve
-            </p>
-          </FadeUp>
-          <motion.div
-            ref={nicheGridRef}
-            variants={nicheContainerVariants}
-            initial="hidden"
-            animate={nicheGridInView ? 'visible' : 'hidden'}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: '12px',
-            }}
-          >
-            {niches.map((n) => (
-              <motion.div key={n.label} variants={nicheCardVariants}>
-                <div style={{
-                  background: '#111111',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: '12px',
-                  padding: '20px 16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '10px',
-                  transition: 'border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
-                }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = '#3B82F6'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-                    e.currentTarget.style.background = 'rgba(59,130,246,0.05)'
-                    e.currentTarget.style.transform = 'translateY(-3px)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                    e.currentTarget.style.boxShadow = 'none'
-                    e.currentTarget.style.background = '#111111'
-                    e.currentTarget.style.transform = 'translateY(0)'
-                  }}
-                >
-                  <n.icon size={22} style={{ color: '#3B82F6' }} />
-                  <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', fontWeight: 500, color: '#A0A0A0', textAlign: 'center' }}>
-                    {n.label}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      {/* ── Industries We Serve — horizontal scroll ── */}
+      <NicheHorizontalScroll />
 
-      {/* Why Athea */}
-      <section ref={whyAtheaRef} style={{ padding: '80px 24px', background: '#0D0D0D' }}>
+      {/* ── Why Athea ── */}
+      <section style={{ padding: '80px 24px', background: '#0D0D0D' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <FadeUp>
-            <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '12px' }}>
+          {/* Section header */}
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <FadeUp>
+              <p style={{
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: '#3B82F6',
+                marginBottom: '12px',
+              }}>
                 Why Choose Athea
               </p>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: '#F0F0F0', letterSpacing: '-0.02em' }}>
-                Built Different. Delivered Faster.
-              </h2>
-            </div>
-          </FadeUp>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '24px',
-          }}>
-            {features.map((f, i) => (
-              <FadeUp key={f.title} delay={i * 0.1}>
+            </FadeUp>
+            {/* Word-by-word mask reveal on the H2 */}
+            <h2 style={{
+              fontFamily: 'Syne, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+              color: '#F0F0F0',
+              letterSpacing: '-0.02em',
+            }}>
+              <MaskReveal text="Built Different. Delivered Faster." />
+            </h2>
+          </div>
+
+          {/* Staggered feature cards */}
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {features.map((f) => (
+              <motion.div key={f.title} variants={fadeUpItem}>
                 <div
                   style={{
                     background: '#111111',
@@ -562,49 +733,91 @@ export default function Home() {
                   }}>
                     <f.icon size={20} style={{ color: '#3B82F6' }} />
                   </div>
-                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0F0F0', marginBottom: '12px' }}>
+                  <h3 style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700,
+                    fontSize: '1.15rem',
+                    color: '#F0F0F0',
+                    marginBottom: '12px',
+                  }}>
                     {f.title}
                   </h3>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#A0A0A0', lineHeight: 1.7 }}>
-                    {f.body}
-                  </p>
+                  <FeatureBody feature={f} />
                 </div>
-              </FadeUp>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Portfolio preview */}
-      <section ref={portfolioRef} style={{ padding: '80px 24px' }}>
+      {/* ── Portfolio preview ── */}
+      <section style={{ padding: '80px 24px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          {/* Section header */}
           <FadeUp>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px', flexWrap: 'wrap', gap: '16px' }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              marginBottom: '48px',
+              flexWrap: 'wrap',
+              gap: '16px',
+            }}>
               <div>
-                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '8px' }}>
+                <p style={{
+                  fontFamily: 'DM Sans, sans-serif',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#3B82F6',
+                  marginBottom: '8px',
+                }}>
                   Recent Work
                 </p>
-                <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: '#F0F0F0', letterSpacing: '-0.02em' }}>
-                  Selected Projects
+                {/* Word-by-word mask reveal on the H2 */}
+                <h2 style={{
+                  fontFamily: 'Syne, sans-serif',
+                  fontWeight: 800,
+                  fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+                  color: '#F0F0F0',
+                  letterSpacing: '-0.02em',
+                }}>
+                  <MaskReveal text="Selected Projects" />
                 </h2>
               </div>
               <Link to="/portfolio" style={{ textDecoration: 'none' }}>
                 <motion.div
                   whileHover={{ x: 4 }}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#3B82F6', fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', fontWeight: 500 }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    color: '#3B82F6',
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                  }}
                 >
                   View All Work <ChevronRight size={16} />
                 </motion.div>
               </Link>
             </div>
           </FadeUp>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '24px',
-          }}>
-            {portfolioPreviews.map((p, i) => (
-              <FadeUp key={p.name} delay={i * 0.1}>
+
+          {/* Staggered portfolio cards */}
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '24px',
+            }}
+          >
+            {portfolioPreviews.map((p) => (
+              <motion.div key={p.name} variants={fadeUpItem}>
                 <motion.div
                   whileHover={{ scale: 1.03, y: -4 }}
                   transition={{ duration: 0.3 }}
@@ -657,7 +870,13 @@ export default function Home() {
                     }}>
                       {p.niche}
                     </span>
-                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#F0F0F0', marginBottom: p.url ? '12px' : 0 }}>
+                    <h3 style={{
+                      fontFamily: 'Syne, sans-serif',
+                      fontWeight: 700,
+                      fontSize: '1rem',
+                      color: '#F0F0F0',
+                      marginBottom: p.url ? '12px' : 0,
+                    }}>
                       {p.name}
                     </h3>
                     {p.url && (
@@ -683,14 +902,14 @@ export default function Home() {
                     )}
                   </div>
                 </motion.div>
-              </FadeUp>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section ref={ctaRef} style={{ padding: '80px 24px' }}>
+      {/* ── CTA Banner ── */}
+      <section style={{ padding: '80px 24px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{
@@ -702,7 +921,7 @@ export default function Home() {
               position: 'relative',
               overflow: 'hidden',
             }}>
-              {/* Glow orbs */}
+              {/* Glow orb */}
               <div style={{
                 position: 'absolute',
                 top: '-60px',
@@ -713,9 +932,19 @@ export default function Home() {
                 background: 'radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%)',
                 pointerEvents: 'none',
               }} />
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}>
+
+              <p style={{
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: '0.75rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: '#3B82F6',
+                marginBottom: '16px',
+              }}>
                 Ready To Get Online?
               </p>
+
+              {/* Word-by-word mask reveal on the CTA H2 */}
               <h2 style={{
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: 800,
@@ -723,12 +952,21 @@ export default function Home() {
                 color: '#F0F0F0',
                 letterSpacing: '-0.02em',
                 marginBottom: '16px',
+                justifyContent: 'center',
               }}>
-                Let's build something that works.
+                <MaskReveal text="Let's build something that works." />
               </h2>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', marginBottom: '36px', maxWidth: '480px', margin: '0 auto 36px' }}>
+
+              <p style={{
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: '1rem',
+                color: '#A0A0A0',
+                maxWidth: '480px',
+                margin: '0 auto 36px',
+              }}>
                 No lengthy briefs. No upfront payment. We build your site — you see it, love it, then we talk about the rest.
               </p>
+
               <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px' }}>
                 <a
                   href="https://wa.me/27000000000?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20quote"
@@ -791,6 +1029,7 @@ export default function Home() {
           </FadeUp>
         </div>
       </section>
+
     </div>
   )
 }

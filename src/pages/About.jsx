@@ -39,15 +39,15 @@ const values = [
 const team = [
   {
     name: 'Damian de Boer',
-    title: 'Co-Founder & Lead Developer',
-    bio: 'Damian handles the architecture, code, and performance of every site we build. Obsessed with clean interfaces and conversion-focused layouts.',
+    title: 'Co-Founder & Design Lead',
+    bio: 'Damian leads the design and SEO strategy on every build. He obsesses over the details that make a site convert — layout, hierarchy, and making sure Google knows you exist. A Marketing graduate from the IMM, he brings both creative and strategic thinking to every project.',
     initials: 'DD',
     color: '#1e3a5f',
   },
   {
     name: 'Dasendhran Subramoney',
     title: 'Co-Founder & Lead Developer',
-    bio: 'Dasendran drives the design direction and client experience. His eye for detail ensures every pixel earns its place on the screen.',
+    bio: 'Das engineers the foundation every site runs on. He handles the architecture, code quality, and performance that makes a site fast, stable, and built to last. A Software Development graduate from CodeSpace, clean code isn\'t a bonus for him — it\'s the baseline.',
     initials: 'DS',
     color: '#1a2e1a',
   },
@@ -110,7 +110,7 @@ export default function About() {
               lineHeight: 1.7,
             }}
           >
-            We're a two-person studio based in Johannesburg, South Africa. We don't take on dozens of clients — we focus on doing exceptional work for the ones we do.
+            Small studio. Serious output. Every site is built by us, for you — no middlemen, no outsourcing, no compromises.
           </motion.p>
         </div>
       </section>

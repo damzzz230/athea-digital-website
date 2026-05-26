@@ -43,7 +43,7 @@ const services = [
   },
   {
     icon: Wrench,
-    niche: 'Trades (Plumbers & Electricians)',
+    niche: 'Trades (Plumbers, Electricians & Construction)',
     tagline: 'Be found when it matters most',
     features: [
       'Emergency call CTA button (one-click)',
