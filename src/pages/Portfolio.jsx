@@ -17,65 +17,186 @@ function FadeUp({ children, delay = 0 }) {
   )
 }
 
+function ExpandableGallery({ images }) {
+  const [hoveredIndex, setHoveredIndex] = useState(null)
+  const [selectedIndex, setSelectedIndex] = useState(null)
+
+  const getFlexValue = (index) => {
+    if (hoveredIndex === null) return 1
+    return hoveredIndex === index ? 2 : 0.5
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <div style={{ display: 'flex', gap: '4px', height: '220px', width: '100%' }}>
+        {images.map((image, index) => (
+          <motion.div
+            key={index}
+            style={{ flex: 1, position: 'relative', cursor: 'pointer', overflow: 'hidden', borderRadius: '4px' }}
+            animate={{ flex: getFlexValue(index) }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseLeave={() => setHoveredIndex(null)}
+            onClick={() => setSelectedIndex(index)}
+          >
+            <img src={image} alt={`screenshot-${index}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <motion.div
+              style={{ position: 'absolute', inset: 0, background: 'black' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: hoveredIndex === index ? 0 : 0.35 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {selectedIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.95)', padding: '24px' }}
+            onClick={() => setSelectedIndex(null)}
+          >
+            <button
+              onClick={() => setSelectedIndex(null)}
+              style={{ position: 'absolute', top: '20px', right: '20px', background: 'none', border: 'none', color: '#F0F0F0', cursor: 'pointer', zIndex: 10 }}
+            >
+              <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            {images.length > 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setSelectedIndex((selectedIndex - 1 + images.length) % images.length) }}
+                style={{ position: 'absolute', left: '20px', background: 'none', border: 'none', color: '#F0F0F0', cursor: 'pointer', zIndex: 10 }}
+              >
+                <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+            )}
+            <motion.img
+              key={selectedIndex}
+              src={images[selectedIndex]}
+              alt={`screenshot-${selectedIndex}`}
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain', borderRadius: '8px' }}
+            />
+            {images.length > 1 && (
+              <button
+                onClick={(e) => { e.stopPropagation(); setSelectedIndex((selectedIndex + 1) % images.length) }}
+                style={{ position: 'absolute', right: '20px', background: 'none', border: 'none', color: '#F0F0F0', cursor: 'pointer', zIndex: 10 }}
+              >
+                <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            )}
+            <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: '#A0A0A0', fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem' }}>
+              {selectedIndex + 1} / {images.length}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 const projects = [
-  // {
-  //   id: 1,
-  //   name: 'Luxe Hair Studio',
-  //   niche: 'Salons',
-  //   tag: 'Hair Salon',
-  //   description: 'A sleek booking-forward site for a premium Joburg salon. Gallery-led with WhatsApp booking integration.',
-  //   gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)',
-  //   accent: '#3B82F6',
-  // },
+  {
+    id: 1,
+    name: 'Luxe Hair Studio',
+    niche: 'Salons',
+    tag: 'Hair Salon',
+    description: 'A sleek booking-forward site for a premium Joburg salon. Gallery-led with WhatsApp booking integration.',
+    accent: '#3B82F6',
+    images: [
+      'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80',
+      'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&q=80',
+      'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&q=80',
+    ],
+  },
   {
     id: 2,
     name: 'Arc Energy JHB',
     niche: 'Trades',
     tag: 'Electrical',
-    description: 'Call-first design for a Johannesburg electricians and Victron experts .',
-    gradient: 'linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1f3a1f 100%)',
+    description: 'Call-first design for a Johannesburg electricians and Victron experts.',
     accent: '#22c55e',
     url: 'https://www.arcenergy.co.za',
+    images: [
+      'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80',
+    ],
   },
-  // {
-  //   id: 3,
-  //   name: 'Iron & Ink Tattoo',
-  //   niche: 'Fitness',
-  //   tag: 'Tattoo Studio',
-  //   description: 'Portfolio-first site for a Sandton tattoo studio. Dark editorial aesthetic with artist profiles.',
-  //   gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1212 100%)',
-  //   accent: '#ef4444',
-  // },
-  // {
-  //   id: 4,
-  //   name: 'The Grind Cafe',
-  //   niche: 'Restaurants',
-  //   tag: 'Restaurant',
-  //   description: 'Warm, menu-focused site for a Parkhurst neighbourhood cafe. Online reservations via WhatsApp.',
-  //   gradient: 'linear-gradient(135deg, #1a1205 0%, #2d2210 50%, #1a1a0a 100%)',
-  //   accent: '#f59e0b',
-  // },
-  // {
-  //   id: 5,
-  //   name: 'Peak Performance PT',
-  //   niche: 'Fitness',
-  //   tag: 'Fitness',
-  //   description: 'Conversion-focused site for a personal trainer in Randburg. Package pricing and lead capture form.',
-  //   gradient: 'linear-gradient(135deg, #0a1a0a 0%, #0d2b0d 50%, #112211 100%)',
-  //   accent: '#10b981',
-  // },
-  // {
-  //   id: 6,
-  //   name: 'DetailCraft Auto',
-  //   niche: 'Trades',
-  //   tag: 'Auto Detailing',
-  //   description: 'Before/after gallery site for a premium auto detailer in Midrand. Package pricing with quote form.',
-  //   gradient: 'linear-gradient(135deg, #0d0d1a 0%, #151525 50%, #1a1a2e 100%)',
-  //   accent: '#8b5cf6',
-  // },
+  {
+    id: 3,
+    name: 'Iron & Ink Tattoo',
+    niche: 'Tattoo',
+    tag: 'Tattoo Studio',
+    description: 'Portfolio-first site for a Sandton tattoo studio. Dark editorial aesthetic with artist profiles.',
+    accent: '#ef4444',
+    images: [
+      'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=80',
+      'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&q=80',
+      'https://images.unsplash.com/photo-1543767271-7b282a59ff78?w=800&q=80',
+      'https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=800&q=80',
+    ],
+  },
+  {
+    id: 4,
+    name: 'The Grind Cafe',
+    niche: 'Restaurants',
+    tag: 'Restaurant',
+    description: 'Warm, menu-focused site for a Parkhurst neighbourhood cafe. Online reservations via WhatsApp.',
+    accent: '#f59e0b',
+    images: [
+      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80',
+      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
+      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
+      'https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80',
+    ],
+  },
+  {
+    id: 5,
+    name: 'Peak Performance PT',
+    niche: 'Fitness',
+    tag: 'Fitness',
+    description: 'Conversion-focused site for a personal trainer in Randburg. Package pricing and lead capture form.',
+    accent: '#10b981',
+    images: [
+      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
+      'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80',
+      'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
+      'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80',
+    ],
+  },
+  {
+    id: 6,
+    name: 'DetailCraft Auto',
+    niche: 'Trades',
+    tag: 'Auto Detailing',
+    description: 'Before/after gallery site for a premium auto detailer in Midrand. Package pricing with quote form.',
+    accent: '#8b5cf6',
+    images: [
+      'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=800&q=80',
+      'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80',
+      'https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=800&q=80',
+    ],
+  },
 ]
 
-const filters = ['All', 'Salons', 'Trades', 'Restaurants', 'Fitness']
+const filters = ['All', 'Salons', 'Trades', 'Restaurants', 'Fitness', 'Tattoo']
 
 export default function Portfolio() {
   const [activeFilter, setActiveFilter] = useState('All')
@@ -200,49 +321,7 @@ export default function Portfolio() {
                     e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
-                  {/* Image placeholder */}
-                  <div style={{
-                    height: '220px',
-                    background: p.gradient,
-                    position: 'relative',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                    <div style={{
-                      position: 'absolute',
-                      inset: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                    }}>
-                      <div style={{
-                        width: '48px',
-                        height: '2px',
-                        background: p.accent,
-                        opacity: 0.6,
-                        borderRadius: '1px',
-                      }} />
-                      <span style={{
-                        fontFamily: 'Syne, sans-serif',
-                        fontWeight: 700,
-                        fontSize: '1.1rem',
-                        color: 'rgba(240,240,240,0.35)',
-                        letterSpacing: '-0.01em',
-                      }}>
-                        {p.name}
-                      </span>
-                      <div style={{
-                        width: '24px',
-                        height: '2px',
-                        background: p.accent,
-                        opacity: 0.4,
-                        borderRadius: '1px',
-                      }} />
-                    </div>
-                  </div>
+                  <ExpandableGallery images={p.images} />
 
                   {/* Card body */}
                   <div style={{ padding: '22px 24px 24px' }}>

@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Shield, Zap, Eye } from 'lucide-react'
+import SpecBuildCube from '../components/SpecBuildCube'
 
 function FadeUp({ children, delay = 0 }) {
   const ref = useRef(null)
@@ -14,6 +15,143 @@ function FadeUp({ children, delay = 0 }) {
       transition={{ duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
+    </motion.div>
+  )
+}
+
+function MaskReveal({ text }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.2 })
+  const words = text.split(' ')
+  return (
+    <span
+      ref={ref}
+      aria-label={text}
+      style={{ display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', rowGap: 0 }}
+    >
+      {words.map((word, i) => (
+        <span
+          key={i}
+          style={{ overflow: 'hidden', display: 'inline-block', lineHeight: 'inherit' }}
+        >
+          <motion.span
+            style={{ display: 'inline-block', lineHeight: 'inherit' }}
+            initial={{ y: '105%' }}
+            animate={inView ? { y: 0 } : { y: '105%' }}
+            transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: 'easeOut' }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+function TeamCard({ member, direction, delay }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: direction.x, y: direction.y }}
+      transition={{ duration: 1.1, delay: 0.2 + delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{ opacity: 0 }}
+    >
+      <div style={{
+        background: '#111111',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '20px',
+        padding: '36px',
+        transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
+      }}
+        onMouseEnter={e => {
+          e.currentTarget.style.borderColor = '#3B82F6'
+          e.currentTarget.style.transform = 'translateY(-6px)'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow = 'none'
+        }}
+      >
+        <div style={{
+          width: '72px',
+          height: '72px',
+          borderRadius: '50%',
+          background: member.color,
+          border: '2px solid rgba(59,130,246,0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: '20px',
+        }}>
+          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: '#F0F0F0' }}>
+            {member.initials}
+          </span>
+        </div>
+        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0F0F0', marginBottom: '4px' }}>
+          {member.name}
+        </h3>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#3B82F6', marginBottom: '16px', letterSpacing: '0.02em' }}>
+          {member.title}
+        </p>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#A0A0A0', lineHeight: 1.7 }}>
+          {member.bio}
+        </p>
+      </div>
+    </motion.div>
+  )
+}
+
+function ValueCard({ value, direction, delay }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  return (
+    <motion.div
+      ref={ref}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: direction.x, y: direction.y }}
+      transition={{ duration: 1.1, delay: 0.2 + delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{ opacity: 0 }}
+    >
+      <div style={{
+        background: '#111111',
+        border: '1px solid rgba(255,255,255,0.06)',
+        borderRadius: '16px',
+        padding: '32px',
+        transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
+      }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-6px)'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+          e.currentTarget.style.borderColor = '#3B82F6'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow = 'none'
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+        }}
+      >
+        <div style={{
+          width: '44px',
+          height: '44px',
+          borderRadius: '10px',
+          background: 'rgba(59,130,246,0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: '20px',
+        }}>
+          <value.icon size={20} style={{ color: '#3B82F6' }} />
+        </div>
+        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0F0F0', marginBottom: '12px' }}>
+          {value.title}
+        </h3>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#A0A0A0', lineHeight: 1.7 }}>
+          {value.body}
+        </p>
+      </div>
     </motion.div>
   )
 }
@@ -123,113 +261,82 @@ export default function About() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '24px',
           }}>
-            {team.map((member, i) => (
-              <FadeUp key={member.name} delay={i * 0.15}>
-                <div style={{
-                  background: '#111111',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: '20px',
-                  padding: '36px',
-                  transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
-                }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = '#3B82F6'
-                    e.currentTarget.style.transform = 'translateY(-6px)'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
-                >
-                  {/* Avatar */}
-                  <div style={{
-                    width: '72px',
-                    height: '72px',
-                    borderRadius: '50%',
-                    background: member.color,
-                    border: '2px solid rgba(59,130,246,0.3)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                  }}>
-                    <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: '#F0F0F0' }}>
-                      {member.initials}
-                    </span>
-                  </div>
-                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0F0F0', marginBottom: '4px' }}>
-                    {member.name}
-                  </h3>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#3B82F6', marginBottom: '16px', letterSpacing: '0.02em' }}>
-                    {member.title}
-                  </p>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#A0A0A0', lineHeight: 1.7 }}>
-                    {member.bio}
-                  </p>
-                </div>
-              </FadeUp>
-            ))}
+            {team.map((member, i) => {
+              const directions = [
+                { x: -160, y: 0 },
+                { x: 160, y: 0 },
+              ]
+              return (
+                <TeamCard key={member.name} member={member} direction={directions[i]} delay={i * 0.15} />
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* Studio story */}
       <section style={{ padding: '80px 24px', background: '#0D0D0D' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-          <FadeUp>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}>
-              How We Work
-            </p>
-            <h2 style={{
-              fontFamily: 'Syne, sans-serif',
-              fontWeight: 800,
-              fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-              color: '#F0F0F0',
-              letterSpacing: '-0.02em',
-              marginBottom: '28px',
-            }}>
-              The Spec-Build Model
-            </h2>
-          </FadeUp>
-          <FadeUp delay={0.1}>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8, marginBottom: '20px' }}>
-              Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
-            </p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8, marginBottom: '20px' }}>
-              <strong style={{ color: '#F0F0F0' }}>We build the site first.</strong> You get to see exactly what you're getting — the design, the layout, the copy, the features — before you commit to anything. If you love it, we talk about a deal. If it's not right, we iterate until it is.
-            </p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8 }}>
-              This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.
-            </p>
-          </FadeUp>
-          <FadeUp delay={0.2}>
-            <div style={{ marginTop: '40px', display: 'flex', justifyContent: 'center' }}>
-              <Link to="/contact" style={{ textDecoration: 'none' }}>
-                <motion.button
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  style={{
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: 700,
-                    fontSize: '0.95rem',
-                    background: '#3B82F6',
-                    color: '#0A0A0A',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '14px 28px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    boxShadow: '0 0 24px rgba(59,130,246,0.25)',
-                  }}
-                >
-                  Start a Conversation <ArrowRight size={16} />
-                </motion.button>
-              </Link>
-            </div>
-          </FadeUp>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '64px' }}>
+          {/* Left column */}
+          <div style={{ flex: 1 }}>
+            <FadeUp>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}>
+                How We Work
+              </p>
+              <h2 style={{
+                fontFamily: 'Syne, sans-serif',
+                fontWeight: 800,
+                fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+                color: '#F0F0F0',
+                letterSpacing: '-0.02em',
+                marginBottom: '28px',
+              }}>
+                <MaskReveal text="The Spec-Build Model" />
+              </h2>
+            </FadeUp>
+            <FadeUp delay={0.1}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8, marginBottom: '20px' }}>
+                Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
+              </p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8, marginBottom: '20px' }}>
+                <strong style={{ color: '#F0F0F0' }}>We build the site first.</strong> You get to see exactly what you're getting — the design, the layout, the copy, the features — before you commit to anything. If you love it, we talk about a deal. If it's not right, we iterate until it is.
+              </p>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8 }}>
+                This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.
+              </p>
+            </FadeUp>
+            <FadeUp delay={0.2}>
+              <div style={{ marginTop: '40px' }}>
+                <Link to="/contact" style={{ textDecoration: 'none' }}>
+                  <motion.button
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.97 }}
+                    style={{
+                      fontFamily: 'Syne, sans-serif',
+                      fontWeight: 700,
+                      fontSize: '0.95rem',
+                      background: '#3B82F6',
+                      color: '#0A0A0A',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '14px 28px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      boxShadow: '0 0 24px rgba(59,130,246,0.25)',
+                    }}
+                  >
+                    Start a Conversation <ArrowRight size={16} />
+                  </motion.button>
+                </Link>
+              </div>
+            </FadeUp>
+          </div>
+
+          {/* Right column — hidden below md breakpoint */}
+          <div className="hidden md:block" style={{ flexShrink: 0, position: 'relative', width: '320px', height: '320px', overflow: 'visible' }}>
+            <SpecBuildCube />
+          </div>
         </div>
       </section>
 
@@ -242,7 +349,7 @@ export default function About() {
                 What We Stand For
               </p>
               <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: '#F0F0F0', letterSpacing: '-0.02em' }}>
-                Our Values
+                <MaskReveal text="Our Values" />
               </h2>
             </div>
           </FadeUp>
@@ -251,47 +358,16 @@ export default function About() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
             gap: '24px',
           }}>
-            {values.map((v, i) => (
-              <FadeUp key={v.title} delay={i * 0.1}>
-                <div style={{
-                  background: '#111111',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: '16px',
-                  padding: '32px',
-                  transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
-                }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.transform = 'translateY(-6px)'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-                    e.currentTarget.style.borderColor = '#3B82F6'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = 'none'
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                  }}
-                >
-                  <div style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '10px',
-                    background: 'rgba(59,130,246,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                  }}>
-                    <v.icon size={20} style={{ color: '#3B82F6' }} />
-                  </div>
-                  <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0F0F0', marginBottom: '12px' }}>
-                    {v.title}
-                  </h3>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#A0A0A0', lineHeight: 1.7 }}>
-                    {v.body}
-                  </p>
-                </div>
-              </FadeUp>
-            ))}
+            {values.map((v, i) => {
+              const directions = [
+                { x: -160, y: 0 },
+                { x: 0, y: 100 },
+                { x: 160, y: 0 },
+              ]
+              return (
+                <ValueCard key={v.title} value={v} direction={directions[i]} delay={i * 0.15} />
+              )
+            })}
           </div>
         </div>
       </section>

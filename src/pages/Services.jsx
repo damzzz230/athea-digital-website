@@ -18,6 +18,129 @@ function FadeUp({ children, delay = 0 }) {
   )
 }
 
+function MaskReveal({ text }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.2 })
+  const words = text.split(' ')
+  return (
+    <span
+      ref={ref}
+      aria-label={text}
+      style={{ display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', rowGap: 0 }}
+    >
+      {words.map((word, i) => (
+        <span
+          key={i}
+          style={{ overflow: 'hidden', display: 'inline-block', lineHeight: 'inherit' }}
+        >
+          <motion.span
+            style={{ display: 'inline-block', lineHeight: 'inherit' }}
+            initial={{ y: '105%' }}
+            animate={inView ? { y: 0 } : { y: '105%' }}
+            transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: 'easeOut' }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+function ServiceCard({ service, direction, delay }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-200px' })
+  return (
+    <motion.div
+      ref={ref}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: direction.x, y: direction.y }}
+      transition={{ duration: 1.1, delay: 0.2 + delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{ opacity: 0, height: '100%' }}
+    >
+      <motion.div
+        whileHover={{ y: -6 }}
+        transition={{ duration: 0.3 }}
+        style={{
+          background: '#111111',
+          border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: '20px',
+          overflow: 'hidden',
+          height: '100%',
+          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.borderColor = '#3B82F6'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+          e.currentTarget.style.boxShadow = 'none'
+        }}
+      >
+        <div style={{
+          background: service.color,
+          padding: '28px 28px 24px',
+          borderBottom: '1px solid rgba(255,255,255,0.04)',
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '16px',
+        }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            borderRadius: '12px',
+            background: 'rgba(59,130,246,0.15)',
+            border: '1px solid rgba(59,130,246,0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <service.icon size={22} style={{ color: '#3B82F6' }} />
+          </div>
+          <div>
+            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: '#F0F0F0', marginBottom: '4px' }}>
+              {service.niche}
+            </h3>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.85rem', color: '#A0A0A0' }}>
+              {service.tagline}
+            </p>
+          </div>
+        </div>
+        <div style={{ padding: '24px 28px 28px' }}>
+          <p style={{
+            fontFamily: 'DM Sans, sans-serif',
+            fontSize: '0.7rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgba(160,160,160,0.5)',
+            marginBottom: '14px',
+          }}>
+            What's Included
+          </p>
+          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {service.features.map((f) => (
+              <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                <span style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: '#3B82F6',
+                  flexShrink: 0,
+                  marginTop: '7px',
+                }} />
+                <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.88rem', color: '#A0A0A0', lineHeight: 1.6 }}>
+                  {f}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 const services = [
   {
     icon: Scissors,
@@ -153,93 +276,19 @@ export default function Services() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
             gap: '24px',
           }}>
-            {services.map((s, i) => (
-              <FadeUp key={s.niche} delay={i * 0.08}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.3 }}
-                  style={{
-                    background: '#111111',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    borderRadius: '20px',
-                    overflow: 'hidden',
-                    height: '100%',
-                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = '#3B82F6'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
-                >
-                  {/* Color header */}
-                  <div style={{
-                    background: s.color,
-                    padding: '28px 28px 24px',
-                    borderBottom: '1px solid rgba(255,255,255,0.04)',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '16px',
-                  }}>
-                    <div style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '12px',
-                      background: 'rgba(59,130,246,0.15)',
-                      border: '1px solid rgba(59,130,246,0.2)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}>
-                      <s.icon size={22} style={{ color: '#3B82F6' }} />
-                    </div>
-                    <div>
-                      <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: '#F0F0F0', marginBottom: '4px' }}>
-                        {s.niche}
-                      </h3>
-                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.85rem', color: '#A0A0A0' }}>
-                        {s.tagline}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Features */}
-                  <div style={{ padding: '24px 28px 28px' }}>
-                    <p style={{
-                      fontFamily: 'DM Sans, sans-serif',
-                      fontSize: '0.7rem',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: 'rgba(160,160,160,0.5)',
-                      marginBottom: '14px',
-                    }}>
-                      What's Included
-                    </p>
-                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      {s.features.map((f) => (
-                        <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                          <span style={{
-                            width: '6px',
-                            height: '6px',
-                            borderRadius: '50%',
-                            background: '#3B82F6',
-                            flexShrink: 0,
-                            marginTop: '7px',
-                          }} />
-                          <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.88rem', color: '#A0A0A0', lineHeight: 1.6 }}>
-                            {f}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </motion.div>
-              </FadeUp>
-            ))}
+            {services.map((s, i) => {
+              const directions = [
+                { x: -160, y: 0 },
+                { x: 0, y: -120 },
+                { x: 160, y: 0 },
+                { x: -160, y: 0 },
+                { x: 0, y: 120 },
+                { x: 160, y: 0 },
+              ]
+              return (
+                <ServiceCard key={s.niche} service={s} direction={directions[i]} delay={i < 3 ? i * 0.1 : (i - 3) * 0.1} />
+              )
+            })}
           </div>
         </div>
       </section>
@@ -261,8 +310,11 @@ export default function Services() {
                 fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
                 color: '#F0F0F0',
                 marginBottom: '12px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
               }}>
-                Don't see your industry?
+                <MaskReveal text="Don't see your industry?" />
               </h2>
               <p style={{
                 fontFamily: 'DM Sans, sans-serif',

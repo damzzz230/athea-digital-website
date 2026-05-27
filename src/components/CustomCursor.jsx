@@ -10,10 +10,10 @@ export default function CustomCursor() {
   const ringScaleRaw = useMotionValue(1)
 
   // Spring-smoothed position for the outer ring (gives it the slight lag)
-  const springX = useSpring(mouseX, { stiffness: 600, damping: 50, mass: 0.3 })
-  const springY = useSpring(mouseY, { stiffness: 600, damping: 50, mass: 0.3 })
+  const springX = useSpring(mouseX, { stiffness: 1200, damping: 60, mass: 0.1 })
+  const springY = useSpring(mouseY, { stiffness: 1200, damping: 60, mass: 0.1 })
   // Spring-smoothed scale for hover expand
-  const ringScale = useSpring(ringScaleRaw, { stiffness: 400, damping: 25 })
+  const ringScale = useSpring(ringScaleRaw, { stiffness: 800, damping: 35 })
 
   // Offset transforms — GPU-composited translate, no layout triggered
   const ringX = useTransform(springX, v => v - 20)

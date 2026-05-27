@@ -5,6 +5,8 @@ import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
   ArrowRight, Zap, Smartphone, Clock, ChevronRight, ExternalLink
 } from 'lucide-react'
+import { gsap, ScrollTrigger } from '../lib/gsap'
+import Marquee from '../components/Marquee'
 
 const heroWords = ["We're So Good,", "We Build It", "First."]
 
@@ -280,7 +282,7 @@ function FadeUp({ children, delay = 0 }) {
 // ── MaskReveal — word-by-word clip reveal for major headings ─────────────────
 function MaskReveal({ text }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const inView = useInView(ref, { once: true, margin: '-80px 0px -80px 0px' })
   const words = text.split(' ')
   return (
     <span
@@ -296,8 +298,8 @@ function MaskReveal({ text }) {
           <motion.span
             style={{ display: 'inline-block', lineHeight: 'inherit' }}
             initial={{ y: '105%' }}
-            animate={inView ? { y: 0 } : {}}
-            transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
+            animate={inView ? { y: 0 } : { y: '105%' }}
+            transition={{ duration: 0.6, delay: 0.1 + i * 0.08, ease: 'easeOut' }}
           >
             {word}
           </motion.span>
@@ -327,62 +329,54 @@ function CountUp({ to, suffix = '', duration = 1.5 }) {
   )
 }
 
-// ── NicheHorizontalScroll — pinned horizontal scroll for Industries section ──
-function NicheHorizontalScroll() {
-  const containerRef = useRef(null)
-  const trackRef = useRef(null)
-  // Initialise with a reasonable desktop default; recalculated after mount
-  const [translateXEnd, setTranslateXEnd] = useState(-800)
-  const [sectionHeight, setSectionHeight] = useState('250vh')
+// ── NicheScrollReveal — radial card burst driven by scroll progress ──────────
+function NicheScrollReveal() {
+  const sectionRef = useRef(null)
+  const [animationProgress, setAnimationProgress] = useState(0)
 
   useEffect(() => {
-    const calc = () => {
-      if (!trackRef.current) return
-      const trackW = trackRef.current.scrollWidth
-      const viewW  = window.innerWidth
-      // How far we need to pull the strip left so the last card is fully visible
-      const translation = Math.max(0, trackW - viewW + 48)
-      setTranslateXEnd(-translation)
-      // Make scroll distance give a ~0.8× pan feel (comfortable, not too slow)
-      const scrollPx = Math.ceil(translation / 0.8)
-      setSectionHeight(`calc(100vh + ${scrollPx}px)`)
+    const onScroll = () => {
+      if (!sectionRef.current) return
+      const offsetTop     = sectionRef.current.offsetTop
+      const relativeScroll = Math.max(0, window.scrollY - offsetTop + window.innerHeight * 0.1)
+      setAnimationProgress(Math.min(relativeScroll / 350, 1))
     }
-    calc()
-    window.addEventListener('resize', calc)
-    return () => window.removeEventListener('resize', calc)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll() // seed on mount in case already scrolled
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  })
-
-  const x = useTransform(scrollYProgress, [0, 1], [0, translateXEnd])
+  const expandRadius   = animationProgress * 220
+  const cardOpacity    = Math.min(animationProgress * 3, 1)
+  const angleStep      = (2 * Math.PI) / 6
 
   return (
     <section
-      ref={containerRef}
-      style={{ height: sectionHeight, position: 'relative', marginBottom: '80px' }}
+      ref={sectionRef}
+      style={{ height: '180vh', position: 'relative', marginBottom: '80px' }}
     >
       {/* Sticky viewport-height panel */}
       <div style={{
         position: 'sticky',
         top: 0,
         height: '100vh',
-        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
         justifyContent: 'center',
-        gap: '32px',
+        gap: '40px',
+        overflow: 'hidden',
       }}>
-        {/* Section label fades in as panel enters view */}
+
+        {/* Section label */}
         <FadeUp>
           <p style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '0.75rem',
-            letterSpacing: '0.12em',
+            fontFamily: 'Syne, sans-serif',
+            fontSize: '1.1rem',
+            letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: 'rgba(160,160,160,0.5)',
+            color: '#F0F0F0',
+            fontWeight: 700,
             textAlign: 'center',
             margin: 0,
           }}>
@@ -390,66 +384,205 @@ function NicheHorizontalScroll() {
           </p>
         </FadeUp>
 
-        {/* Horizontally-scrolling card strip */}
-        <motion.div
-          ref={trackRef}
-          style={{
-            x,
+        {/* Radial burst container */}
+        <div style={{ position: 'relative', width: '500px', height: '500px' }}>
+
+          {/* Outer ring — appears after 60% progress */}
+          {animationProgress > 0.6 && (
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.06)',
+              opacity: Math.min((animationProgress - 0.6) / 0.4, 1),
+              transition: 'opacity 0.3s ease',
+              pointerEvents: 'none',
+            }} />
+          )}
+
+          {/* Inner ring — appears after 20% progress */}
+          {animationProgress > 0.2 && (
+            <div style={{
+              position: 'absolute',
+              top: '12.5%',
+              left: '12.5%',
+              width: '75%',
+              height: '75%',
+              borderRadius: '50%',
+              border: '1px solid rgba(59,130,246,0.15)',
+              opacity: Math.min((animationProgress - 0.2) / 0.4, 1),
+              transition: 'opacity 0.3s ease',
+              pointerEvents: 'none',
+            }} />
+          )}
+
+          {/* Centre orb */}
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '160px',
+            height: '160px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, rgba(59,130,246,0.06) 55%, transparent 75%)',
+            border: '1px solid rgba(59,130,246,0.25)',
+            boxShadow: `0 0 ${40 + animationProgress * 40}px rgba(59,130,246,${0.1 + animationProgress * 0.15})`,
             display: 'flex',
-            gap: '12px',
-            paddingLeft: '24px',
-            paddingRight: '24px',
-            willChange: 'transform',
-          }}
-        >
-          {niches.map((n) => (
-            <Link
-              key={n.label}
-              to="/services"
-              style={{ textDecoration: 'none', display: 'block', flex: '0 0 280px' }}
-            >
-              <div
-                style={{
-                  background: '#111111',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: '12px',
-                  padding: '20px 16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '10px',
-                  cursor: 'pointer',
-                  transition: 'border-color 0.25s ease, background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = '#3B82F6'
-                  e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-                  e.currentTarget.style.background = 'rgba(59,130,246,0.05)'
-                  e.currentTarget.style.transform = 'translateY(-3px)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                  e.currentTarget.style.boxShadow = 'none'
-                  e.currentTarget.style.background = '#111111'
-                  e.currentTarget.style.transform = 'translateY(0)'
-                }}
-              >
-                <n.icon size={22} style={{ color: '#3B82F6' }} />
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '2px',
+            transition: 'box-shadow 0.1s linear',
+          }}>
+            {animationProgress > 0.6 && (
+              <>
                 <span style={{
-                  fontFamily: 'DM Sans, sans-serif',
+                  fontFamily: 'Syne, sans-serif',
+                  fontWeight: 800,
                   fontSize: '0.8rem',
-                  fontWeight: 500,
-                  color: '#A0A0A0',
-                  textAlign: 'center',
+                  color: '#F0F0F0',
+                  letterSpacing: '-0.01em',
+                  opacity: Math.min((animationProgress - 0.6) / 0.4, 1),
+                  transition: 'opacity 0.3s ease',
                 }}>
-                  {n.label}
+                  Your Industry.
                 </span>
-              </div>
-            </Link>
-          ))}
-        </motion.div>
+                <span style={{
+                  fontFamily: 'Syne, sans-serif',
+                  fontWeight: 800,
+                  fontSize: '0.8rem',
+                  color: '#3B82F6',
+                  letterSpacing: '-0.01em',
+                  opacity: Math.min((animationProgress - 0.6) / 0.4, 1),
+                  transition: 'opacity 0.3s ease',
+                }}>
+                  Your Site.
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Radial niche cards */}
+          {niches.map((n, i) => {
+            const angle = -Math.PI / 2 + angleStep * i
+            const x     = Math.cos(angle) * expandRadius
+            const y     = Math.sin(angle) * expandRadius
+            return (
+              <Link
+                key={n.label}
+                to="/services"
+                style={{ textDecoration: 'none' }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                    width: '110px',
+                    height: '110px',
+                    background: '#111111',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    borderRadius: '16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    opacity: cardOpacity,
+                    cursor: 'pointer',
+                    transition: 'border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = '#3B82F6'
+                    e.currentTarget.style.boxShadow  = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+                    e.currentTarget.style.background  = 'rgba(59,130,246,0.05)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.boxShadow  = 'none'
+                    e.currentTarget.style.background  = '#111111'
+                  }}
+                >
+                  <n.icon size={22} style={{ color: '#3B82F6' }} />
+                  <span style={{
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: '0.7rem',
+                    fontWeight: 500,
+                    color: '#A0A0A0',
+                    textAlign: 'center',
+                    lineHeight: 1.3,
+                    padding: '0 6px',
+                  }}>
+                    {n.label}
+                  </span>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
       </div>
     </section>
+  )
+}
+
+// ── Feature card — ref-based inView animation ─────────────────────────────────
+function FeatureCard({ feature, direction, delay }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  return (
+    <motion.div
+      ref={ref}
+      animate={inView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: direction.x, y: direction.y }}
+      transition={{ duration: 1.1, delay: 0.2 + delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{ opacity: 0 }}
+    >
+      <div
+        style={{
+          background: '#111111',
+          border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: '16px',
+          padding: '32px',
+          height: '100%',
+          transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-6px)'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+          e.currentTarget.style.borderColor = '#3B82F6'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow = 'none'
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+        }}
+      >
+        <div style={{
+          width: '44px',
+          height: '44px',
+          borderRadius: '10px',
+          background: 'rgba(59,130,246,0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: '20px',
+        }}>
+          <feature.icon size={20} style={{ color: '#3B82F6' }} />
+        </div>
+        <h3 style={{
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 700,
+          fontSize: '1.15rem',
+          color: '#F0F0F0',
+          marginBottom: '12px',
+        }}>
+          {feature.title}
+        </h3>
+        <FeatureBody feature={feature} />
+      </div>
+    </motion.div>
   )
 }
 
@@ -472,12 +605,35 @@ function FeatureBody({ feature }) {
 }
 
 export default function Home() {
-  const heroRef = useRef(null)
+  const heroRef       = useRef(null)
+  const floatingOrbRef = useRef(null)  // GSAP-parallax decorative orb
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   })
+
+  // GSAP ScrollTrigger — parallax on the secondary hero background orb.
+  // Animates a purely decorative element so there's zero conflict with
+  // Framer Motion which handles the content/text animations above.
+  useEffect(() => {
+    if (!floatingOrbRef.current || !heroRef.current) return
+
+    const ctx = gsap.context(() => {
+      gsap.to(floatingOrbRef.current, {
+        y: -200,            // drifts upward as user scrolls
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,       // slight lag gives a dreamy parallax feel
+        },
+      })
+    })
+
+    return () => ctx.revert()
+  }, [])
 
   return (
     <div style={{ background: '#0A0A0A' }}>
@@ -502,6 +658,21 @@ export default function Home() {
           background: 'radial-gradient(ellipse, rgba(59,130,246,0.08) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
+        {/* GSAP-parallax secondary orb — drifts at a different rate to add depth */}
+        <div
+          ref={floatingOrbRef}
+          style={{
+            position: 'absolute',
+            bottom: '5%',
+            right: '8%',
+            width: '480px',
+            height: '480px',
+            background: 'radial-gradient(circle, rgba(59,130,246,0.045) 0%, transparent 65%)',
+            filter: 'blur(72px)',
+            borderRadius: '50%',
+            pointerEvents: 'none',
+          }}
+        />
         {/* Grid lines */}
         <div style={{
           position: 'absolute',
@@ -655,8 +826,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Industries We Serve — horizontal scroll ── */}
-      <NicheHorizontalScroll />
+      {/* ── Marquee ticker — GSAP infinite scroll ── */}
+      <Marquee />
+
+      {/* ── Industries We Serve — radial scroll reveal ── */}
+      <NicheScrollReveal />
 
       {/* ── Why Athea ── */}
       <section style={{ padding: '80px 24px', background: '#0D0D0D' }}>
@@ -688,65 +862,24 @@ export default function Home() {
           </div>
 
           {/* Staggered feature cards */}
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
+          <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
               gap: '24px',
             }}
           >
-            {features.map((f) => (
-              <motion.div key={f.title} variants={fadeUpItem}>
-                <div
-                  style={{
-                    background: '#111111',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    borderRadius: '16px',
-                    padding: '32px',
-                    height: '100%',
-                    transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.transform = 'translateY(-6px)'
-                    e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-                    e.currentTarget.style.borderColor = '#3B82F6'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = 'none'
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                  }}
-                >
-                  <div style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '10px',
-                    background: 'rgba(59,130,246,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                  }}>
-                    <f.icon size={20} style={{ color: '#3B82F6' }} />
-                  </div>
-                  <h3 style={{
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: 700,
-                    fontSize: '1.15rem',
-                    color: '#F0F0F0',
-                    marginBottom: '12px',
-                  }}>
-                    {f.title}
-                  </h3>
-                  <FeatureBody feature={f} />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+            {features.map((f, i) => {
+              const directions = [
+                { x: -160, y: 0 },
+                { x: 0, y: 140 },
+                { x: 160, y: 0 },
+              ]
+              return (
+                <FeatureCard key={f.title} feature={f} direction={directions[i]} delay={i * 0.15} />
+              )
+            })}
+          </div>
         </div>
       </section>
 
@@ -952,7 +1085,10 @@ export default function Home() {
                 color: '#F0F0F0',
                 letterSpacing: '-0.02em',
                 marginBottom: '16px',
+                display: 'flex',
                 justifyContent: 'center',
+                textAlign: 'center',
+                flexWrap: 'wrap',
               }}>
                 <MaskReveal text="Let's build something that works." />
               </h2>
