@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(netstat -ano)"
+      "PowerShell(netstat -ano)",
+      "Bash(Start-Sleep -Seconds 5)",
+      "Bash(Get-Content \"C:\\\\Users\\\\damia\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-damia-athea-digital-website\\\\4a45474a-5f57-42e7-b38c-742e3f20ce69\\\\tasks\\\\bgm0ug19e.output\")"
     ]
   }
 }

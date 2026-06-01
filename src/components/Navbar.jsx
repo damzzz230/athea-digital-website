@@ -24,10 +24,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    setOpen(false)
-  }, [location.pathname])
-
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -182,6 +178,7 @@ export default function Navbar() {
                 >
                   <Link
                     to={l.to}
+                    onClick={() => setOpen(false)}
                     style={{
                       display: 'block',
                       fontFamily: 'Syne, sans-serif',

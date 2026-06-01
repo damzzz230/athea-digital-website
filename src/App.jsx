@@ -13,6 +13,26 @@ import Portfolio from './pages/Portfolio'
 import Pricing from './pages/Pricing'
 import Contact from './pages/Contact'
 
+const SITE_URL = 'https://athea.digital'
+
+const PAGE_TITLES = {
+  '/':          'Athea Digital — Premium Web Design, Johannesburg',
+  '/about':     'About Us | Athea Digital — Johannesburg Web Design Studio',
+  '/services':  'Web Design Services for Johannesburg Businesses | Athea Digital',
+  '/portfolio': 'Our Work & Portfolio | Athea Digital',
+  '/pricing':   'Web Design Pricing & Packages | Athea Digital',
+  '/contact':   'Get a Quote | Athea Digital — Johannesburg Web Design',
+}
+
+const PAGE_DESCRIPTIONS = {
+  '/':          'Athea Digital builds premium websites for Johannesburg businesses — salons, trades, restaurants, fitness, tattoo studios and more. See your site before you pay.',
+  '/about':     'We\'re a two-person web design studio based in Johannesburg. We build fast, mobile-first websites for local businesses — you see it before you pay anything.',
+  '/services':  'Custom websites for Johannesburg hair salons, restaurants, trades, fitness studios, tattoo parlours, and auto detailers. Niche-specific design that converts.',
+  '/portfolio': 'View Athea Digital\'s portfolio of premium websites built for Johannesburg local businesses. Real projects, real results.',
+  '/pricing':   'Transparent, once-off web design pricing for Johannesburg businesses. Starter from R3,499 — no monthly fees, no hidden costs. You own your site outright.',
+  '/contact':   'Get in touch with Athea Digital for a custom website quote. Based in Johannesburg — we respond within a few hours and have a direction ready within 24 hours.',
+}
+
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
   enter:   { opacity: 1, y: 0  },
@@ -61,6 +81,28 @@ function ScrollToTop({ lenisRef }) {
 export default function App() {
   const location  = useLocation()
   const lenisRef  = useLenis()   // ← Lenis smooth scroll + GSAP sync
+
+  useEffect(() => {
+    const path = location.pathname
+    const title = PAGE_TITLES[path] ?? 'Athea Digital'
+    const description = PAGE_DESCRIPTIONS[path] ?? PAGE_DESCRIPTIONS['/']
+    const url = `${SITE_URL}${path}`
+
+    document.title = title
+
+    const setMeta = (selector, attr, value) => {
+      const el = document.querySelector(selector)
+      if (el) el.setAttribute(attr, value)
+    }
+
+    setMeta('meta[name="description"]', 'content', description)
+    setMeta('link#canonical-tag', 'href', url)
+    setMeta('meta[id="og-url"]', 'content', url)
+    setMeta('meta[id="og-title"]', 'content', title)
+    setMeta('meta[id="og-description"]', 'content', description)
+    setMeta('meta[id="twitter-title"]', 'content', title)
+    setMeta('meta[id="twitter-description"]', 'content', description)
+  }, [location.pathname])
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#0A0A0A' }}>

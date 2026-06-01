@@ -115,7 +115,7 @@ export default function Contact() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
                   <a
-                    href="https://wa.me/27000000000?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20website%20quote"
+                    href="https://wa.me/27615223385?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20website%20quote"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -152,7 +152,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0F0F0', marginBottom: '2px' }}>WhatsApp</p>
-                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#A0A0A0' }}>+27 000 000 0000</p>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#A0A0A0' }}>061 522 3385</p>
                     </div>
                   </a>
 
@@ -298,7 +298,7 @@ export default function Contact() {
                     <input
                       type="tel"
                       name="phone"
-                      placeholder="+27 000 000 0000"
+                      placeholder="061 522 3385"
                       style={fieldStyle('phone')}
                       onFocus={() => setFocused('phone')}
                       onBlur={() => setFocused(null)}

@@ -26,7 +26,7 @@ export default function WhatsAppButton() {
       />
 
       <motion.a
-        href="https://wa.me/27000000000?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20website%20quote"
+        href="https://wa.me/27615223385?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20website%20quote"
         target="_blank"
         rel="noopener noreferrer"
         className="float-bounce"

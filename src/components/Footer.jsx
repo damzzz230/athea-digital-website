@@ -132,7 +132,7 @@ export default function Footer() {
             {/* Social icons */}
             <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
               {[
-                { href: 'https://wa.me/27000000000', icon: <MessageCircle size={16} />, label: 'WhatsApp' },
+                { href: 'https://wa.me/27615223385', icon: <MessageCircle size={16} />, label: 'WhatsApp' },
                 { href: 'mailto:hello@athea.digital', icon: <Mail size={16} />, label: 'Email' },
               ].map(({ href, icon, label }) => (
                 <a
@@ -199,7 +199,7 @@ export default function Footer() {
             <ColHeading>Contact</ColHeading>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <a
-                href="https://wa.me/27000000000"
+                href="https://wa.me/27615223385"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#A0A0A0', textDecoration: 'none', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', transition: 'color 0.2s' }}
@@ -207,7 +207,7 @@ export default function Footer() {
                 onMouseLeave={e => { e.currentTarget.style.color = '#A0A0A0' }}
               >
                 <MessageCircle size={15} style={{ color: '#3B82F6', flexShrink: 0 }} />
-                +27 000 000 0000
+                061 522 3385
               </a>
               <a
                 href="mailto:hello@athea.digital"

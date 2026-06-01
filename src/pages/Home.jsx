@@ -5,7 +5,7 @@ import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
   ArrowRight, Zap, Smartphone, Clock, ChevronRight, ExternalLink
 } from 'lucide-react'
-import { gsap, ScrollTrigger } from '../lib/gsap'
+import { gsap } from '../lib/gsap'
 import Marquee from '../components/Marquee'
 
 const heroWords = ["We're So Good,", "We Build It", "First."]
@@ -97,6 +97,7 @@ function Logo3D() {
   const rafRef     = useRef(null)
   const hovRef     = useRef(false)
   const springsRef = useRef([])
+  const tickRef    = useRef(null)
 
   const startBreathing = useCallback(() => {
     glowControls.start({
@@ -116,8 +117,10 @@ function Logo3D() {
     glowXMV.set(50 + s.cx * 30)
     glowYMV.set(50 + s.cy * 30)
 
-    if (hovRef.current) rafRef.current = requestAnimationFrame(tick)
+    if (hovRef.current) rafRef.current = requestAnimationFrame(tickRef.current)
   }, [rotXMV, rotYMV, glowXMV, glowYMV])
+
+  useEffect(() => { tickRef.current = tick }, [tick])
 
   const handleMouseMove = useCallback((e) => {
     const rect = containerRef.current?.getBoundingClientRect()
@@ -1105,7 +1108,7 @@ export default function Home() {
 
               <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px' }}>
                 <a
-                  href="https://wa.me/27000000000?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20quote"
+                  href="https://wa.me/27615223385?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20quote"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ textDecoration: 'none' }}

@@ -110,20 +110,6 @@ function ExpandableGallery({ images }) {
 
 const projects = [
   {
-    id: 1,
-    name: 'Luxe Hair Studio',
-    niche: 'Salons',
-    tag: 'Hair Salon',
-    description: 'A sleek booking-forward site for a premium Joburg salon. Gallery-led with WhatsApp booking integration.',
-    accent: '#3B82F6',
-    images: [
-      'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
-      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80',
-      'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&q=80',
-      'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&q=80',
-    ],
-  },
-  {
     id: 2,
     name: 'Arc Energy JHB',
     niche: 'Trades',
@@ -138,73 +124,9 @@ const projects = [
       'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80',
     ],
   },
-  {
-    id: 3,
-    name: 'Iron & Ink Tattoo',
-    niche: 'Tattoo',
-    tag: 'Tattoo Studio',
-    description: 'Portfolio-first site for a Sandton tattoo studio. Dark editorial aesthetic with artist profiles.',
-    accent: '#ef4444',
-    images: [
-      'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800&q=80',
-      'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?w=800&q=80',
-      'https://images.unsplash.com/photo-1543767271-7b282a59ff78?w=800&q=80',
-      'https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=800&q=80',
-    ],
-  },
-  {
-    id: 4,
-    name: 'The Grind Cafe',
-    niche: 'Restaurants',
-    tag: 'Restaurant',
-    description: 'Warm, menu-focused site for a Parkhurst neighbourhood cafe. Online reservations via WhatsApp.',
-    accent: '#f59e0b',
-    images: [
-      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80',
-      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
-      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
-      'https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80',
-    ],
-  },
-  {
-    id: 5,
-    name: 'Peak Performance PT',
-    niche: 'Fitness',
-    tag: 'Fitness',
-    description: 'Conversion-focused site for a personal trainer in Randburg. Package pricing and lead capture form.',
-    accent: '#10b981',
-    images: [
-      'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
-      'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80',
-      'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
-      'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80',
-    ],
-  },
-  {
-    id: 6,
-    name: 'DetailCraft Auto',
-    niche: 'Trades',
-    tag: 'Auto Detailing',
-    description: 'Before/after gallery site for a premium auto detailer in Midrand. Package pricing with quote form.',
-    accent: '#8b5cf6',
-    images: [
-      'https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=800&q=80',
-      'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=800&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80',
-      'https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=800&q=80',
-    ],
-  },
 ]
 
-const filters = ['All', 'Salons', 'Trades', 'Restaurants', 'Fitness', 'Tattoo']
-
 export default function Portfolio() {
-  const [activeFilter, setActiveFilter] = useState('All')
-
-  const filtered = activeFilter === 'All'
-    ? projects
-    : projects.filter(p => p.niche === activeFilter || p.tag.toLowerCase().includes(activeFilter.toLowerCase()))
-
   return (
     <div style={{ background: '#0A0A0A' }}>
       {/* Hero */}
@@ -256,37 +178,6 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Filter row */}
-      <section style={{ padding: '0 24px 48px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <FadeUp>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {filters.map((f) => (
-                <motion.button
-                  key={f}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => setActiveFilter(f)}
-                  style={{
-                    fontFamily: 'DM Sans, sans-serif',
-                    fontWeight: 500,
-                    fontSize: '0.85rem',
-                    padding: '8px 18px',
-                    borderRadius: '100px',
-                    border: activeFilter === f ? '1px solid #3B82F6' : '1px solid rgba(255,255,255,0.08)',
-                    background: activeFilter === f ? 'rgba(59,130,246,0.15)' : 'transparent',
-                    color: activeFilter === f ? '#3B82F6' : '#A0A0A0',
-                    transition: 'background 0.2s ease, color 0.2s ease, border-color 0.2s ease',
-                  }}
-                >
-                  {f}
-                </motion.button>
-              ))}
-            </div>
-          </FadeUp>
-        </div>
-      </section>
-
       {/* Grid */}
       <section style={{ padding: '0 24px 100px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -296,7 +187,7 @@ export default function Portfolio() {
             gap: '24px',
           }}>
             <AnimatePresence mode="popLayout">
-              {filtered.map((p, i) => (
+              {projects.map((p, i) => (
                 <motion.div
                   key={p.id}
                   layout
@@ -381,11 +272,6 @@ export default function Portfolio() {
             </AnimatePresence>
           </div>
 
-          {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '80px 0' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', color: '#A0A0A0' }}>No projects in this category yet.</p>
-            </div>
-          )}
         </div>
       </section>
     </div>
