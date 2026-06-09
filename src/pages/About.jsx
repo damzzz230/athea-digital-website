@@ -170,7 +170,7 @@ const values = [
   {
     icon: Eye,
     title: 'Transparency',
-    body: "No hidden costs, no vague timelines. You see exactly what you're getting before any money changes hands.",
+    body: "No hidden costs, no vague timelines. You see exactly what you're getting before you commit a cent. Approve the design, pay 50% to start.",
   },
 ]
 
@@ -299,7 +299,7 @@ export default function About() {
                 Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
               </p>
               <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8, marginBottom: '20px' }}>
-                <strong style={{ color: '#F0F0F0' }}>We build the site first.</strong> You get to see exactly what you're getting — the design, the layout, the copy, the features — before you commit to anything. If you love it, we talk about a deal. If it's not right, we iterate until it is.
+                <strong style={{ color: '#F0F0F0' }}>We design your site first</strong> — layout, copy, features. Love it? Pay 50% to kick off. Full build delivered in 7 days, balance on completion.
               </p>
               <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8 }}>
                 This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.

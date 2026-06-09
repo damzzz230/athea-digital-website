@@ -8,7 +8,7 @@ import {
 import { gsap } from '../lib/gsap'
 import Marquee from '../components/Marquee'
 
-const heroWords = ["We're So Good,", "We Build It", "First."]
+const heroWords = ["Still Paying Upfront", "For A Site You", "Haven't Seen?"]
 
 const niches = [
   { icon: Scissors, label: 'Hair Salons' },
@@ -33,7 +33,7 @@ const features = [
   {
     icon: Clock,
     title: 'Launched in Days',
-    body: 'No discovery calls that drag on for weeks. We spec-build your site and have it live faster than any traditional agency.',
+    body: 'No discovery calls that drag on for weeks. We design your site before you commit — approve it, pay 50%, and have the full build delivered in 7 days.',
   },
 ]
 
@@ -757,7 +757,7 @@ export default function Home() {
                 marginBottom: '44px',
               }}
             >
-              See your finished website before you spend a cent. Custom-built for your business. Delivered in 5 days.
+              We do it differently. See your design first, pay 50% to start, full site delivered in 7 days.
             </motion.p>
 
             {/* CTAs */}
@@ -1103,7 +1103,7 @@ export default function Home() {
                 maxWidth: '480px',
                 margin: '0 auto 36px',
               }}>
-                No lengthy briefs. No upfront payment. We build your site — you see it, love it, then we talk about the rest.
+                No lengthy briefs. No guessing. We design your site first — love it, pay 50% to kick off, full site in 7 days.
               </p>
 
               <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px' }}>

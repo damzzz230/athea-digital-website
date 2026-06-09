@@ -25,8 +25,8 @@ const PAGE_TITLES = {
 }
 
 const PAGE_DESCRIPTIONS = {
-  '/':          'Athea Digital builds premium websites for Johannesburg businesses — salons, trades, restaurants, fitness, tattoo studios and more. See your site before you pay.',
-  '/about':     'We\'re a two-person web design studio based in Johannesburg. We build fast, mobile-first websites for local businesses — you see it before you pay anything.',
+  '/':          'Athea Digital builds premium websites for Johannesburg businesses — salons, trades, restaurants, fitness, tattoo studios and more. We design your site first — see it, approve it, and pay 50% to kick off. Full build delivered in 7 days.',
+  '/about':     'We\'re a two-person web design studio based in Johannesburg. We build fast, mobile-first websites for local businesses — we design it first, you approve it, then pay 50% to start. Full site delivered in 7 days.',
   '/services':  'Custom websites for Johannesburg hair salons, restaurants, trades, fitness studios, tattoo parlours, and auto detailers. Niche-specific design that converts.',
   '/portfolio': 'View Athea Digital\'s portfolio of premium websites built for Johannesburg local businesses. Real projects, real results.',
   '/pricing':   'Transparent, once-off web design pricing for Johannesburg businesses. Starter from R3,499 — no monthly fees, no hidden costs. You own your site outright.',

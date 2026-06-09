@@ -126,14 +126,14 @@ export default function Footer() {
               lineHeight: 1.6,
               maxWidth: '260px',
             }}>
-              Premium websites for Johannesburg businesses. We build first — you pay only when you're impressed.
+              Premium websites for Johannesburg businesses. We design it first. 50% to kick off, full site in 7 days, balance on completion.
             </p>
 
             {/* Social icons */}
             <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
               {[
                 { href: 'https://wa.me/27615223385', icon: <MessageCircle size={16} />, label: 'WhatsApp' },
-                { href: 'mailto:hello@athea.digital', icon: <Mail size={16} />, label: 'Email' },
+                { href: 'mailto:info@atheadigital.co.za', icon: <Mail size={16} />, label: 'Email' },
               ].map(({ href, icon, label }) => (
                 <a
                   key={label}
@@ -210,13 +210,13 @@ export default function Footer() {
                 061 522 3385
               </a>
               <a
-                href="mailto:hello@athea.digital"
+                href="mailto:info@atheadigital.co.za"
                 style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#A0A0A0', textDecoration: 'none', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', transition: 'color 0.2s' }}
                 onMouseEnter={e => { e.currentTarget.style.color = '#F0F0F0' }}
                 onMouseLeave={e => { e.currentTarget.style.color = '#A0A0A0' }}
               >
                 <Mail size={15} style={{ color: '#3B82F6', flexShrink: 0 }} />
-                hello@athea.digital
+                info@atheadigital.co.za
               </a>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', color: '#A0A0A0' }}>
                 <MapPin size={15} style={{ color: '#3B82F6', flexShrink: 0 }} />
