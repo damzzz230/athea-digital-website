@@ -8,7 +8,7 @@ import {
 import { gsap } from '../lib/gsap'
 import Marquee from '../components/Marquee'
 
-const heroWords = ["Still Paying Upfront", "For A Site You", "Haven't Seen?"]
+const heroWords = ["See It.", "Love It.", "Own It."]
 
 const niches = [
   { icon: Scissors, label: 'Hair Salons' },
@@ -757,7 +757,7 @@ export default function Home() {
                 marginBottom: '44px',
               }}
             >
-              We do it differently. See your design first, pay 50% to start, full site delivered in 7 days.
+              We build your site before you pay a thing. 50% to start. Full delivery in 7 days. Balance on completion.
             </motion.p>
 
             {/* CTAs */}
