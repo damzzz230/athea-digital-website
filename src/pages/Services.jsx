@@ -61,26 +61,26 @@ function ServiceCard({ service, direction, delay }) {
         whileHover={{ y: -6 }}
         transition={{ duration: 0.3 }}
         style={{
-          background: '#111111',
-          border: '1px solid rgba(255,255,255,0.06)',
+          background: '#12121A',
+          border: '1px solid #2A2A3A',
           borderRadius: '20px',
           overflow: 'hidden',
           height: '100%',
           transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.borderColor = '#3B82F6'
-          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+          e.currentTarget.style.borderColor = '#8B5CF6'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(139,92,246,0.15), 0 0 0 1px rgba(139,92,246,0.6)'
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+          e.currentTarget.style.borderColor = '#2A2A3A'
           e.currentTarget.style.boxShadow = 'none'
         }}
       >
         <div style={{
           background: service.color,
           padding: '28px 28px 24px',
-          borderBottom: '1px solid rgba(255,255,255,0.04)',
+          borderBottom: '1px solid #2A2A3A',
           display: 'flex',
           alignItems: 'flex-start',
           gap: '16px',
@@ -89,20 +89,20 @@ function ServiceCard({ service, direction, delay }) {
             width: '48px',
             height: '48px',
             borderRadius: '12px',
-            background: 'rgba(59,130,246,0.15)',
-            border: '1px solid rgba(59,130,246,0.2)',
+            background: 'rgba(139,92,246,0.15)',
+            border: '1px solid rgba(139,92,246,0.2)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
           }}>
-            <service.icon size={22} style={{ color: '#3B82F6' }} />
+            <service.icon size={22} style={{ color: '#8B5CF6' }} />
           </div>
           <div>
-            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: '#F0F0F0', marginBottom: '4px' }}>
+            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.1rem', color: '#F0EDE8', marginBottom: '4px' }}>
               {service.niche}
             </h3>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.85rem', color: '#A0A0A0' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.85rem', color: '#9A9A9A' }}>
               {service.tagline}
             </p>
           </div>
@@ -113,7 +113,7 @@ function ServiceCard({ service, direction, delay }) {
             fontSize: '0.7rem',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
-            color: 'rgba(160,160,160,0.5)',
+            color: 'rgba(154,154,154,0.5)',
             marginBottom: '14px',
           }}>
             What's Included
@@ -125,11 +125,11 @@ function ServiceCard({ service, direction, delay }) {
                   width: '6px',
                   height: '6px',
                   borderRadius: '50%',
-                  background: '#3B82F6',
+                  background: '#8B5CF6',
                   flexShrink: 0,
                   marginTop: '7px',
                 }} />
-                <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.88rem', color: '#A0A0A0', lineHeight: 1.6 }}>
+                <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.88rem', color: '#9A9A9A', lineHeight: 1.6 }}>
                   {f}
                 </span>
               </li>
@@ -151,7 +151,7 @@ const services = [
       'Service menu with pricing and gallery',
       'Google Maps embed + directions link',
     ],
-    color: '#1a1030',
+    color: '#262631',
   },
   {
     icon: UtensilsCrossed,
@@ -162,7 +162,7 @@ const services = [
       'Reservation form or WhatsApp booking',
       'Trading hours, location & Google Maps',
     ],
-    color: '#1a1a0a',
+    color: '#2A2419',
   },
   {
     icon: Wrench,
@@ -173,7 +173,7 @@ const services = [
       'Services list with coverage area map',
       'Trust badges, licensing & WhatsApp CTA',
     ],
-    color: '#0a1a1a',
+    color: '#1E2A2A',
   },
   {
     icon: Dumbbell,
@@ -184,7 +184,7 @@ const services = [
       'Before/after gallery and testimonials',
       'Lead capture form + WhatsApp booking CTA',
     ],
-    color: '#0a1510',
+    color: '#1E2A1E',
   },
   {
     icon: Palette,
@@ -195,7 +195,7 @@ const services = [
       'Artist profiles and booking request form',
       'Flash availability section + WhatsApp CTA',
     ],
-    color: '#1a0a0a',
+    color: '#2A1E26',
   },
   {
     icon: Car,
@@ -206,13 +206,13 @@ const services = [
       'Online quote request or WhatsApp CTA',
       'Location, service area & Google Maps',
     ],
-    color: '#0d0d1a',
+    color: '#1E222A',
   },
 ]
 
 export default function Services() {
   return (
-    <div style={{ background: '#0A0A0A' }}>
+    <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
       <section style={{ padding: '160px 24px 80px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
@@ -221,7 +221,7 @@ export default function Services() {
           left: '30%',
           width: '600px',
           height: '400px',
-          background: 'radial-gradient(ellipse, rgba(59,130,246,0.07) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -229,7 +229,7 @@ export default function Services() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}
+            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '16px' }}
           >
             What We Build
           </motion.p>
@@ -243,13 +243,13 @@ export default function Services() {
               fontSize: 'clamp(2.5rem, 7vw, 5rem)',
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
-              color: '#F0F0F0',
+              color: '#F0EDE8',
               maxWidth: '700px',
               marginBottom: '20px',
             }}
           >
             A site built for<br />
-            <span style={{ color: '#3B82F6' }}>your industry.</span>
+            <span style={{ color: '#8B5CF6' }}>your industry.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -258,7 +258,7 @@ export default function Services() {
             style={{
               fontFamily: 'DM Sans, sans-serif',
               fontSize: '1.05rem',
-              color: '#A0A0A0',
+              color: '#9A9A9A',
               maxWidth: '520px',
               lineHeight: 1.7,
             }}
@@ -298,8 +298,8 @@ export default function Services() {
         <div style={{ maxWidth: '700px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{
-              background: '#111111',
-              border: '1px solid rgba(59,130,246,0.12)',
+              background: '#12121A',
+              border: '1px solid rgba(139,92,246,0.12)',
               borderRadius: '20px',
               padding: '48px',
               textAlign: 'center',
@@ -308,7 +308,7 @@ export default function Services() {
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: 700,
                 fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
-                color: '#F0F0F0',
+                color: '#F0EDE8',
                 marginBottom: '12px',
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -319,7 +319,7 @@ export default function Services() {
               <p style={{
                 fontFamily: 'DM Sans, sans-serif',
                 fontSize: '0.95rem',
-                color: '#A0A0A0',
+                color: '#9A9A9A',
                 lineHeight: 1.7,
                 marginBottom: '28px',
               }}>
@@ -333,15 +333,15 @@ export default function Services() {
                     fontFamily: 'Syne, sans-serif',
                     fontWeight: 700,
                     fontSize: '0.95rem',
-                    background: '#3B82F6',
-                    color: '#0A0A0A',
+                    background: '#8B5CF6',
+                    color: '#0A0A0F',
                     border: 'none',
                     borderRadius: '8px',
                     padding: '14px 28px',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    boxShadow: '0 0 24px rgba(59,130,246,0.25)',
+                    boxShadow: '0 0 24px rgba(139,92,246,0.25)',
                   }}
                 >
                   Let's Talk <ArrowRight size={16} />

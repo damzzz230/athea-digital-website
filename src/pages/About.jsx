@@ -59,19 +59,19 @@ function TeamCard({ member, direction, delay }) {
       style={{ opacity: 0 }}
     >
       <div style={{
-        background: '#111111',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: '#12121A',
+        border: '1px solid #2A2A3A',
         borderRadius: '20px',
         padding: '36px',
         transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
       }}
         onMouseEnter={e => {
-          e.currentTarget.style.borderColor = '#3B82F6'
+          e.currentTarget.style.borderColor = '#8B5CF6'
           e.currentTarget.style.transform = 'translateY(-6px)'
-          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(139,92,246,0.15), 0 0 0 1px rgba(139,92,246,0.6)'
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+          e.currentTarget.style.borderColor = '#2A2A3A'
           e.currentTarget.style.transform = 'translateY(0)'
           e.currentTarget.style.boxShadow = 'none'
         }}
@@ -81,23 +81,23 @@ function TeamCard({ member, direction, delay }) {
           height: '72px',
           borderRadius: '50%',
           background: member.color,
-          border: '2px solid rgba(59,130,246,0.3)',
+          border: '2px solid rgba(139,92,246,0.3)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '20px',
         }}>
-          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: '#F0F0F0' }}>
+          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: '#F0EDE8' }}>
             {member.initials}
           </span>
         </div>
-        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0F0F0', marginBottom: '4px' }}>
+        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0EDE8', marginBottom: '4px' }}>
           {member.name}
         </h3>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#3B82F6', marginBottom: '16px', letterSpacing: '0.02em' }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#8B5CF6', marginBottom: '16px', letterSpacing: '0.02em' }}>
           {member.title}
         </p>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#A0A0A0', lineHeight: 1.7 }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#9A9A9A', lineHeight: 1.7 }}>
           {member.bio}
         </p>
       </div>
@@ -116,39 +116,39 @@ function ValueCard({ value, direction, delay }) {
       style={{ opacity: 0 }}
     >
       <div style={{
-        background: '#111111',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: '#12121A',
+        border: '1px solid #2A2A3A',
         borderRadius: '16px',
         padding: '32px',
         transition: 'border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
       }}
         onMouseEnter={e => {
           e.currentTarget.style.transform = 'translateY(-6px)'
-          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-          e.currentTarget.style.borderColor = '#3B82F6'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(139,92,246,0.15), 0 0 0 1px rgba(139,92,246,0.6)'
+          e.currentTarget.style.borderColor = '#8B5CF6'
         }}
         onMouseLeave={e => {
           e.currentTarget.style.transform = 'translateY(0)'
           e.currentTarget.style.boxShadow = 'none'
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+          e.currentTarget.style.borderColor = '#2A2A3A'
         }}
       >
         <div style={{
           width: '44px',
           height: '44px',
           borderRadius: '10px',
-          background: 'rgba(59,130,246,0.1)',
+          background: 'rgba(139,92,246,0.1)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '20px',
         }}>
-          <value.icon size={20} style={{ color: '#3B82F6' }} />
+          <value.icon size={20} style={{ color: '#8B5CF6' }} />
         </div>
-        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0F0F0', marginBottom: '12px' }}>
+        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.15rem', color: '#F0EDE8', marginBottom: '12px' }}>
           {value.title}
         </h3>
-        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#A0A0A0', lineHeight: 1.7 }}>
+        <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.9rem', color: '#9A9A9A', lineHeight: 1.7 }}>
           {value.body}
         </p>
       </div>
@@ -180,20 +180,20 @@ const team = [
     title: 'Co-Founder & Design Lead',
     bio: 'Damian leads the design and SEO strategy on every build. He obsesses over the details that make a site convert — layout, hierarchy, and making sure Google knows you exist. A Marketing graduate from the IMM, he brings both creative and strategic thinking to every project.',
     initials: 'DD',
-    color: '#1e3a5f',
+    color: '#262631',
   },
   {
     name: 'Dasendhran Subramoney',
     title: 'Co-Founder & Lead Developer',
     bio: 'Das engineers the foundation every site runs on. He handles the architecture, code quality, and performance that makes a site fast, stable, and built to last. A Software Development graduate from CodeSpace, clean code isn\'t a bonus for him — it\'s the baseline.',
     initials: 'DS',
-    color: '#1a2e1a',
+    color: '#332A1E',
   },
 ]
 
 export default function About() {
   return (
-    <div style={{ background: '#0A0A0A' }}>
+    <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
       <section style={{
         padding: '160px 24px 80px',
@@ -206,7 +206,7 @@ export default function About() {
           right: '-10%',
           width: '500px',
           height: '500px',
-          background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -214,7 +214,7 @@ export default function About() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}
+            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '16px' }}
           >
             About the Studio
           </motion.p>
@@ -228,13 +228,13 @@ export default function About() {
               fontSize: 'clamp(2.5rem, 7vw, 5.5rem)',
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
-              color: '#F0F0F0',
+              color: '#F0EDE8',
               maxWidth: '800px',
               marginBottom: '28px',
             }}
           >
             Two developers.<br />
-            <span style={{ color: '#3B82F6' }}>One obsession.</span>
+            <span style={{ color: '#8B5CF6' }}>One obsession.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -243,7 +243,7 @@ export default function About() {
             style={{
               fontFamily: 'DM Sans, sans-serif',
               fontSize: '1.1rem',
-              color: '#A0A0A0',
+              color: '#9A9A9A',
               maxWidth: '560px',
               lineHeight: 1.7,
             }}
@@ -275,19 +275,19 @@ export default function About() {
       </section>
 
       {/* Studio story */}
-      <section style={{ padding: '80px 24px', background: '#0D0D0D' }}>
+      <section style={{ padding: '80px 24px', background: '#12121A' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '64px' }}>
           {/* Left column */}
           <div style={{ flex: 1 }}>
             <FadeUp>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '16px' }}>
                 How We Work
               </p>
               <h2 style={{
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: 800,
                 fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-                color: '#F0F0F0',
+                color: '#F0EDE8',
                 letterSpacing: '-0.02em',
                 marginBottom: '28px',
               }}>
@@ -295,13 +295,13 @@ export default function About() {
               </h2>
             </FadeUp>
             <FadeUp delay={0.1}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8, marginBottom: '20px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
                 Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
               </p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8, marginBottom: '20px' }}>
-                <strong style={{ color: '#F0F0F0' }}>We build the site first.</strong> You get to see exactly what you're getting — the design, the layout, the copy, the features — before you commit to anything. If you love it, we talk about a deal. If it's not right, we iterate until it is.
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
+                <strong style={{ color: '#F0EDE8' }}>We build the site first.</strong> You get to see exactly what you're getting — the design, the layout, the copy, the features — before you commit to anything. If you love it, we talk about a deal. If it's not right, we iterate until it is.
               </p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#A0A0A0', lineHeight: 1.8 }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8 }}>
                 This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.
               </p>
             </FadeUp>
@@ -315,15 +315,15 @@ export default function About() {
                       fontFamily: 'Syne, sans-serif',
                       fontWeight: 700,
                       fontSize: '0.95rem',
-                      background: '#3B82F6',
-                      color: '#0A0A0A',
+                      background: '#8B5CF6',
+                      color: '#0A0A0F',
                       border: 'none',
                       borderRadius: '8px',
                       padding: '14px 28px',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      boxShadow: '0 0 24px rgba(59,130,246,0.25)',
+                      boxShadow: '0 0 24px rgba(139,92,246,0.25)',
                     }}
                   >
                     Start a Conversation <ArrowRight size={16} />
@@ -345,10 +345,10 @@ export default function About() {
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '12px' }}>
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '12px' }}>
                 What We Stand For
               </p>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: '#F0F0F0', letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', color: '#F0EDE8', letterSpacing: '-0.02em' }}>
                 <MaskReveal text="Our Values" />
               </h2>
             </div>

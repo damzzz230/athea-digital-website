@@ -1,21 +1,6 @@
-import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
-
-function FadeUp({ children, delay = 0 }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.65, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {children}
-    </motion.div>
-  )
-}
 
 function ExpandableGallery({ images }) {
   const [hoveredIndex, setHoveredIndex] = useState(null)
@@ -41,7 +26,7 @@ function ExpandableGallery({ images }) {
           >
             <img src={image} alt={`screenshot-${index}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             <motion.div
-              style={{ position: 'absolute', inset: 0, background: 'black' }}
+              style={{ position: 'absolute', inset: 0, background: '#12121A' }}
               initial={{ opacity: 0 }}
               animate={{ opacity: hoveredIndex === index ? 0 : 0.35 }}
               transition={{ duration: 0.3 }}
@@ -56,12 +41,12 @@ function ExpandableGallery({ images }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.95)', padding: '24px' }}
+            style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(18,18,26,0.95)', padding: '24px' }}
             onClick={() => setSelectedIndex(null)}
           >
             <button
               onClick={() => setSelectedIndex(null)}
-              style={{ position: 'absolute', top: '20px', right: '20px', background: 'none', border: 'none', color: '#F0F0F0', cursor: 'pointer', zIndex: 10 }}
+              style={{ position: 'absolute', top: '20px', right: '20px', background: 'none', border: 'none', color: '#F0EDE8', cursor: 'pointer', zIndex: 10 }}
             >
               <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -70,7 +55,7 @@ function ExpandableGallery({ images }) {
             {images.length > 1 && (
               <button
                 onClick={(e) => { e.stopPropagation(); setSelectedIndex((selectedIndex - 1 + images.length) % images.length) }}
-                style={{ position: 'absolute', left: '20px', background: 'none', border: 'none', color: '#F0F0F0', cursor: 'pointer', zIndex: 10 }}
+                style={{ position: 'absolute', left: '20px', background: 'none', border: 'none', color: '#F0EDE8', cursor: 'pointer', zIndex: 10 }}
               >
                 <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -91,14 +76,14 @@ function ExpandableGallery({ images }) {
             {images.length > 1 && (
               <button
                 onClick={(e) => { e.stopPropagation(); setSelectedIndex((selectedIndex + 1) % images.length) }}
-                style={{ position: 'absolute', right: '20px', background: 'none', border: 'none', color: '#F0F0F0', cursor: 'pointer', zIndex: 10 }}
+                style={{ position: 'absolute', right: '20px', background: 'none', border: 'none', color: '#F0EDE8', cursor: 'pointer', zIndex: 10 }}
               >
                 <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             )}
-            <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: '#A0A0A0', fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem' }}>
+            <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: '#9A9A9A', fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem' }}>
               {selectedIndex + 1} / {images.length}
             </div>
           </motion.div>
@@ -115,7 +100,7 @@ const projects = [
     niche: 'Trades',
     tag: 'Electrical',
     description: 'Call-first design for a Johannesburg electricians and Victron experts.',
-    accent: '#22c55e',
+    accent: '#8B5CF6',
     url: 'https://www.arcenergy.co.za',
     images: [
       'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80',
@@ -128,7 +113,7 @@ const projects = [
 
 export default function Portfolio() {
   return (
-    <div style={{ background: '#0A0A0A' }}>
+    <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
       <section style={{ padding: '160px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
@@ -137,7 +122,7 @@ export default function Portfolio() {
           right: '0',
           width: '500px',
           height: '400px',
-          background: 'radial-gradient(circle at bottom right, rgba(59,130,246,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle at bottom right, rgba(139,92,246,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -145,7 +130,7 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}
+            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '16px' }}
           >
             Our Work
           </motion.p>
@@ -159,19 +144,19 @@ export default function Portfolio() {
               fontSize: 'clamp(2.5rem, 7vw, 5rem)',
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
-              color: '#F0F0F0',
+              color: '#F0EDE8',
               maxWidth: '700px',
               marginBottom: '20px',
             }}
           >
             Sites that perform<br />
-            <span style={{ color: '#3B82F6' }}>in the real world.</span>
+            <span style={{ color: '#8B5CF6' }}>in the real world.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.05rem', color: '#A0A0A0', maxWidth: '480px', lineHeight: 1.7 }}
+            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.05rem', color: '#9A9A9A', maxWidth: '480px', lineHeight: 1.7 }}
           >
             A selection of sites we've built for local Johannesburg businesses. Each one is designed to win new customers, not just look good.
           </motion.p>
@@ -197,18 +182,18 @@ export default function Portfolio() {
                   transition={{ duration: 0.35, delay: i * 0.05 }}
                   whileHover={{ y: -6 }}
                   style={{
-                    background: '#111111',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: '#12121A',
+                    border: '1px solid #2A2A3A',
                     borderRadius: '20px',
                     overflow: 'hidden',
                     transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'
-                    e.currentTarget.style.boxShadow = '0 0 40px rgba(59,130,246,0.12)'
+                    e.currentTarget.style.borderColor = 'rgba(139,92,246,0.3)'
+                    e.currentTarget.style.boxShadow = '0 0 40px rgba(139,92,246,0.12)'
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.borderColor = '#2A2A3A'
                     e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
@@ -219,22 +204,22 @@ export default function Portfolio() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
                       <span style={{
                         display: 'inline-block',
-                        background: 'rgba(59,130,246,0.1)',
-                        border: '1px solid rgba(59,130,246,0.2)',
+                        background: 'rgba(139,92,246,0.1)',
+                        border: '1px solid rgba(139,92,246,0.2)',
                         borderRadius: '100px',
                         padding: '3px 10px',
                         fontSize: '0.72rem',
-                        color: '#3B82F6',
+                        color: '#8B5CF6',
                         fontFamily: 'DM Sans, sans-serif',
                         fontWeight: 500,
                       }}>
                         {p.tag}
                       </span>
                     </div>
-                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#F0F0F0', marginBottom: '8px' }}>
+                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1rem', color: '#F0EDE8', marginBottom: '8px' }}>
                       {p.name}
                     </h3>
-                    <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.85rem', color: '#A0A0A0', lineHeight: 1.65, marginBottom: '18px' }}>
+                    <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.85rem', color: '#9A9A9A', lineHeight: 1.65, marginBottom: '18px' }}>
                       {p.description}
                     </p>
                     <motion.a
@@ -248,8 +233,8 @@ export default function Portfolio() {
                         fontWeight: 500,
                         fontSize: '0.82rem',
                         background: 'transparent',
-                        color: '#A0A0A0',
-                        border: '1px solid rgba(255,255,255,0.08)',
+                        color: '#9A9A9A',
+                        border: '1px solid #2A2A3A',
                         borderRadius: '6px',
                         padding: '7px 14px',
                         display: 'inline-flex',
@@ -261,8 +246,8 @@ export default function Portfolio() {
                         pointerEvents: p.url ? 'auto' : 'none',
                         opacity: p.url ? 1 : 0.4,
                       }}
-                      onMouseEnter={e => { if (p.url) { e.currentTarget.style.color = '#3B82F6'; e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)' } }}
-                      onMouseLeave={e => { e.currentTarget.style.color = '#A0A0A0'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
+                      onMouseEnter={e => { if (p.url) { e.currentTarget.style.color = '#8B5CF6'; e.currentTarget.style.borderColor = 'rgba(139,92,246,0.3)' } }}
+                      onMouseLeave={e => { e.currentTarget.style.color = '#9A9A9A'; e.currentTarget.style.borderColor = '#2A2A3A' }}
                     >
                       View Project <ExternalLink size={13} />
                     </motion.a>

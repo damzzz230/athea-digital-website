@@ -1,12 +1,14 @@
-import { useRef, useState, useCallback, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useInView, useMotionValue, useTransform, useScroll, animate, useAnimation } from 'framer-motion'
+import { motion, useInView, useTransform, useScroll } from 'framer-motion'
 import {
   Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car,
   ArrowRight, Zap, Smartphone, Clock, ChevronRight, ExternalLink
 } from 'lucide-react'
 import { gsap } from '../lib/gsap'
 import Marquee from '../components/Marquee'
+import BackgroundVideo from '../components/BackgroundVideo'
+import { BackgroundCircles } from '../components/ui/background-circles'
 
 const heroWords = ["We're So Good,", "We Build It", "First."]
 
@@ -38,9 +40,9 @@ const features = [
 ]
 
 const portfolioPreviews = [
-  // { name: 'Luxe Hair Studio', niche: 'Hair Salon', gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' },
-  { name: 'Arc Energy JHB', niche: 'Electrical', gradient: 'linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1f3a1f 100%)', url: 'https://www.arcenergy.co.za' },
-  // { name: 'Iron & Ink Tattoo', niche: 'Tattoo Studio', gradient: 'linear-gradient(135deg, #1a0a0a 0%, #2d1515 50%, #1a1a1a 100%)' },
+  // { name: 'Luxe Hair Studio', niche: 'Hair Salon', gradient: 'linear-gradient(135deg, #12121A 0%, #12121A 50%, #0A0A0F 100%)' },
+  { name: 'Arc Energy JHB', niche: 'Electrical', gradient: 'linear-gradient(135deg, #0A0A0F 0%, #12121A 50%, #12121A 100%)', url: 'https://www.arcenergy.co.za' },
+  // { name: 'Iron & Ink Tattoo', niche: 'Tattoo Studio', gradient: 'linear-gradient(135deg, #12121A 0%, #2A1E26 50%, #12121A 100%)' },
 ]
 
 // ── Stagger variants ─────────────────────────────────────────────────────────
@@ -63,7 +65,7 @@ function HeroWord({ word, index, total, scrollYProgress }) {
   const color = useTransform(
     scrollYProgress,
     [start, end],
-    isBlue ? ['#3B82F6', '#3B82F6'] : ['#F0F0F0', 'rgba(240,240,240,0.15)']
+    isBlue ? ['#8B5CF6', '#8B5CF6'] : ['#F0EDE8', 'rgba(240,237,232,0.15)']
   )
 
   return (
@@ -75,196 +77,6 @@ function HeroWord({ word, index, total, scrollYProgress }) {
     >
       {word}
     </motion.span>
-  )
-}
-
-// ── Logo3D ───────────────────────────────────────────────────────────────────
-function Logo3D() {
-  const containerRef = useRef(null)
-  const [isHovered, setIsHovered] = useState(false)
-
-  const rotXMV  = useMotionValue(0)
-  const rotYMV  = useMotionValue(0)
-  const glowXMV = useMotionValue(50)
-  const glowYMV = useMotionValue(50)
-
-  const glowControls = useAnimation()
-
-  const MAX  = 12
-  const LERP = 0.08
-
-  const lerpRef    = useRef({ tx: 0, ty: 0, cx: 0, cy: 0 })
-  const rafRef     = useRef(null)
-  const hovRef     = useRef(false)
-  const springsRef = useRef([])
-  const tickRef    = useRef(null)
-
-  const startBreathing = useCallback(() => {
-    glowControls.start({
-      scale:   [1, 1.08, 1],
-      opacity: [0.6, 0.85, 0.6],
-      transition: { duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'loop' },
-    })
-  }, [glowControls])
-
-  const tick = useCallback(() => {
-    const s = lerpRef.current
-    s.cx += (s.tx - s.cx) * LERP
-    s.cy += (s.ty - s.cy) * LERP
-
-    rotXMV.set(-s.cy * 2 * MAX)
-    rotYMV.set( s.cx * 2 * MAX)
-    glowXMV.set(50 + s.cx * 30)
-    glowYMV.set(50 + s.cy * 30)
-
-    if (hovRef.current) rafRef.current = requestAnimationFrame(tickRef.current)
-  }, [rotXMV, rotYMV, glowXMV, glowYMV])
-
-  useEffect(() => { tickRef.current = tick }, [tick])
-
-  const handleMouseMove = useCallback((e) => {
-    const rect = containerRef.current?.getBoundingClientRect()
-    if (!rect) return
-    lerpRef.current.tx = Math.max(-0.5, Math.min(0.5, (e.clientX - rect.left) / rect.width  - 0.5))
-    lerpRef.current.ty = Math.max(-0.5, Math.min(0.5, (e.clientY - rect.top)  / rect.height - 0.5))
-  }, [])
-
-  const handleMouseEnter = useCallback(async () => {
-    springsRef.current.forEach(a => a?.stop?.())
-    springsRef.current = []
-    lerpRef.current.cx =  rotYMV.get() / (2 * MAX)
-    lerpRef.current.cy = -rotXMV.get() / (2 * MAX)
-    hovRef.current = true
-    setIsHovered(true)
-    cancelAnimationFrame(rafRef.current)
-    rafRef.current = requestAnimationFrame(tick)
-    await glowControls.start({
-      scale: 1.25, opacity: 1,
-      transition: { duration: 0.3, ease: 'easeOut' },
-    })
-    if (!hovRef.current) return
-    glowControls.start({
-      scale: 1.1, opacity: 0.9,
-      transition: { duration: 0.4, ease: 'easeInOut' },
-    })
-  }, [tick, rotXMV, rotYMV, glowControls])
-
-  const handleMouseLeave = useCallback(async () => {
-    springsRef.current.forEach(a => a?.stop?.())
-    hovRef.current = false
-    setIsHovered(false)
-    lerpRef.current.tx = 0
-    lerpRef.current.ty = 0
-    cancelAnimationFrame(rafRef.current)
-    springsRef.current = [
-      animate(rotXMV,  0,  { type: 'spring', duration: 0.7, bounce: 0.15 }),
-      animate(rotYMV,  0,  { type: 'spring', duration: 0.7, bounce: 0.15 }),
-      animate(glowXMV, 50, { type: 'spring', duration: 0.7, bounce: 0.15 }),
-      animate(glowYMV, 50, { type: 'spring', duration: 0.7, bounce: 0.15 }),
-    ]
-    await glowControls.start({
-      scale: 1, opacity: 0.6,
-      transition: { duration: 0.6, ease: 'easeInOut' },
-    })
-    if (!hovRef.current) startBreathing()
-  }, [rotXMV, rotYMV, glowXMV, glowYMV, glowControls, startBreathing])
-
-  useEffect(() => {
-    startBreathing()
-    return () => {
-      cancelAnimationFrame(rafRef.current)
-      springsRef.current.forEach(a => a?.stop?.())
-    }
-  }, [startBreathing])
-
-  const glowLeft = useTransform(glowXMV, v => `${v}%`)
-  const glowTop  = useTransform(glowYMV, v => `${v}%`)
-
-  return (
-    <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        flex: '1 1 400px',
-        height: '520px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        perspective: '900px',
-      }}
-    >
-      <motion.div
-        animate={glowControls}
-        initial={{ scale: 1, opacity: 0.6 }}
-        style={{
-          position: 'absolute',
-          width: '420px',
-          height: '420px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(59,130,246,0.35) 0%, rgba(59,130,246,0.12) 40%, transparent 70%)',
-          filter: 'blur(40px)',
-          left: glowLeft,
-          top: glowTop,
-          x: '-50%',
-          y: '-50%',
-          pointerEvents: 'none',
-        }}
-      />
-      <div style={{
-        position: 'absolute',
-        width: '340px',
-        height: '340px',
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 65%)',
-        filter: 'blur(24px)',
-        pointerEvents: 'none',
-      }} />
-
-      <motion.div
-        style={{
-          rotateX: rotXMV,
-          rotateY: rotYMV,
-          transformStyle: 'preserve-3d',
-          willChange: 'transform',
-        }}
-        animate={{ opacity: 1, scale: 1 }}
-        initial={{ opacity: 0, scale: 0.92 }}
-        transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <motion.div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '16px',
-            background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.4) 0%, transparent 70%)',
-            filter: 'blur(32px)',
-            transform: 'translateZ(-60px) scale(0.85)',
-            opacity: isHovered ? 0.9 : 0.5,
-            transition: 'opacity 0.4s ease',
-          }}
-        />
-        <img
-          src="/images/Athea_Digital_3D_Logo.png"
-          alt="Athea Digital"
-          draggable={false}
-          style={{
-            width: '560px',
-            maxWidth: '90vw',
-            height: 'auto',
-            display: 'block',
-            userSelect: 'none',
-            transform: 'rotate(90deg)',
-            filter: isHovered
-              ? 'drop-shadow(0 0 32px rgba(59,130,246,0.6)) drop-shadow(0 0 8px rgba(59,130,246,0.4))'
-              : 'drop-shadow(0 0 20px rgba(59,130,246,0.4)) drop-shadow(0 0 6px rgba(59,130,246,0.25))',
-            transition: 'filter 0.4s ease',
-          }}
-        />
-      </motion.div>
-    </div>
   )
 }
 
@@ -312,22 +124,26 @@ function MaskReveal({ text }) {
   )
 }
 
-// ── CountUp — number animates from 0 to target on scroll into view ───────────
-function CountUp({ to, suffix = '', duration = 1.5 }) {
+// ── CountUp — number steps from 0 to target on scroll into view ──────────────
+function CountUp({ to, suffix = '', stepMs = 100 }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
-  const count = useMotionValue(0)
-  const rounded = useTransform(count, v => Math.round(v))
+  const [count, setCount] = useState(0)
 
   useEffect(() => {
-    if (inView) {
-      animate(count, to, { duration, ease: 'easeOut' })
-    }
-  }, [inView, count, to, duration])
+    if (!inView) return
+    let current = 0
+    const id = setInterval(() => {
+      current += 1
+      setCount(current)
+      if (current >= to) clearInterval(id)
+    }, stepMs)
+    return () => clearInterval(id)
+  }, [inView, to, stepMs])
 
   return (
     <span ref={ref} style={{ display: 'inline' }}>
-      <motion.span>{rounded}</motion.span>{suffix}
+      {count}{suffix}
     </span>
   )
 }
@@ -363,13 +179,31 @@ function NicheScrollReveal() {
         position: 'sticky',
         top: 0,
         height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '40px',
         overflow: 'hidden',
       }}>
+
+        {/* Layer 1 — Animated purple circles background */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <BackgroundCircles variant="athea" className="opacity-40" />
+        </div>
+
+        {/* Layer 2 — Vignette to blend edges cleanly */}
+        <div
+          className="absolute inset-0 z-[1] pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 75% 75% at center, transparent 25%, #0A0A0F 100%)',
+          }}
+        />
+
+        {/* Layer 3 — All section content */}
+        <div className="relative z-10" style={{
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '40px',
+        }}>
 
         {/* Section label */}
         <FadeUp>
@@ -378,7 +212,7 @@ function NicheScrollReveal() {
             fontSize: '1.1rem',
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            color: '#F0F0F0',
+            color: '#F0EDE8',
             fontWeight: 700,
             textAlign: 'center',
             margin: 0,
@@ -396,7 +230,7 @@ function NicheScrollReveal() {
               position: 'absolute',
               inset: 0,
               borderRadius: '50%',
-              border: '1px solid rgba(255,255,255,0.06)',
+              border: '1px solid #2A2A3A',
               opacity: Math.min((animationProgress - 0.6) / 0.4, 1),
               transition: 'opacity 0.3s ease',
               pointerEvents: 'none',
@@ -412,7 +246,7 @@ function NicheScrollReveal() {
               width: '75%',
               height: '75%',
               borderRadius: '50%',
-              border: '1px solid rgba(59,130,246,0.15)',
+              border: '1px solid rgba(139,92,246,0.15)',
               opacity: Math.min((animationProgress - 0.2) / 0.4, 1),
               transition: 'opacity 0.3s ease',
               pointerEvents: 'none',
@@ -428,9 +262,9 @@ function NicheScrollReveal() {
             width: '160px',
             height: '160px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, rgba(59,130,246,0.06) 55%, transparent 75%)',
-            border: '1px solid rgba(59,130,246,0.25)',
-            boxShadow: `0 0 ${40 + animationProgress * 40}px rgba(59,130,246,${0.1 + animationProgress * 0.15})`,
+            background: 'radial-gradient(circle, rgba(139,92,246,0.18) 0%, rgba(139,92,246,0.06) 55%, transparent 75%)',
+            border: '1px solid rgba(139,92,246,0.25)',
+            boxShadow: `0 0 ${40 + animationProgress * 40}px rgba(139,92,246,${0.1 + animationProgress * 0.15})`,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -444,7 +278,7 @@ function NicheScrollReveal() {
                   fontFamily: 'Syne, sans-serif',
                   fontWeight: 800,
                   fontSize: '0.8rem',
-                  color: '#F0F0F0',
+                  color: '#F0EDE8',
                   letterSpacing: '-0.01em',
                   opacity: Math.min((animationProgress - 0.6) / 0.4, 1),
                   transition: 'opacity 0.3s ease',
@@ -455,7 +289,7 @@ function NicheScrollReveal() {
                   fontFamily: 'Syne, sans-serif',
                   fontWeight: 800,
                   fontSize: '0.8rem',
-                  color: '#3B82F6',
+                  color: '#8B5CF6',
                   letterSpacing: '-0.01em',
                   opacity: Math.min((animationProgress - 0.6) / 0.4, 1),
                   transition: 'opacity 0.3s ease',
@@ -485,8 +319,8 @@ function NicheScrollReveal() {
                     transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
                     width: '110px',
                     height: '110px',
-                    background: '#111111',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: '#12121A',
+                    border: '1px solid #2A2A3A',
                     borderRadius: '16px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -498,22 +332,22 @@ function NicheScrollReveal() {
                     transition: 'border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = '#3B82F6'
-                    e.currentTarget.style.boxShadow  = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-                    e.currentTarget.style.background  = 'rgba(59,130,246,0.05)'
+                    e.currentTarget.style.borderColor = '#8B5CF6'
+                    e.currentTarget.style.boxShadow  = '0 20px 60px rgba(139,92,246,0.15), 0 0 0 1px rgba(139,92,246,0.6)'
+                    e.currentTarget.style.background  = 'rgba(139,92,246,0.05)'
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.borderColor = '#2A2A3A'
                     e.currentTarget.style.boxShadow  = 'none'
-                    e.currentTarget.style.background  = '#111111'
+                    e.currentTarget.style.background  = '#12121A'
                   }}
                 >
-                  <n.icon size={22} style={{ color: '#3B82F6' }} />
+                  <n.icon size={22} style={{ color: '#8B5CF6' }} />
                   <span style={{
                     fontFamily: 'DM Sans, sans-serif',
                     fontSize: '0.7rem',
                     fontWeight: 500,
-                    color: '#A0A0A0',
+                    color: '#9A9A9A',
                     textAlign: 'center',
                     lineHeight: 1.3,
                     padding: '0 6px',
@@ -524,6 +358,7 @@ function NicheScrollReveal() {
               </Link>
             )
           })}
+        </div>
         </div>
       </div>
     </section>
@@ -544,8 +379,8 @@ function FeatureCard({ feature, direction, delay }) {
     >
       <div
         style={{
-          background: '#111111',
-          border: '1px solid rgba(255,255,255,0.06)',
+          background: '#1C1C28',
+          border: '1px solid #2A2A3A',
           borderRadius: '16px',
           padding: '32px',
           height: '100%',
@@ -553,32 +388,32 @@ function FeatureCard({ feature, direction, delay }) {
         }}
         onMouseEnter={e => {
           e.currentTarget.style.transform = 'translateY(-6px)'
-          e.currentTarget.style.boxShadow = '0 20px 60px rgba(59,130,246,0.15), 0 0 0 1px rgba(59,130,246,0.6)'
-          e.currentTarget.style.borderColor = '#3B82F6'
+          e.currentTarget.style.boxShadow = '0 20px 60px rgba(139,92,246,0.15), 0 0 0 1px rgba(139,92,246,0.6)'
+          e.currentTarget.style.borderColor = '#8B5CF6'
         }}
         onMouseLeave={e => {
           e.currentTarget.style.transform = 'translateY(0)'
           e.currentTarget.style.boxShadow = 'none'
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+          e.currentTarget.style.borderColor = '#2A2A3A'
         }}
       >
         <div style={{
           width: '44px',
           height: '44px',
           borderRadius: '10px',
-          background: 'rgba(59,130,246,0.1)',
+          background: 'rgba(139,92,246,0.1)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginBottom: '20px',
         }}>
-          <feature.icon size={20} style={{ color: '#3B82F6' }} />
+          <feature.icon size={20} style={{ color: '#8B5CF6' }} />
         </div>
         <h3 style={{
           fontFamily: 'Syne, sans-serif',
           fontWeight: 700,
           fontSize: '1.15rem',
-          color: '#F0F0F0',
+          color: '#F0EDE8',
           marginBottom: '12px',
         }}>
           {feature.title}
@@ -594,7 +429,7 @@ function FeatureBody({ feature }) {
   const bodyStyle = {
     fontFamily: 'DM Sans, sans-serif',
     fontSize: '0.9rem',
-    color: '#A0A0A0',
+    color: '#9A9A9A',
     lineHeight: 1.7,
   }
   if (feature.title === 'Mobile-First Always') {
@@ -639,7 +474,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div style={{ background: '#0A0A0A' }}>
+    <div style={{ background: '#0A0A0F' }}>
 
       {/* ── Hero ── */}
       <section ref={heroRef} style={{
@@ -650,6 +485,8 @@ export default function Home() {
         position: 'relative',
         overflow: 'hidden',
       }}>
+        {/* Fullscreen background video — replaces the previous 3D logo animation */}
+        <BackgroundVideo />
         {/* Background glow blob */}
         <div style={{
           position: 'absolute',
@@ -658,7 +495,7 @@ export default function Home() {
           transform: 'translateX(-50%)',
           width: '700px',
           height: '500px',
-          background: 'radial-gradient(ellipse, rgba(59,130,246,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(139,92,246,0.08) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         {/* GSAP-parallax secondary orb — drifts at a different rate to add depth */}
@@ -670,21 +507,12 @@ export default function Home() {
             right: '8%',
             width: '480px',
             height: '480px',
-            background: 'radial-gradient(circle, rgba(59,130,246,0.045) 0%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(139,92,246,0.045) 0%, transparent 65%)',
             filter: 'blur(72px)',
             borderRadius: '50%',
             pointerEvents: 'none',
           }}
         />
-        {/* Grid lines */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-          pointerEvents: 'none',
-        }} />
-
         <div style={{
           maxWidth: '1200px',
           margin: '0 auto',
@@ -706,15 +534,15 @@ export default function Home() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                background: 'rgba(59,130,246,0.08)',
-                border: '1px solid rgba(59,130,246,0.2)',
+                background: 'rgba(139,92,246,0.08)',
+                border: '1px solid rgba(139,92,246,0.2)',
                 borderRadius: '100px',
                 padding: '6px 14px',
                 marginBottom: '32px',
               }}
             >
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3B82F6', display: 'inline-block' }} />
-              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#3B82F6', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#8B5CF6', display: 'inline-block' }} />
+              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: '#8B5CF6', letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>
                 Johannesburg Web Design Studio
               </span>
             </motion.div>
@@ -726,7 +554,7 @@ export default function Home() {
               fontSize: 'clamp(2.4rem, 6vw, 5rem)',
               lineHeight: 1.0,
               letterSpacing: '-0.03em',
-              color: '#F0F0F0',
+              color: '#F0EDE8',
               marginBottom: '28px',
               display: 'flex',
               flexDirection: 'column',
@@ -751,7 +579,7 @@ export default function Home() {
               style={{
                 fontFamily: 'DM Sans, sans-serif',
                 fontSize: 'clamp(1rem, 2vw, 1.15rem)',
-                color: '#A0A0A0',
+                color: '#9A9A9A',
                 maxWidth: '480px',
                 lineHeight: 1.65,
                 marginBottom: '44px',
@@ -775,15 +603,15 @@ export default function Home() {
                     fontFamily: 'Syne, sans-serif',
                     fontWeight: 700,
                     fontSize: '0.95rem',
-                    background: '#3B82F6',
-                    color: '#0A0A0A',
+                    background: '#8B5CF6',
+                    color: '#0A0A0F',
                     border: 'none',
                     borderRadius: '8px',
                     padding: '14px 28px',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    boxShadow: '0 0 24px rgba(59,130,246,0.35)',
+                    boxShadow: '0 0 24px rgba(139,92,246,0.35)',
                     letterSpacing: '0.01em',
                   }}
                 >
@@ -799,22 +627,24 @@ export default function Home() {
                     fontWeight: 600,
                     fontSize: '0.95rem',
                     background: 'transparent',
-                    color: '#F0F0F0',
-                    border: '1px solid rgba(240,240,240,0.15)',
+                    color: '#8B5CF6',
+                    border: '1px solid #8B5CF6',
                     borderRadius: '8px',
                     padding: '14px 28px',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
                     letterSpacing: '0.01em',
-                    transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                    transition: 'background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = '#3B82F6'
-                    e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.25)'
+                    e.currentTarget.style.background = '#8B5CF6'
+                    e.currentTarget.style.color = '#0A0A0F'
+                    e.currentTarget.style.boxShadow = '0 0 20px rgba(139,92,246,0.25)'
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(240,240,240,0.15)'
+                    e.currentTarget.style.background = 'transparent'
+                    e.currentTarget.style.color = '#8B5CF6'
                     e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
@@ -823,9 +653,6 @@ export default function Home() {
               </Link>
             </motion.div>
           </div>
-
-          {/* Right: interactive 3D logo */}
-          <Logo3D />
         </div>
       </section>
 
@@ -836,7 +663,7 @@ export default function Home() {
       <NicheScrollReveal />
 
       {/* ── Why Athea ── */}
-      <section style={{ padding: '80px 24px', background: '#0D0D0D' }}>
+      <section style={{ padding: '80px 24px', background: '#12121A' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {/* Section header */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
@@ -846,7 +673,7 @@ export default function Home() {
                 fontSize: '0.75rem',
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: '#3B82F6',
+                color: '#8B5CF6',
                 marginBottom: '12px',
               }}>
                 Why Choose Athea
@@ -857,7 +684,7 @@ export default function Home() {
               fontFamily: 'Syne, sans-serif',
               fontWeight: 800,
               fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-              color: '#F0F0F0',
+              color: '#F0EDE8',
               letterSpacing: '-0.02em',
             }}>
               <MaskReveal text="Built Different. Delivered Faster." />
@@ -905,7 +732,7 @@ export default function Home() {
                   fontSize: '0.75rem',
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
-                  color: '#3B82F6',
+                  color: '#8B5CF6',
                   marginBottom: '8px',
                 }}>
                   Recent Work
@@ -915,7 +742,7 @@ export default function Home() {
                   fontFamily: 'Syne, sans-serif',
                   fontWeight: 800,
                   fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-                  color: '#F0F0F0',
+                  color: '#F0EDE8',
                   letterSpacing: '-0.02em',
                 }}>
                   <MaskReveal text="Selected Projects" />
@@ -928,7 +755,7 @@ export default function Home() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
-                    color: '#3B82F6',
+                    color: '#8B5CF6',
                     fontFamily: 'DM Sans, sans-serif',
                     fontSize: '0.9rem',
                     fontWeight: 500,
@@ -958,18 +785,18 @@ export default function Home() {
                   whileHover={{ scale: 1.03, y: -4 }}
                   transition={{ duration: 0.3 }}
                   style={{
-                    background: '#111111',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: '#12121A',
+                    border: '1px solid #2A2A3A',
                     borderRadius: '16px',
                     overflow: 'hidden',
                     transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'
-                    e.currentTarget.style.boxShadow = '0 0 40px rgba(59,130,246,0.12)'
+                    e.currentTarget.style.borderColor = 'rgba(139,92,246,0.3)'
+                    e.currentTarget.style.boxShadow = '0 0 40px rgba(139,92,246,0.12)'
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.borderColor = '#2A2A3A'
                     e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
@@ -985,7 +812,7 @@ export default function Home() {
                         fontFamily: 'Syne, sans-serif',
                         fontWeight: 700,
                         fontSize: '1.2rem',
-                        color: 'rgba(240,240,240,0.4)',
+                        color: 'rgba(240,237,232,0.4)',
                         letterSpacing: '-0.02em',
                       }}>
                         {p.name}
@@ -995,12 +822,12 @@ export default function Home() {
                   <div style={{ padding: '20px 24px' }}>
                     <span style={{
                       display: 'inline-block',
-                      background: 'rgba(59,130,246,0.1)',
-                      border: '1px solid rgba(59,130,246,0.2)',
+                      background: 'rgba(139,92,246,0.1)',
+                      border: '1px solid rgba(139,92,246,0.2)',
                       borderRadius: '100px',
                       padding: '3px 10px',
                       fontSize: '0.75rem',
-                      color: '#3B82F6',
+                      color: '#8B5CF6',
                       fontFamily: 'DM Sans, sans-serif',
                       marginBottom: '8px',
                     }}>
@@ -1010,7 +837,7 @@ export default function Home() {
                       fontFamily: 'Syne, sans-serif',
                       fontWeight: 700,
                       fontSize: '1rem',
-                      color: '#F0F0F0',
+                      color: '#F0EDE8',
                       marginBottom: p.url ? '12px' : 0,
                     }}>
                       {p.name}
@@ -1027,7 +854,7 @@ export default function Home() {
                           fontFamily: 'DM Sans, sans-serif',
                           fontSize: '0.8rem',
                           fontWeight: 500,
-                          color: '#3B82F6',
+                          color: '#8B5CF6',
                           textDecoration: 'none',
                         }}
                         onMouseEnter={e => { e.currentTarget.style.textDecoration = 'underline' }}
@@ -1049,8 +876,8 @@ export default function Home() {
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{
-              background: '#111111',
-              border: '1px solid rgba(59,130,246,0.15)',
+              background: '#12121A',
+              border: '1px solid rgba(139,92,246,0.15)',
               borderRadius: '24px',
               padding: 'clamp(40px, 6vw, 80px) clamp(24px, 5vw, 80px)',
               textAlign: 'center',
@@ -1065,7 +892,7 @@ export default function Home() {
                 transform: 'translateX(-50%)',
                 width: '400px',
                 height: '200px',
-                background: 'radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%)',
+                background: 'radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 70%)',
                 pointerEvents: 'none',
               }} />
 
@@ -1074,7 +901,7 @@ export default function Home() {
                 fontSize: '0.75rem',
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: '#3B82F6',
+                color: '#8B5CF6',
                 marginBottom: '16px',
               }}>
                 Ready To Get Online?
@@ -1085,7 +912,7 @@ export default function Home() {
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: 800,
                 fontSize: 'clamp(1.8rem, 4vw, 3rem)',
-                color: '#F0F0F0',
+                color: '#F0EDE8',
                 letterSpacing: '-0.02em',
                 marginBottom: '16px',
                 display: 'flex',
@@ -1099,7 +926,7 @@ export default function Home() {
               <p style={{
                 fontFamily: 'DM Sans, sans-serif',
                 fontSize: '1rem',
-                color: '#A0A0A0',
+                color: '#9A9A9A',
                 maxWidth: '480px',
                 margin: '0 auto 36px',
               }}>
@@ -1145,18 +972,20 @@ export default function Home() {
                       fontWeight: 700,
                       fontSize: '0.95rem',
                       background: 'transparent',
-                      color: '#F0F0F0',
-                      border: '1px solid rgba(240,240,240,0.15)',
+                      color: '#8B5CF6',
+                      border: '1px solid #8B5CF6',
                       borderRadius: '8px',
                       padding: '14px 28px',
-                      transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+                      transition: 'background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease',
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = '#3B82F6'
-                      e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.25)'
+                      e.currentTarget.style.background = '#8B5CF6'
+                      e.currentTarget.style.color = '#0A0A0F'
+                      e.currentTarget.style.boxShadow = '0 0 20px rgba(139,92,246,0.25)'
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(240,240,240,0.15)'
+                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.color = '#8B5CF6'
                       e.currentTarget.style.boxShadow = 'none'
                     }}
                   >

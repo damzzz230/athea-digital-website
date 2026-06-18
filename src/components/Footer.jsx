@@ -31,7 +31,7 @@ function FooterLink({ to, children }) {
         fontFamily: 'DM Sans, sans-serif',
         fontSize: '0.875rem',
         fontWeight: 500,
-        color: hovered ? '#F0F0F0' : '#A0A0A0',
+        color: hovered ? '#F0EDE8' : '#9A9A9A',
         textDecoration: 'none',
         transition: 'color 0.2s ease',
         position: 'relative',
@@ -51,7 +51,7 @@ function FooterLink({ to, children }) {
           left: 0,
           right: 0,
           height: '2px',
-          background: '#3B82F6',
+          background: '#8B5CF6',
           borderRadius: '1px',
           originX: 0,
         }}
@@ -70,7 +70,7 @@ function ColHeading({ children }) {
       fontSize: '0.75rem',
       letterSpacing: '0.12em',
       textTransform: 'uppercase',
-      color: '#F0F0F0',
+      color: '#F0EDE8',
       marginBottom: '20px',
     }}>
       {children}
@@ -81,8 +81,8 @@ function ColHeading({ children }) {
 export default function Footer() {
   return (
     <footer style={{
-      background: '#0D0D0D',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      background: '#12121A',
+      borderTop: '1px solid #2A2A3A',
       padding: '64px 24px 32px',
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -113,7 +113,7 @@ export default function Footer() {
               fontWeight: 700,
               fontSize: '0.78rem',
               letterSpacing: '0.05em',
-              color: '#3B82F6',
+              color: '#8B5CF6',
             }}>
               Built in Joburg. Built to convert.
             </p>
@@ -122,7 +122,7 @@ export default function Footer() {
               marginTop: '12px',
               fontFamily: 'DM Sans, sans-serif',
               fontSize: '0.875rem',
-              color: '#A0A0A0',
+              color: '#9A9A9A',
               lineHeight: 1.6,
               maxWidth: '260px',
             }}>
@@ -148,20 +148,20 @@ export default function Footer() {
                     width: '36px',
                     height: '36px',
                     borderRadius: '8px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    color: '#A0A0A0',
+                    background: '#2A2A3A',
+                    border: '1px solid #2A2A3A',
+                    color: '#9A9A9A',
                     transition: 'background 0.2s ease, color 0.2s ease, border-color 0.2s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.background    = 'rgba(59,130,246,0.15)'
-                    e.currentTarget.style.color         = '#3B82F6'
-                    e.currentTarget.style.borderColor   = 'rgba(59,130,246,0.3)'
+                    e.currentTarget.style.background    = 'rgba(139,92,246,0.15)'
+                    e.currentTarget.style.color         = '#8B5CF6'
+                    e.currentTarget.style.borderColor   = 'rgba(139,92,246,0.3)'
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.background    = 'rgba(255,255,255,0.05)'
-                    e.currentTarget.style.color         = '#A0A0A0'
-                    e.currentTarget.style.borderColor   = 'rgba(255,255,255,0.06)'
+                    e.currentTarget.style.background    = '#2A2A3A'
+                    e.currentTarget.style.color         = '#9A9A9A'
+                    e.currentTarget.style.borderColor   = '#2A2A3A'
                   }}
                 >
                   {icon}
@@ -202,24 +202,24 @@ export default function Footer() {
                 href="https://wa.me/27615223385"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#A0A0A0', textDecoration: 'none', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', transition: 'color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#F0F0F0' }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#A0A0A0' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#9A9A9A', textDecoration: 'none', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', transition: 'color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#F0EDE8' }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#9A9A9A' }}
               >
-                <MessageCircle size={15} style={{ color: '#3B82F6', flexShrink: 0 }} />
+                <MessageCircle size={15} style={{ color: '#8B5CF6', flexShrink: 0 }} />
                 061 522 3385
               </a>
               <a
                 href="mailto:hello@athea.digital"
-                style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#A0A0A0', textDecoration: 'none', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', transition: 'color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#F0F0F0' }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#A0A0A0' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#9A9A9A', textDecoration: 'none', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', transition: 'color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#F0EDE8' }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#9A9A9A' }}
               >
-                <Mail size={15} style={{ color: '#3B82F6', flexShrink: 0 }} />
+                <Mail size={15} style={{ color: '#8B5CF6', flexShrink: 0 }} />
                 hello@athea.digital
               </a>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', color: '#A0A0A0' }}>
-                <MapPin size={15} style={{ color: '#3B82F6', flexShrink: 0 }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.875rem', fontFamily: 'DM Sans, sans-serif', color: '#9A9A9A' }}>
+                <MapPin size={15} style={{ color: '#8B5CF6', flexShrink: 0 }} />
                 Johannesburg, South Africa
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function Footer() {
 
         {/* ── Bottom bar ── */}
         <div style={{
-          borderTop: '1px solid rgba(255,255,255,0.06)',
+          borderTop: '1px solid #2A2A3A',
           paddingTop: '28px',
           display: 'flex',
           flexWrap: 'wrap',
@@ -237,10 +237,10 @@ export default function Footer() {
           alignItems: 'center',
           gap: '12px',
         }}>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: 'rgba(160,160,160,0.5)' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: 'rgba(154,154,154,0.5)' }}>
             © 2026 Athea Digital. Built in Johannesburg.
           </p>
-          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: 'rgba(160,160,160,0.3)' }}>
+          <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: 'rgba(154,154,154,0.3)' }}>
             Designed & developed by Athea Digital
           </p>
         </div>

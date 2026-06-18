@@ -19,13 +19,13 @@ function FadeUp({ children, delay = 0 }) {
 
 const inputStyle = {
   width: '100%',
-  background: '#111111',
-  border: '1px solid rgba(255,255,255,0.08)',
+  background: '#1C1C28',
+  border: '1px solid #2A2A3A',
   borderRadius: '10px',
   padding: '13px 16px',
   fontFamily: 'DM Sans, sans-serif',
   fontSize: '0.9rem',
-  color: '#F0F0F0',
+  color: '#F0EDE8',
   outline: 'none',
   transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
 }
@@ -35,12 +35,12 @@ export default function Contact() {
 
   const fieldStyle = (name) => ({
     ...inputStyle,
-    borderColor: focused === name ? 'rgba(59,130,246,0.5)' : 'rgba(255,255,255,0.08)',
-    boxShadow: focused === name ? '0 0 0 3px rgba(59,130,246,0.1)' : 'none',
+    borderColor: focused === name ? 'rgba(139,92,246,0.5)' : '#2A2A3A',
+    boxShadow: focused === name ? '0 0 0 3px rgba(139,92,246,0.1)' : 'none',
   })
 
   return (
-    <div style={{ background: '#0A0A0A' }}>
+    <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
       <section style={{ padding: '160px 24px 60px', position: 'relative', overflow: 'hidden' }}>
         <div style={{
@@ -49,7 +49,7 @@ export default function Contact() {
           left: '-10%',
           width: '500px',
           height: '500px',
-          background: 'radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -57,7 +57,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#3B82F6', marginBottom: '16px' }}
+            style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '16px' }}
           >
             Get In Touch
           </motion.p>
@@ -71,13 +71,13 @@ export default function Contact() {
               fontSize: 'clamp(2.5rem, 7vw, 5rem)',
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
-              color: '#F0F0F0',
+              color: '#F0EDE8',
               maxWidth: '700px',
               marginBottom: '20px',
             }}
           >
             Let's build something<br />
-            <span style={{ color: '#3B82F6' }}>worth showing off.</span>
+            <span style={{ color: '#8B5CF6' }}>worth showing off.</span>
           </motion.h1>
         </div>
       </section>
@@ -98,7 +98,7 @@ export default function Contact() {
                   fontFamily: 'Syne, sans-serif',
                   fontWeight: 700,
                   fontSize: '1.4rem',
-                  color: '#F0F0F0',
+                  color: '#F0EDE8',
                   marginBottom: '8px',
                 }}>
                   Say hello.
@@ -106,7 +106,7 @@ export default function Contact() {
                 <p style={{
                   fontFamily: 'DM Sans, sans-serif',
                   fontSize: '0.95rem',
-                  color: '#A0A0A0',
+                  color: '#9A9A9A',
                   lineHeight: 1.7,
                   marginBottom: '36px',
                 }}>
@@ -122,8 +122,8 @@ export default function Contact() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '14px',
-                      background: '#111111',
-                      border: '1px solid rgba(255,255,255,0.06)',
+                      background: '#12121A',
+                      border: '1px solid #2A2A3A',
                       borderRadius: '12px',
                       padding: '16px 20px',
                       textDecoration: 'none',
@@ -134,8 +134,8 @@ export default function Contact() {
                       e.currentTarget.style.background = 'rgba(37,211,102,0.05)'
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                      e.currentTarget.style.background = '#111111'
+                      e.currentTarget.style.borderColor = '#2A2A3A'
+                      e.currentTarget.style.background = '#12121A'
                     }}
                   >
                     <div style={{
@@ -151,8 +151,8 @@ export default function Contact() {
                       <MessageCircle size={18} style={{ color: '#25D366' }} />
                     </div>
                     <div>
-                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0F0F0', marginBottom: '2px' }}>WhatsApp</p>
-                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#A0A0A0' }}>061 522 3385</p>
+                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0EDE8', marginBottom: '2px' }}>WhatsApp</p>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#9A9A9A' }}>061 522 3385</p>
                     </div>
                   </a>
 
@@ -162,37 +162,37 @@ export default function Contact() {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '14px',
-                      background: '#111111',
-                      border: '1px solid rgba(255,255,255,0.06)',
+                      background: '#12121A',
+                      border: '1px solid #2A2A3A',
                       borderRadius: '12px',
                       padding: '16px 20px',
                       textDecoration: 'none',
                       transition: 'background 0.25s ease, border-color 0.25s ease',
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(59,130,246,0.3)'
-                      e.currentTarget.style.background = 'rgba(59,130,246,0.05)'
+                      e.currentTarget.style.borderColor = 'rgba(139,92,246,0.3)'
+                      e.currentTarget.style.background = 'rgba(139,92,246,0.05)'
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-                      e.currentTarget.style.background = '#111111'
+                      e.currentTarget.style.borderColor = '#2A2A3A'
+                      e.currentTarget.style.background = '#12121A'
                     }}
                   >
                     <div style={{
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'rgba(59,130,246,0.1)',
+                      background: 'rgba(139,92,246,0.1)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                     }}>
-                      <Mail size={18} style={{ color: '#3B82F6' }} />
+                      <Mail size={18} style={{ color: '#8B5CF6' }} />
                     </div>
                     <div>
-                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0F0F0', marginBottom: '2px' }}>Email</p>
-                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#A0A0A0' }}>hello@athea.digital</p>
+                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0EDE8', marginBottom: '2px' }}>Email</p>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#9A9A9A' }}>hello@athea.digital</p>
                     </div>
                   </a>
 
@@ -200,8 +200,8 @@ export default function Contact() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '14px',
-                    background: '#111111',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: '#12121A',
+                    border: '1px solid #2A2A3A',
                     borderRadius: '12px',
                     padding: '16px 20px',
                   }}>
@@ -209,17 +209,17 @@ export default function Contact() {
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      background: 'rgba(59,130,246,0.1)',
+                      background: 'rgba(139,92,246,0.1)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
                     }}>
-                      <MapPin size={18} style={{ color: '#3B82F6' }} />
+                      <MapPin size={18} style={{ color: '#8B5CF6' }} />
                     </div>
                     <div>
-                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0F0F0', marginBottom: '2px' }}>Location</p>
-                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#A0A0A0' }}>Johannesburg, South Africa</p>
+                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0EDE8', marginBottom: '2px' }}>Location</p>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#9A9A9A' }}>Johannesburg, South Africa</p>
                     </div>
                   </div>
                 </div>
@@ -230,7 +230,7 @@ export default function Contact() {
                   borderRadius: '12px',
                   padding: '16px 20px',
                 }}>
-                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.875rem', color: '#A0A0A0', lineHeight: 1.65 }}>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.875rem', color: '#9A9A9A', lineHeight: 1.65 }}>
                     <span style={{ color: '#25D366', fontWeight: 600 }}>Prefer to chat?</span> Message us on WhatsApp and we'll respond within the hour.
                   </p>
                 </div>
@@ -240,8 +240,8 @@ export default function Contact() {
             {/* Right column — form */}
             <FadeUp delay={0.15}>
               <div style={{
-                background: '#111111',
-                border: '1px solid rgba(255,255,255,0.06)',
+                background: '#12121A',
+                border: '1px solid #2A2A3A',
                 borderRadius: '20px',
                 padding: '36px',
               }}>
@@ -249,7 +249,7 @@ export default function Contact() {
                   fontFamily: 'Syne, sans-serif',
                   fontWeight: 700,
                   fontSize: '1.1rem',
-                  color: '#F0F0F0',
+                  color: '#F0EDE8',
                   marginBottom: '24px',
                 }}>
                   Send a message
@@ -262,7 +262,7 @@ export default function Contact() {
                 >
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <div>
-                      <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#A0A0A0', marginBottom: '6px', letterSpacing: '0.04em' }}>
+                      <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#9A9A9A', marginBottom: '6px', letterSpacing: '0.04em' }}>
                         Name *
                       </label>
                       <input
@@ -276,7 +276,7 @@ export default function Contact() {
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#A0A0A0', marginBottom: '6px', letterSpacing: '0.04em' }}>
+                      <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#9A9A9A', marginBottom: '6px', letterSpacing: '0.04em' }}>
                         Email *
                       </label>
                       <input
@@ -292,8 +292,8 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#A0A0A0', marginBottom: '6px', letterSpacing: '0.04em' }}>
-                      Phone <span style={{ color: 'rgba(160,160,160,0.4)' }}>(optional)</span>
+                    <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#9A9A9A', marginBottom: '6px', letterSpacing: '0.04em' }}>
+                      Phone <span style={{ color: 'rgba(154,154,154,0.4)' }}>(optional)</span>
                     </label>
                     <input
                       type="tel"
@@ -306,7 +306,7 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#A0A0A0', marginBottom: '6px', letterSpacing: '0.04em' }}>
+                    <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#9A9A9A', marginBottom: '6px', letterSpacing: '0.04em' }}>
                       Tell us about your business *
                     </label>
                     <textarea
@@ -332,8 +332,8 @@ export default function Contact() {
                       fontFamily: 'Syne, sans-serif',
                       fontWeight: 700,
                       fontSize: '0.95rem',
-                      background: '#3B82F6',
-                      color: '#0A0A0A',
+                      background: '#8B5CF6',
+                      color: '#0A0A0F',
                       border: 'none',
                       borderRadius: '10px',
                       padding: '14px',
@@ -342,7 +342,7 @@ export default function Contact() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      boxShadow: '0 0 24px rgba(59,130,246,0.25)',
+                      boxShadow: '0 0 24px rgba(139,92,246,0.25)',
                       marginTop: '4px',
                       letterSpacing: '0.02em',
                     }}

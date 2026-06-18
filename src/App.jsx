@@ -105,7 +105,7 @@ export default function App() {
   }, [location.pathname])
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#0A0A0A' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#0A0A0F' }}>
       <CustomCursor />
       <Navbar />
       <ScrollToTop lenisRef={lenisRef} />

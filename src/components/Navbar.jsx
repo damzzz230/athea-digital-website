@@ -36,10 +36,10 @@ export default function Navbar() {
         right: 0,
         zIndex: 1000,
         transition: 'background 0.3s ease, backdrop-filter 0.3s ease, border-bottom 0.3s ease',
-        background: scrolled ? 'rgba(10,10,10,0.85)' : 'transparent',
+        background: scrolled ? 'rgba(18,18,26,0.85)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(180%)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
+        borderBottom: scrolled ? '1px solid #2A2A3A' : '1px solid transparent',
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
@@ -69,7 +69,7 @@ export default function Navbar() {
                     fontSize: '0.875rem',
                     fontWeight: 500,
                     letterSpacing: '0.02em',
-                    color: active || hovered ? '#F0F0F0' : '#A0A0A0',
+                    color: active || hovered ? '#F0EDE8' : '#9A9A9A',
                     textDecoration: 'none',
                     transition: 'color 0.2s ease',
                     position: 'relative',
@@ -89,7 +89,7 @@ export default function Navbar() {
                         left: 0,
                         right: 0,
                         height: '2px',
-                        background: '#3B82F6',
+                        background: '#8B5CF6',
                         borderRadius: '1px',
                       }}
                     />
@@ -105,7 +105,7 @@ export default function Navbar() {
                         left: 0,
                         right: 0,
                         height: '2px',
-                        background: '#3B82F6',
+                        background: '#8B5CF6',
                         borderRadius: '1px',
                         originX: 0,
                       }}
@@ -120,16 +120,16 @@ export default function Navbar() {
                 fontFamily: 'DM Sans, sans-serif',
                 fontSize: '0.875rem',
                 fontWeight: 600,
-                color: '#0A0A0A',
-                background: '#3B82F6',
+                color: '#0A0A0F',
+                background: '#8B5CF6',
                 padding: '8px 20px',
                 borderRadius: '6px',
                 textDecoration: 'none',
                 transition: 'background 0.2s ease, transform 0.2s ease',
                 display: 'inline-block',
               }}
-              onMouseEnter={e => { e.target.style.background = '#60a5fa'; e.target.style.transform = 'translateY(-1px)' }}
-              onMouseLeave={e => { e.target.style.background = '#3B82F6'; e.target.style.transform = 'translateY(0)' }}
+              onMouseEnter={e => { e.target.style.background = '#A78BFA'; e.target.style.transform = 'translateY(-1px)' }}
+              onMouseLeave={e => { e.target.style.background = '#8B5CF6'; e.target.style.transform = 'translateY(0)' }}
             >
               Get a Quote
             </Link>
@@ -142,7 +142,7 @@ export default function Navbar() {
             style={{
               background: 'none',
               border: 'none',
-              color: '#F0F0F0',
+              color: '#F0EDE8',
               padding: '8px',
               display: 'none',
             }}
@@ -163,9 +163,9 @@ export default function Navbar() {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             style={{
               overflow: 'hidden',
-              background: 'rgba(10,10,10,0.96)',
+              background: 'rgba(18,18,26,0.96)',
               backdropFilter: 'blur(20px)',
-              borderTop: '1px solid rgba(255,255,255,0.06)',
+              borderTop: '1px solid #2A2A3A',
             }}
           >
             <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -184,10 +184,10 @@ export default function Navbar() {
                       fontFamily: 'Syne, sans-serif',
                       fontWeight: 600,
                       fontSize: '1.25rem',
-                      color: location.pathname === l.to ? '#3B82F6' : '#F0F0F0',
+                      color: location.pathname === l.to ? '#8B5CF6' : '#F0EDE8',
                       textDecoration: 'none',
                       padding: '12px 0',
-                      borderBottom: '1px solid rgba(255,255,255,0.05)',
+                      borderBottom: '1px solid #2A2A3A',
                     }}
                   >
                     {l.label}

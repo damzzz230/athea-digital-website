@@ -78,9 +78,9 @@ export default function Marquee({ speed = 32 }) {
       style={{
         overflow: 'hidden',
         padding: '18px 0',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-        background: 'rgba(13,13,13,0.95)',
+        borderTop: '1px solid #2A2A3A',
+        borderBottom: '1px solid #2A2A3A',
+        background: 'rgba(18,18,26,0.95)',
       }}
     >
       <div
@@ -101,8 +101,8 @@ export default function Marquee({ speed = 32 }) {
               fontWeight:     item === '✦' ? 400      : 500,
               fontSize:       item === '✦' ? '0.6rem' : '0.72rem',
               color:          item === '✦'
-                ? 'rgba(59,130,246,0.45)'
-                : 'rgba(160,160,160,0.38)',
+                ? 'rgba(139,92,246,0.45)'
+                : 'rgba(154,154,154,0.38)',
               letterSpacing:  item === '✦' ? 0 : '0.1em',
               textTransform:  'uppercase',
               lineHeight:     1,

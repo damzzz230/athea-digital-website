@@ -50,7 +50,7 @@ export default function SpecBuildCube() {
 
     const geometry = new THREE.BoxGeometry(1.4, 1.4, 1.4)
     const material = new THREE.MeshPhysicalMaterial({
-      color: '#1D4ED8',
+      color: '#8B5CF6',
       metalness: 0.0,
       roughness: 0.05,
       transmission: 0.95,
@@ -66,7 +66,7 @@ export default function SpecBuildCube() {
     scene.add(mesh)
 
     const edges = new THREE.EdgesGeometry(geometry)
-    const outerLineMat = new THREE.LineBasicMaterial({ color: '#93C5FD', opacity: 0.6, transparent: true, linewidth: 1 })
+    const outerLineMat = new THREE.LineBasicMaterial({ color: '#F0EDE8', opacity: 0.6, transparent: true, linewidth: 1 })
     const wireframe = new THREE.LineSegments(edges, outerLineMat)
     mesh.add(wireframe)
 
@@ -83,19 +83,19 @@ export default function SpecBuildCube() {
     dirLight.position.set(3, 4, 5)
     scene.add(dirLight)
 
-    const rimLight = new THREE.DirectionalLight(0x93C5FD, 0.8)
+    const rimLight = new THREE.DirectionalLight(0xF0EDE8, 0.8)
     rimLight.position.set(-3, -2, -3)
     scene.add(rimLight)
 
-    const pointLight = new THREE.PointLight(0x3B82F6, 3.0, 8)
+    const pointLight = new THREE.PointLight(0x8B5CF6, 3.0, 8)
     pointLight.position.set(2, 2, 2)
     scene.add(pointLight)
 
     // Background particle clouds
-    const cloudA = makeSphereCloud(200, 3.5, '#3B82F6', 0.06, 0.85)
+    const cloudA = makeSphereCloud(200, 3.5, '#8B5CF6', 0.06, 0.85)
     scene.add(cloudA)
 
-    const cloudB = makeSphereCloud(100, 2.2, '#93C5FD', 0.035, 0.6)
+    const cloudB = makeSphereCloud(100, 2.2, '#F0EDE8', 0.035, 0.6)
     scene.add(cloudB)
 
 
