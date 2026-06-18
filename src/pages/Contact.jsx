@@ -157,7 +157,7 @@ export default function Contact() {
                   </a>
 
                   <a
-                    href="mailto:hello@athea.digital"
+                    href="mailto:info@atheadigital.co.za"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -192,7 +192,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '0.85rem', color: '#F0EDE8', marginBottom: '2px' }}>Email</p>
-                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#9A9A9A' }}>hello@athea.digital</p>
+                      <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.82rem', color: '#9A9A9A' }}>info@atheadigital.co.za</p>
                     </div>
                   </a>
 
@@ -256,7 +256,7 @@ export default function Contact() {
                 </h3>
 
                 <form
-                  action="https://formspree.io/f/placeholder"
+                  action="https://formspree.io/f/mkoabllw"
                   method="POST"
                   style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
                 >

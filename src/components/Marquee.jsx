@@ -16,7 +16,7 @@ const ITEMS = [
   '✦',
   'Local Business',
   '✦',
-  'No Upfront Payment',
+  '50% To Start. Done In 7 Days.',
   '✦',
 ]
 

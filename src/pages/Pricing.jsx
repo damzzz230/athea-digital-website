@@ -69,8 +69,8 @@ const tiers = [
 
 const faqs = [
   {
-    q: 'Do I pay upfront?',
-    a: 'No. We build the site first and show it to you. Once you love it and we agree on price, payment is made before handover. No deposits, no risk on your side.',
+    q: 'How does payment work?',
+    a: 'We design your site first at no cost. Once you approve it, pay 50% to kick off. We deliver the full site within 7 days — balance due on completion.',
   },
   {
     q: 'What do I need to provide?',
