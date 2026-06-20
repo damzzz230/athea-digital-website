@@ -115,7 +115,7 @@ export default function Portfolio() {
   return (
     <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
-      <section style={{ padding: '160px 24px 60px', position: 'relative', overflow: 'hidden' }}>
+      <section className="pt-[120px] px-4 pb-12 md:pt-[160px] md:px-6 md:pb-[60px]" style={{ position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           bottom: '0',
@@ -125,7 +125,7 @@ export default function Portfolio() {
           background: 'radial-gradient(circle at bottom right, rgba(139,92,246,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="text-center md:text-left" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -138,6 +138,7 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mx-auto md:mx-0"
             style={{
               fontFamily: 'Syne, sans-serif',
               fontWeight: 800,
@@ -145,17 +146,18 @@ export default function Portfolio() {
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
               color: '#F0EDE8',
-              maxWidth: '700px',
+              maxWidth: '1150px',
               marginBottom: '20px',
             }}
           >
-            Sites that perform<br />
+            Sites that perform<br className="hidden md:block" />{' '}
             <span style={{ color: '#8B5CF6' }}>in the real world.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
+            className="mx-auto md:mx-0"
             style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1.05rem', color: '#9A9A9A', maxWidth: '480px', lineHeight: 1.7 }}
           >
             A selection of sites we've built for local Johannesburg businesses. Each one is designed to win new customers, not just look good.
@@ -164,11 +166,11 @@ export default function Portfolio() {
       </section>
 
       {/* Grid */}
-      <section style={{ padding: '0 24px 100px' }}>
+      <section className="px-4 pb-16 md:px-6 md:pb-[100px]">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(340px, 100%), 1fr))',
             gap: '24px',
           }}>
             <AnimatePresence mode="popLayout">

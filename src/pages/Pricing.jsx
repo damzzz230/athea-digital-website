@@ -138,7 +138,7 @@ export default function Pricing() {
   return (
     <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
-      <section style={{ padding: '160px 24px 80px', position: 'relative', overflow: 'hidden' }}>
+      <section className="pt-[120px] px-4 pb-16 md:pt-[160px] md:px-6 md:pb-20" style={{ position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: '10%',
@@ -172,7 +172,7 @@ export default function Pricing() {
               marginBottom: '20px',
             }}
           >
-            Flat rates.<br />
+            Flat rates.<br className="hidden md:block" />{' '}
             <span style={{ color: '#8B5CF6' }}>No surprises.</span>
           </motion.h1>
           <motion.p
@@ -187,11 +187,11 @@ export default function Pricing() {
       </section>
 
       {/* Pricing cards */}
-      <section style={{ padding: '0 24px 80px' }}>
+      <section className="px-4 pb-16 md:px-6 md:pb-20">
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
             gap: '24px',
             alignItems: 'start',
           }}>
@@ -308,7 +308,7 @@ export default function Pricing() {
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: '40px 24px 100px', background: '#12121A' }}>
+      <section className="px-4 pb-16 md:px-6 md:pb-[100px]" style={{ paddingTop: '40px', background: '#12121A' }}>
         <div style={{ maxWidth: '720px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{ textAlign: 'center', marginBottom: '52px' }}>

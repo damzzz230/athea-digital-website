@@ -18,12 +18,6 @@
   --font-body: 'DM Sans', sans-serif;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 html {
   /* scroll-behavior removed — Lenis handles smooth scrolling */
 }
@@ -63,6 +57,11 @@ a, button { cursor: none; }
 #root {
   width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+main {
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar { width: 5px; }

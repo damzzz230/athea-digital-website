@@ -80,23 +80,24 @@ function ColHeading({ children }) {
 
 export default function Footer() {
   return (
-    <footer style={{
+    <footer className="px-4 md:px-6" style={{
       background: '#12121A',
       borderTop: '1px solid #2A2A3A',
-      padding: '64px 24px 32px',
+      paddingTop: '64px',
+      paddingBottom: '32px',
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
         {/* ── Main grid ── */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
           gap: '48px',
           marginBottom: '48px',
         }}>
 
           {/* Brand column */}
-          <div>
+          <div className="text-center md:text-left">
             <Link to="/" style={{ textDecoration: 'none', display: 'inline-block' }}>
               <img
                 src="/images/Athea_Digital_logo_white_transparent.png"
@@ -118,7 +119,7 @@ export default function Footer() {
               Built in Joburg. Built to convert.
             </p>
 
-            <p style={{
+            <p className="mx-auto md:mx-0" style={{
               marginTop: '12px',
               fontFamily: 'DM Sans, sans-serif',
               fontSize: '0.875rem',
@@ -130,7 +131,7 @@ export default function Footer() {
             </p>
 
             {/* Social icons */}
-            <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+            <div className="justify-center md:justify-start" style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
               {[
                 { href: 'https://wa.me/27615223385', icon: <MessageCircle size={16} />, label: 'WhatsApp' },
                 { href: 'mailto:info@atheadigital.co.za', icon: <Mail size={16} />, label: 'Email' },
@@ -141,12 +142,11 @@ export default function Footer() {
                   target={href.startsWith('http') ? '_blank' : undefined}
                   rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                   aria-label={label}
+                  className="w-11 h-11 md:w-9 md:h-9"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: '36px',
-                    height: '36px',
                     borderRadius: '8px',
                     background: '#2A2A3A',
                     border: '1px solid #2A2A3A',
@@ -171,7 +171,7 @@ export default function Footer() {
           </div>
 
           {/* Pages */}
-          <div>
+          <div className="text-center md:text-left">
             <ColHeading>Pages</ColHeading>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {pageLinks.map((l) => (
@@ -183,7 +183,7 @@ export default function Footer() {
           </div>
 
           {/* Service Industries */}
-          <div>
+          <div className="text-center md:text-left">
             <ColHeading>Service Industries</ColHeading>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {nicheItems.map((item) => (
@@ -195,9 +195,9 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div>
+          <div className="text-center md:text-left">
             <ColHeading>Contact</ColHeading>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div className="items-center md:items-start" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <a
                 href="https://wa.me/27615223385"
                 target="_blank"
@@ -228,7 +228,7 @@ export default function Footer() {
         </div>
 
         {/* ── Bottom bar ── */}
-        <div style={{
+        <div className="flex-col text-center md:flex-row md:text-left" style={{
           borderTop: '1px solid #2A2A3A',
           paddingTop: '28px',
           display: 'flex',

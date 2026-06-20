@@ -42,7 +42,7 @@ export default function Contact() {
   return (
     <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
-      <section style={{ padding: '160px 24px 60px', position: 'relative', overflow: 'hidden' }}>
+      <section className="pt-[120px] px-4 pb-12 md:pt-[160px] md:px-6 md:pb-[60px]" style={{ position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: 0,
@@ -52,7 +52,7 @@ export default function Contact() {
           background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="text-center md:text-left" style={{ maxWidth: '1320px', margin: '0 auto' }}>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -65,6 +65,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mx-auto md:mx-0"
             style={{
               fontFamily: 'Syne, sans-serif',
               fontWeight: 800,
@@ -72,22 +73,22 @@ export default function Contact() {
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
               color: '#F0EDE8',
-              maxWidth: '700px',
+              maxWidth: '1300px',
               marginBottom: '20px',
             }}
           >
-            Let's build something<br />
+            Let's build something<br className="hidden md:block" />{' '}
             <span style={{ color: '#8B5CF6' }}>worth showing off.</span>
           </motion.h1>
         </div>
       </section>
 
       {/* Main contact section */}
-      <section style={{ padding: '0 24px 100px' }}>
+      <section className="px-4 pb-16 md:px-6 md:pb-[100px]">
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
             gap: '40px',
             alignItems: 'start',
           }}>
@@ -239,11 +240,10 @@ export default function Contact() {
 
             {/* Right column — form */}
             <FadeUp delay={0.15}>
-              <div style={{
+              <div className="p-6 md:p-9" style={{
                 background: '#12121A',
                 border: '1px solid #2A2A3A',
                 borderRadius: '20px',
-                padding: '36px',
               }}>
                 <h3 style={{
                   fontFamily: 'Syne, sans-serif',
@@ -260,7 +260,7 @@ export default function Contact() {
                   method="POST"
                   style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
                 >
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '12px' }}>
                     <div>
                       <label style={{ display: 'block', fontFamily: 'DM Sans, sans-serif', fontSize: '0.78rem', color: '#9A9A9A', marginBottom: '6px', letterSpacing: '0.04em' }}>
                         Name *

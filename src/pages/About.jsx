@@ -2,7 +2,9 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Shield, Zap, Eye } from 'lucide-react'
-import SpecBuildCube from '../components/SpecBuildCube'
+import { useScreenSize } from '../hooks/use-screen-size'
+import { GooeyFilter } from '../components/ui/gooey-filter'
+import { PixelTrail } from '../components/ui/pixel-trail'
 
 function FadeUp({ children, delay = 0 }) {
   const ref = useRef(null)
@@ -19,14 +21,16 @@ function FadeUp({ children, delay = 0 }) {
   )
 }
 
-function MaskReveal({ text }) {
+function MaskReveal({ text, align = 'flex-start' }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, amount: 0.2 })
   const words = text.split(' ')
+  const desktopJustify = align === 'center' ? 'justify-center' : 'md:justify-start'
   return (
     <span
       ref={ref}
       aria-label={text}
+      className={`justify-center ${desktopJustify}`}
       style={{ display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', rowGap: 0 }}
     >
       {words.map((word, i) => (
@@ -192,11 +196,11 @@ const team = [
 ]
 
 export default function About() {
+  const screenSize = useScreenSize()
   return (
     <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
-      <section style={{
-        padding: '160px 24px 80px',
+      <section className="pt-[120px] px-4 pb-16 md:pt-[160px] md:px-6 md:pb-20" style={{
         position: 'relative',
         overflow: 'hidden',
       }}>
@@ -209,7 +213,7 @@ export default function About() {
           background: 'radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="text-center md:text-left" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -222,6 +226,7 @@ export default function About() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mx-auto md:mx-0"
             style={{
               fontFamily: 'Syne, sans-serif',
               fontWeight: 800,
@@ -233,13 +238,14 @@ export default function About() {
               marginBottom: '28px',
             }}
           >
-            Two developers.<br />
+            Two developers.<br className="hidden md:block" />{' '}
             <span style={{ color: '#8B5CF6' }}>One obsession.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
+            className="mx-auto md:mx-0"
             style={{
               fontFamily: 'DM Sans, sans-serif',
               fontSize: '1.1rem',
@@ -254,17 +260,18 @@ export default function About() {
       </section>
 
       {/* Team */}
-      <section style={{ padding: '40px 24px 80px' }}>
+      <section className="px-4 md:px-6 pt-10 pb-20">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
             gap: '24px',
           }}>
             {team.map((member, i) => {
+              const mobile = screenSize.lessThan('md')
               const directions = [
-                { x: -160, y: 0 },
-                { x: 160, y: 0 },
+                { x: mobile ? -80 : -160, y: 0 },
+                { x: mobile ? 80 : 160, y: 0 },
               ]
               return (
                 <TeamCard key={member.name} member={member} direction={directions[i]} delay={i * 0.15} />
@@ -275,73 +282,81 @@ export default function About() {
       </section>
 
       {/* Studio story */}
-      <section style={{ padding: '80px 24px', background: '#12121A' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '64px' }}>
-          {/* Left column */}
-          <div style={{ flex: 1 }}>
-            <FadeUp>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '16px' }}>
-                How We Work
-              </p>
-              <h2 style={{
-                fontFamily: 'Syne, sans-serif',
-                fontWeight: 800,
-                fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-                color: '#F0EDE8',
-                letterSpacing: '-0.02em',
-                marginBottom: '28px',
-              }}>
-                <MaskReveal text="The Spec-Build Model" />
-              </h2>
-            </FadeUp>
-            <FadeUp delay={0.1}>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
-                Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
-              </p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
-                <strong style={{ color: '#F0EDE8' }}>We design your site first</strong> — layout, copy, features. Love it? Pay 50% to kick off. Full build delivered in 7 days, balance on completion.
-              </p>
-              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8 }}>
-                This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.
-              </p>
-            </FadeUp>
-            <FadeUp delay={0.2}>
-              <div style={{ marginTop: '40px' }}>
-                <Link to="/contact" style={{ textDecoration: 'none' }}>
-                  <motion.button
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.97 }}
-                    style={{
-                      fontFamily: 'Syne, sans-serif',
-                      fontWeight: 700,
-                      fontSize: '0.95rem',
-                      background: '#8B5CF6',
-                      color: '#0A0A0F',
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '14px 28px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      boxShadow: '0 0 24px rgba(139,92,246,0.25)',
-                    }}
-                  >
-                    Start a Conversation <ArrowRight size={16} />
-                  </motion.button>
-                </Link>
-              </div>
-            </FadeUp>
+      <section className="py-16 px-4 md:py-20 md:px-6" style={{ background: '#12121A', position: 'relative', overflow: 'hidden' }}>
+        {/* Gooey pixel-trail background — spans the whole section */}
+        <div className="absolute inset-0 z-0">
+          <GooeyFilter id="gooey-filter-spec-build" strength={5} />
+          <div
+            className="absolute inset-0"
+            style={{ filter: 'url(#gooey-filter-spec-build)' }}
+          >
+            <PixelTrail
+              pixelSize={screenSize.lessThan('lg') ? 20 : 28}
+              fadeDuration={500}
+              delay={0}
+              pixelClassName="bg-[#8B5CF6]"
+            />
           </div>
+        </div>
 
-          {/* Right column — hidden below md breakpoint */}
-          <div className="hidden md:block" style={{ flexShrink: 0, position: 'relative', width: '320px', height: '320px', overflow: 'visible' }}>
-            <SpecBuildCube />
-          </div>
+        <div style={{ maxWidth: '720px', margin: '0 auto', position: 'relative', zIndex: 10, textAlign: 'center', pointerEvents: 'none' }}>
+          <FadeUp>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8B5CF6', marginBottom: '16px' }}>
+              How We Work
+            </p>
+            <h2 style={{
+              fontFamily: 'Syne, sans-serif',
+              fontWeight: 800,
+              fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+              color: '#F0EDE8',
+              letterSpacing: '-0.02em',
+              marginBottom: '28px',
+            }}>
+              <MaskReveal text="The Spec-Build Model" align="center" />
+            </h2>
+          </FadeUp>
+          <FadeUp delay={0.1}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
+              Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
+            </p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
+              <strong style={{ color: '#F0EDE8' }}>We design your site first</strong> — layout, copy, features. Love it? Pay 50% to kick off. Full build delivered in 7 days, balance on completion.
+            </p>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8 }}>
+              This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.
+            </p>
+          </FadeUp>
+          <FadeUp delay={0.2}>
+            <div style={{ marginTop: '40px', display: 'flex', justifyContent: 'center' }}>
+              <Link to="/contact" style={{ textDecoration: 'none', pointerEvents: 'auto' }}>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700,
+                    fontSize: '0.95rem',
+                    background: '#8B5CF6',
+                    color: '#0A0A0F',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '14px 28px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 0 24px rgba(139,92,246,0.25)',
+                  }}
+                >
+                  Start a Conversation <ArrowRight size={16} />
+                </motion.button>
+              </Link>
+            </div>
+          </FadeUp>
         </div>
       </section>
 
       {/* Values */}
-      <section style={{ padding: '80px 24px' }}>
+      <section className="py-16 px-4 md:py-20 md:px-6">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{ textAlign: 'center', marginBottom: '56px' }}>
@@ -355,14 +370,15 @@ export default function About() {
           </FadeUp>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
             gap: '24px',
           }}>
             {values.map((v, i) => {
+              const mobile = screenSize.lessThan('md')
               const directions = [
-                { x: -160, y: 0 },
-                { x: 0, y: 100 },
-                { x: 160, y: 0 },
+                { x: mobile ? -80 : -160, y: 0 },
+                { x: 0, y: mobile ? 20 : 100 },
+                { x: mobile ? 80 : 160, y: 0 },
               ]
               return (
                 <ValueCard key={v.title} value={v} direction={directions[i]} delay={i * 0.15} />

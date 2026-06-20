@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
@@ -24,6 +25,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -42,21 +48,20 @@ export default function Navbar() {
         borderBottom: scrolled ? '1px solid #2A2A3A' : '1px solid transparent',
       }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '88px' }}>
+      <div className="px-4 md:px-6" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="h-[64px] md:h-[88px]" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Logo */}
           <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
             <img
               src="/images/Athea_Digital_logo_white_transparent.png"
               alt="Athea Digital"
-              className="navbar-logo"
-              style={{ height: '90px', width: 'auto', display: 'block', minWidth: '160px' }}
+              className="navbar-logo h-[52px] md:h-[90px]"
+              style={{ width: 'auto', display: 'block' }}
             />
           </Link>
 
           {/* Desktop nav */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '36px' }}
-            className="hidden-mobile">
+          <nav className="hidden md:flex" style={{ alignItems: 'center', gap: '36px' }}>
             {links.map((l) => {
               const active = location.pathname === l.to
               const hovered = hoveredLink === l.to
@@ -116,13 +121,12 @@ export default function Navbar() {
             })}
             <Link
               to="/contact"
+              className="px-[20px] py-[8px] text-[0.875rem]"
               style={{
                 fontFamily: 'DM Sans, sans-serif',
-                fontSize: '0.875rem',
                 fontWeight: 600,
                 color: '#0A0A0F',
                 background: '#8B5CF6',
-                padding: '8px 20px',
                 borderRadius: '6px',
                 textDecoration: 'none',
                 transition: 'background 0.2s ease, transform 0.2s ease',
@@ -135,79 +139,97 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          {/* Mobile burger */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="show-mobile"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#F0EDE8',
-              padding: '8px',
-              display: 'none',
-            }}
-            aria-label="Toggle menu"
-          >
-            {open ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile-only: compact CTA + burger */}
+          <div className="flex md:hidden items-center gap-2">
+            <Link
+              to="/contact"
+              className="px-4 py-[6px] text-xs"
+              style={{
+                fontFamily: 'DM Sans, sans-serif',
+                fontWeight: 600,
+                color: '#0A0A0F',
+                background: '#8B5CF6',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                display: 'inline-block',
+                minHeight: '32px',
+                lineHeight: '20px',
+              }}
+            >
+              Get a Quote
+            </Link>
+            <button
+              onClick={() => setOpen(!open)}
+              className="relative z-[60] flex items-center justify-center"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#F0EDE8',
+                width: '44px',
+                height: '44px',
+              }}
+              aria-label="Toggle menu"
+            >
+              {open ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              overflow: 'hidden',
-              background: 'rgba(18,18,26,0.96)',
-              backdropFilter: 'blur(20px)',
-              borderTop: '1px solid #2A2A3A',
-            }}
-          >
-            <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {links.map((l, i) => (
-                <motion.div
-                  key={l.to}
-                  initial={{ opacity: 0, x: -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06 }}
-                >
-                  <Link
-                    to={l.to}
-                    onClick={() => setOpen(false)}
-                    style={{
-                      display: 'block',
-                      fontFamily: 'Syne, sans-serif',
-                      fontWeight: 600,
-                      fontSize: '1.25rem',
-                      color: location.pathname === l.to ? '#8B5CF6' : '#F0EDE8',
-                      textDecoration: 'none',
-                      padding: '12px 0',
-                      borderBottom: '1px solid #2A2A3A',
-                    }}
+      {/* Full-screen mobile menu — portaled to document.body so it isn't
+          affected by the header's backdrop-filter, which would otherwise
+          promote the header into a containing block and collapse this
+          fixed-position overlay down to the header's own height. */}
+      {createPortal(
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 z-50 flex md:hidden flex-col items-center justify-center"
+              style={{ background: '#0A0A0F' }}
+            >
+              {links.map((l, i) => {
+                const active = location.pathname === l.to
+                return (
+                  <motion.div
+                    key={l.to}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {l.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    <Link
+                      to={l.to}
+                      onClick={() => setOpen(false)}
+                      className="mobile-nav-link"
+                      style={{
+                        display: 'block',
+                        fontFamily: 'Syne, sans-serif',
+                        fontWeight: 700,
+                        fontSize: '2rem',
+                        color: active ? '#8B5CF6' : '#F0EDE8',
+                        textDecoration: 'none',
+                        padding: '14px 0',
+                        textAlign: 'center',
+                        borderBottom: active ? '2px solid #8B5CF6' : '2px solid transparent',
+                      }}
+                    >
+                      {l.label}
+                    </Link>
+                  </motion.div>
+                )
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       <style>{`
-        @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
-        }
-        @media (min-width: 769px) {
-          .show-mobile { display: none !important; }
-          .hidden-mobile { display: flex !important; }
-        }
+        .mobile-nav-link:active { border-bottom-color: #8B5CF6 !important; }
       `}</style>
     </motion.header>
   )

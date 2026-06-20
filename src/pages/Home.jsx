@@ -103,6 +103,7 @@ function MaskReveal({ text }) {
     <span
       ref={ref}
       aria-label={text}
+      className="justify-center md:justify-start"
       style={{ display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', rowGap: 0 }}
     >
       {words.map((word, i) => (
@@ -170,9 +171,67 @@ function NicheScrollReveal() {
   const angleStep      = (2 * Math.PI) / 6
 
   return (
+    <>
+    {/* Mobile — static 2-column grid (no orbital/scroll-pin math) */}
+    <section className="block md:hidden" style={{ padding: '64px 16px', position: 'relative', overflow: 'hidden' }}>
+      <FadeUp>
+        <p style={{
+          fontFamily: 'Syne, sans-serif',
+          fontSize: '1.1rem',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: '#F0EDE8',
+          fontWeight: 700,
+          textAlign: 'center',
+          margin: '0 0 28px',
+        }}>
+          Industries We Serve
+        </p>
+      </FadeUp>
+      <div className="grid grid-cols-2 gap-3">
+        {niches.map((n, i) => (
+          <motion.div
+            key={n.label}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
+          >
+            <Link to="/services" style={{ textDecoration: 'none' }}>
+              <div style={{
+                width: '100%',
+                padding: '16px',
+                background: '#12121A',
+                border: '1px solid #2A2A3A',
+                borderRadius: '12px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
+                minHeight: '44px',
+              }}>
+                <n.icon size={22} className="mx-auto" style={{ color: '#8B5CF6' }} />
+                <span className="text-center" style={{
+                  fontFamily: 'DM Sans, sans-serif',
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  color: '#9A9A9A',
+                  lineHeight: 1.3,
+                }}>
+                  {n.label}
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+
+    {/* Desktop — orbital scroll-pinned reveal */}
     <section
       ref={sectionRef}
-      style={{ height: '180vh', position: 'relative', marginBottom: '80px' }}
+      className="hidden md:block"
+      style={{ height: '150vh', position: 'relative', marginBottom: '80px' }}
     >
       {/* Sticky viewport-height panel */}
       <div style={{
@@ -362,6 +421,7 @@ function NicheScrollReveal() {
         </div>
       </div>
     </section>
+    </>
   )
 }
 
@@ -477,14 +537,16 @@ export default function Home() {
     <div style={{ background: '#0A0A0F' }}>
 
       {/* ── Hero ── */}
-      <section ref={heroRef} style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '140px 24px 80px',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
+      <section
+        ref={heroRef}
+        className="min-h-[100dvh] md:min-h-screen pt-[110px] px-4 pb-16 md:pt-[140px] md:px-6 md:pb-20"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
         {/* Fullscreen background video — replaces the previous 3D logo animation */}
         <BackgroundVideo />
         {/* Background glow blob */}
@@ -524,7 +586,7 @@ export default function Home() {
           flexWrap: 'wrap',
         }}>
           {/* Left: text content */}
-          <div style={{ flex: '1 1 380px', minWidth: 0 }}>
+          <div className="text-center md:text-left w-full" style={{ flex: '1 1 380px', minWidth: 0 }}>
             {/* Eyebrow */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
@@ -548,18 +610,21 @@ export default function Home() {
             </motion.div>
 
             {/* Hero headline */}
-            <h1 style={{
-              fontFamily: 'Syne, sans-serif',
-              fontWeight: 800,
-              fontSize: 'clamp(2.4rem, 6vw, 5rem)',
-              lineHeight: 1.0,
-              letterSpacing: '-0.03em',
-              color: '#F0EDE8',
-              marginBottom: '28px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.04em',
-            }}>
+            <h1
+              className="items-center md:items-stretch"
+              style={{
+                fontFamily: 'Syne, sans-serif',
+                fontWeight: 800,
+                fontSize: 'clamp(2.4rem, 6vw, 5rem)',
+                lineHeight: 1.0,
+                letterSpacing: '-0.03em',
+                color: '#F0EDE8',
+                marginBottom: '28px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.04em',
+              }}
+            >
               {heroWords.map((word, i) => (
                 <HeroWord
                   key={i}
@@ -576,6 +641,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.9 }}
+              className="mx-auto md:mx-0"
               style={{
                 fontFamily: 'DM Sans, sans-serif',
                 fontSize: 'clamp(1rem, 2vw, 1.15rem)',
@@ -593,12 +659,14 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.1 }}
-              style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center' }}
+              className="flex-col md:flex-row justify-center md:justify-start"
+              style={{ display: 'flex', gap: '16px', alignItems: 'center' }}
             >
-              <Link to="/contact" style={{ textDecoration: 'none' }}>
+              <Link to="/contact" className="block w-full md:inline-block md:w-auto" style={{ textDecoration: 'none' }}>
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
+                  className="w-full max-w-[320px] mx-auto md:w-auto md:max-w-none md:mx-0"
                   style={{
                     fontFamily: 'Syne, sans-serif',
                     fontWeight: 700,
@@ -610,6 +678,7 @@ export default function Home() {
                     padding: '14px 28px',
                     display: 'inline-flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '8px',
                     boxShadow: '0 0 24px rgba(139,92,246,0.35)',
                     letterSpacing: '0.01em',
@@ -618,10 +687,11 @@ export default function Home() {
                   Get In Touch <ArrowRight size={16} />
                 </motion.button>
               </Link>
-              <Link to="/portfolio" style={{ textDecoration: 'none' }}>
+              <Link to="/portfolio" className="block w-full md:inline-block md:w-auto" style={{ textDecoration: 'none' }}>
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
+                  className="w-full max-w-[320px] mx-auto md:w-auto md:max-w-none md:mx-0"
                   style={{
                     fontFamily: 'Syne, sans-serif',
                     fontWeight: 600,
@@ -633,6 +703,7 @@ export default function Home() {
                     padding: '14px 28px',
                     display: 'inline-flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '8px',
                     letterSpacing: '0.01em',
                     transition: 'background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease',
@@ -663,7 +734,7 @@ export default function Home() {
       <NicheScrollReveal />
 
       {/* ── Why Athea ── */}
-      <section style={{ padding: '80px 24px', background: '#12121A' }}>
+      <section className="py-16 px-4 md:py-20 md:px-6" style={{ background: '#12121A' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {/* Section header */}
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
@@ -695,7 +766,7 @@ export default function Home() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
               gap: '24px',
             }}
           >
@@ -714,18 +785,20 @@ export default function Home() {
       </section>
 
       {/* ── Portfolio preview ── */}
-      <section style={{ padding: '80px 24px' }}>
+      <section className="py-16 px-4 md:py-20 md:px-6">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {/* Section header */}
           <FadeUp>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              marginBottom: '48px',
-              flexWrap: 'wrap',
-              gap: '16px',
-            }}>
+            <div
+              className="flex-col items-center text-center md:flex-row md:items-end md:text-left"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '48px',
+                flexWrap: 'wrap',
+                gap: '16px',
+              }}
+            >
               <div>
                 <p style={{
                   fontFamily: 'DM Sans, sans-serif',
@@ -775,7 +848,7 @@ export default function Home() {
             viewport={{ once: true, margin: '-60px' }}
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
               gap: '24px',
             }}
           >
@@ -872,7 +945,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ── */}
-      <section style={{ padding: '80px 24px' }}>
+      <section className="py-16 px-4 md:py-20 md:px-6">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <FadeUp>
             <div style={{
@@ -933,16 +1006,18 @@ export default function Home() {
                 No lengthy briefs. No guessing. We design your site first — love it, pay 50% to kick off, full site in 7 days.
               </p>
 
-              <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px' }}>
+              <div className="flex-col md:flex-row" style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
                 <a
                   href="https://wa.me/27615223385?text=Hi%20Athea%20Digital%2C%20I%27d%20like%20a%20quote"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="w-full md:w-auto"
                   style={{ textDecoration: 'none' }}
                 >
                   <motion.button
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.97 }}
+                    className="w-full max-w-[280px] mx-auto md:w-auto md:max-w-none md:mx-0"
                     style={{
                       fontFamily: 'Syne, sans-serif',
                       fontWeight: 700,
@@ -954,6 +1029,7 @@ export default function Home() {
                       padding: '14px 28px',
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       gap: '8px',
                     }}
                   >
@@ -963,10 +1039,11 @@ export default function Home() {
                     WhatsApp Us
                   </motion.button>
                 </a>
-                <Link to="/contact" style={{ textDecoration: 'none' }}>
+                <Link to="/contact" className="w-full md:w-auto" style={{ textDecoration: 'none' }}>
                   <motion.button
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.97 }}
+                    className="w-full max-w-[280px] mx-auto md:w-auto md:max-w-none md:mx-0"
                     style={{
                       fontFamily: 'Syne, sans-serif',
                       fontWeight: 700,

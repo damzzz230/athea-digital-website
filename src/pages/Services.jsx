@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Scissors, UtensilsCrossed, Wrench, Dumbbell, Palette, Car, ArrowRight } from 'lucide-react'
+import { useScreenSize } from '../hooks/use-screen-size'
 
 function FadeUp({ children, delay = 0 }) {
   const ref = useRef(null)
@@ -26,6 +27,7 @@ function MaskReveal({ text }) {
     <span
       ref={ref}
       aria-label={text}
+      className="justify-center md:justify-start"
       style={{ display: 'flex', flexWrap: 'wrap', columnGap: '0.28em', rowGap: 0 }}
     >
       {words.map((word, i) => (
@@ -211,10 +213,11 @@ const services = [
 ]
 
 export default function Services() {
+  const screenSize = useScreenSize()
   return (
     <div style={{ background: '#0A0A0F' }}>
       {/* Hero */}
-      <section style={{ padding: '160px 24px 80px', position: 'relative', overflow: 'hidden' }}>
+      <section className="pt-[120px] px-4 pb-16 md:pt-[160px] md:px-6 md:pb-20" style={{ position: 'relative', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute',
           top: '0%',
@@ -224,7 +227,7 @@ export default function Services() {
           background: 'radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="text-center md:text-left" style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -237,6 +240,7 @@ export default function Services() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mx-auto md:mx-0"
             style={{
               fontFamily: 'Syne, sans-serif',
               fontWeight: 800,
@@ -244,17 +248,18 @@ export default function Services() {
               lineHeight: 1.05,
               letterSpacing: '-0.03em',
               color: '#F0EDE8',
-              maxWidth: '700px',
+              maxWidth: '900px',
               marginBottom: '20px',
             }}
           >
-            A site built for<br />
+            A site built for<br className="hidden md:block" />{' '}
             <span style={{ color: '#8B5CF6' }}>your industry.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
+            className="mx-auto md:mx-0"
             style={{
               fontFamily: 'DM Sans, sans-serif',
               fontSize: '1.05rem',
@@ -269,21 +274,22 @@ export default function Services() {
       </section>
 
       {/* Services grid */}
-      <section style={{ padding: '0 24px 80px' }}>
+      <section className="px-4 md:px-6 pb-20">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
             gap: '24px',
           }}>
             {services.map((s, i) => {
+              const mobile = screenSize.lessThan('md')
               const directions = [
-                { x: -160, y: 0 },
-                { x: 0, y: -120 },
-                { x: 160, y: 0 },
-                { x: -160, y: 0 },
-                { x: 0, y: 120 },
-                { x: 160, y: 0 },
+                { x: mobile ? -80 : -160, y: 0 },
+                { x: 0, y: mobile ? -20 : -120 },
+                { x: mobile ? 80 : 160, y: 0 },
+                { x: mobile ? -80 : -160, y: 0 },
+                { x: 0, y: mobile ? 20 : 120 },
+                { x: mobile ? 80 : 160, y: 0 },
               ]
               return (
                 <ServiceCard key={s.niche} service={s} direction={directions[i]} delay={i < 3 ? i * 0.1 : (i - 3) * 0.1} />
@@ -294,14 +300,13 @@ export default function Services() {
       </section>
 
       {/* Bottom CTA */}
-      <section style={{ padding: '0 24px 100px' }}>
+      <section className="px-4 pb-16 md:px-6 md:pb-[100px]">
         <div style={{ maxWidth: '700px', margin: '0 auto' }}>
           <FadeUp>
-            <div style={{
+            <div className="p-6 md:p-12" style={{
               background: '#12121A',
               border: '1px solid rgba(139,92,246,0.12)',
               borderRadius: '20px',
-              padding: '48px',
               textAlign: 'center',
             }}>
               <h2 style={{
@@ -325,10 +330,11 @@ export default function Services() {
               }}>
                 We build for any local business in Johannesburg. If you have customers, we can build something that brings you more of them.
               </p>
-              <Link to="/contact" style={{ textDecoration: 'none' }}>
+              <Link to="/contact" className="block w-full md:inline-block md:w-auto" style={{ textDecoration: 'none' }}>
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
+                  className="w-full max-w-[280px] mx-auto md:w-auto md:max-w-none md:mx-0"
                   style={{
                     fontFamily: 'Syne, sans-serif',
                     fontWeight: 700,
@@ -340,6 +346,7 @@ export default function Services() {
                     padding: '14px 28px',
                     display: 'inline-flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '8px',
                     boxShadow: '0 0 24px rgba(139,92,246,0.25)',
                   }}
