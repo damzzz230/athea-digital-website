@@ -153,6 +153,11 @@ function CountUp({ to, suffix = '', stepMs = 100 }) {
 function NicheScrollReveal() {
   const sectionRef = useRef(null)
   const [animationProgress, setAnimationProgress] = useState(0)
+  // Generous margin so BackgroundCircles' infinite rotate/scale/gradient
+  // animations mount a little before the section arrives and unmount once
+  // it's well past — they'd otherwise keep animating (and repainting) for
+  // the entire scroll length of the page, not just while this is on screen.
+  const isNearViewport = useInView(sectionRef, { margin: '300px' })
 
   useEffect(() => {
     let ticking = false
@@ -250,7 +255,7 @@ function NicheScrollReveal() {
 
         {/* Layer 1 — Animated purple circles background */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <BackgroundCircles variant="athea" className="opacity-40" />
+          {isNearViewport && <BackgroundCircles variant="athea" className="opacity-40" />}
         </div>
 
         {/* Layer 2 — Vignette to blend edges cleanly */}

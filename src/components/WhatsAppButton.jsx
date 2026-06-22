@@ -23,6 +23,7 @@ function WhatsAppButton() {
           borderRadius: '50%',
           background: 'rgba(37,211,102,0.35)',
           pointerEvents: 'none',
+          willChange: 'transform, opacity',
         }}
       />
 
@@ -44,6 +45,7 @@ function WhatsAppButton() {
           boxShadow: '0 8px 32px rgba(37,211,102,0.35)',
           position: 'relative',
           textDecoration: 'none',
+          willChange: 'transform',
         }}
         aria-label="Chat on WhatsApp"
       >

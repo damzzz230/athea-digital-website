@@ -5,6 +5,7 @@ const VIDEO_SRC = 'https://stream.mux.com/kimF2ha9zLrX64H00UgLGPflCzNtl1T0215MlA
 
 export default function BackgroundVideo() {
   const videoRef = useRef(null)
+  const containerRef = useRef(null)
 
   useEffect(() => {
     const video = videoRef.current
@@ -23,8 +24,26 @@ export default function BackgroundVideo() {
     }
   }, [])
 
+  // The video loops forever via the `loop` attribute — without this it
+  // keeps decoding/playing even after the user scrolls well past the hero.
+  useEffect(() => {
+    const container = containerRef.current
+    const video = videoRef.current
+    if (!container || !video) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {})
+        else video.pause()
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+    <div ref={containerRef} style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
       <video
         ref={videoRef}
         autoPlay
