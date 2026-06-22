@@ -89,12 +89,7 @@ export default function Footer() {
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
         {/* ── Main grid ── */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
-          gap: '48px',
-          marginBottom: '48px',
-        }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4" style={{ gap: '48px', marginBottom: '48px' }}>
 
           {/* Brand column */}
           <div className="text-center md:text-left">

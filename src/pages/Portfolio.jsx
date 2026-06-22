@@ -168,11 +168,7 @@ export default function Portfolio() {
       {/* Grid */}
       <section className="px-4 pb-16 md:px-6 md:pb-[100px]">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(340px, 100%), 1fr))',
-            gap: '24px',
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: '24px' }}>
             <AnimatePresence mode="popLayout">
               {projects.map((p, i) => (
                 <motion.div

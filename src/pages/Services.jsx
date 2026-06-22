@@ -51,7 +51,7 @@ function MaskReveal({ text }) {
 
 function ServiceCard({ service, direction, delay }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-200px' })
+  const inView = useInView(ref, { once: true, margin: '-80px' })
   return (
     <motion.div
       ref={ref}
@@ -276,11 +276,7 @@ export default function Services() {
       {/* Services grid */}
       <section className="px-4 md:px-6 pb-20">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
-            gap: '24px',
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '24px' }}>
             {services.map((s, i) => {
               const mobile = screenSize.lessThan('md')
               const directions = [

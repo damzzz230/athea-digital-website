@@ -189,12 +189,7 @@ export default function Pricing() {
       {/* Pricing cards */}
       <section className="px-4 pb-16 md:px-6 md:pb-20">
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
-            gap: '24px',
-            alignItems: 'start',
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '24px', alignItems: 'start' }}>
             {tiers.map((t, i) => {
               const isSelected = selectedTier === t.name
               const isHovered = hoveredTier === t.name

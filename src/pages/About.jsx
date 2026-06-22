@@ -262,11 +262,7 @@ export default function About() {
       {/* Team */}
       <section className="px-4 md:px-6 pt-10 pb-20">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
-            gap: '24px',
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '24px' }}>
             {team.map((member, i) => {
               const mobile = screenSize.lessThan('md')
               const directions = [
@@ -368,11 +364,7 @@ export default function About() {
               </h2>
             </div>
           </FadeUp>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
-            gap: '24px',
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '24px' }}>
             {values.map((v, i) => {
               const mobile = screenSize.lessThan('md')
               const directions = [

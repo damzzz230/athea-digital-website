@@ -763,13 +763,7 @@ export default function Home() {
           </div>
 
           {/* Staggered feature cards */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
-              gap: '24px',
-            }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '24px' }}>
             {features.map((f, i) => {
               const directions = [
                 { x: -160, y: 0 },
@@ -846,11 +840,8 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-60px' }}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
-              gap: '24px',
-            }}
+            className="grid grid-cols-1 md:grid-cols-3"
+            style={{ gap: '24px' }}
           >
             {portfolioPreviews.map((p) => (
               <motion.div key={p.name} variants={fadeUpItem}>

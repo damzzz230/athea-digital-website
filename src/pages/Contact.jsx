@@ -86,12 +86,7 @@ export default function Contact() {
       {/* Main contact section */}
       <section className="px-4 pb-16 md:px-6 md:pb-[100px]">
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
-            gap: '40px',
-            alignItems: 'start',
-          }}>
+          <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: '40px', alignItems: 'start' }}>
             {/* Left column — info */}
             <FadeUp>
               <div>
