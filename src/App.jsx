@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLenis } from './hooks/useLenis'
@@ -7,11 +7,12 @@ import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 import CustomCursor from './components/CustomCursor'
 import Home from './pages/Home'
-import About from './pages/About'
-import Services from './pages/Services'
-import Portfolio from './pages/Portfolio'
-import Pricing from './pages/Pricing'
-import Contact from './pages/Contact'
+
+const About     = lazy(() => import('./pages/About'))
+const Services  = lazy(() => import('./pages/Services'))
+const Portfolio = lazy(() => import('./pages/Portfolio'))
+const Pricing   = lazy(() => import('./pages/Pricing'))
+const Contact   = lazy(() => import('./pages/Contact'))
 
 const SITE_URL = 'https://athea.digital'
 
@@ -110,16 +111,18 @@ export default function App() {
       <Navbar />
       <ScrollToTop lenisRef={lenisRef} />
       <main style={{ flex: 1 }}>
-        <AnimatePresence mode="wait" initial={false}>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/"          element={<PageWrapper><Home      /></PageWrapper>} />
-            <Route path="/about"     element={<PageWrapper><About     /></PageWrapper>} />
-            <Route path="/services"  element={<PageWrapper><Services  /></PageWrapper>} />
-            <Route path="/portfolio" element={<PageWrapper><Portfolio /></PageWrapper>} />
-            <Route path="/pricing"   element={<PageWrapper><Pricing   /></PageWrapper>} />
-            <Route path="/contact"   element={<PageWrapper><Contact   /></PageWrapper>} />
-          </Routes>
-        </AnimatePresence>
+        <Suspense fallback={null}>
+          <AnimatePresence mode="wait" initial={false}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/"          element={<PageWrapper><Home      /></PageWrapper>} />
+              <Route path="/about"     element={<PageWrapper><About     /></PageWrapper>} />
+              <Route path="/services"  element={<PageWrapper><Services  /></PageWrapper>} />
+              <Route path="/portfolio" element={<PageWrapper><Portfolio /></PageWrapper>} />
+              <Route path="/pricing"   element={<PageWrapper><Pricing   /></PageWrapper>} />
+              <Route path="/contact"   element={<PageWrapper><Contact   /></PageWrapper>} />
+            </Routes>
+          </AnimatePresence>
+        </Suspense>
       </main>
       <Footer />
       <WhatsAppButton />
