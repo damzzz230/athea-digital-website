@@ -6,6 +6,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 import CustomCursor from './components/CustomCursor'
+import CookieConsentBanner from './components/CookieConsentBanner'
 import Home from './pages/Home'
 
 const About     = lazy(() => import('./pages/About'))
@@ -126,6 +127,7 @@ export default function App() {
       </main>
       <Footer />
       <WhatsAppButton />
+      <CookieConsentBanner />
     </div>
   )
 }
