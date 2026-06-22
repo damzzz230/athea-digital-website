@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import { motion } from 'framer-motion'
 
-export default function WhatsAppButton() {
+function WhatsAppButton() {
   return (
     <motion.div
       initial={{ scale: 0, opacity: 0 }}
@@ -54,3 +55,5 @@ export default function WhatsAppButton() {
     </motion.div>
   )
 }
+
+export default memo(WhatsAppButton)

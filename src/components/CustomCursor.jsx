@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, memo } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 
-export default function CustomCursor() {
+function CustomCursor() {
   // Motion values bypass React's render cycle entirely — Framer Motion
   // writes directly to the DOM node, so cursor movement causes zero
   // React re-renders.
@@ -85,3 +85,5 @@ export default function CustomCursor() {
     </>
   )
 }
+
+export default memo(CustomCursor)

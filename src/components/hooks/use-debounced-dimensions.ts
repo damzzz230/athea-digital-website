@@ -25,7 +25,7 @@ export function useDimensions(ref: RefObject<HTMLElement | SVGElement | null>): 
 
     updateDimensions()
 
-    window.addEventListener('resize', debouncedUpdateDimensions)
+    window.addEventListener('resize', debouncedUpdateDimensions, { passive: true })
 
     return () => {
       window.removeEventListener('resize', debouncedUpdateDimensions)

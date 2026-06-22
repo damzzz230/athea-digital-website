@@ -12,13 +12,13 @@ interface PixelTrailProps {
   pixelClassName?: string
 }
 
-const PixelTrail: React.FC<PixelTrailProps> = ({
+const PixelTrail: React.FC<PixelTrailProps> = React.memo(function PixelTrail({
   pixelSize = 20,
   fadeDuration = 500,
   delay = 0,
   className,
   pixelClassName,
-}) => {
+}) {
   const containerRef = useRef<HTMLDivElement>(null)
   const dimensions = useDimensions(containerRef)
   const trailId = useRef(uuidv4())
@@ -76,7 +76,7 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
       ))}
     </div>
   )
-}
+})
 
 interface PixelDotProps {
   id: string

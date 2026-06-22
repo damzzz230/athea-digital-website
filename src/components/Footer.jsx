@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { MessageCircle, Mail, MapPin } from 'lucide-react'
@@ -78,7 +78,7 @@ function ColHeading({ children }) {
   )
 }
 
-export default function Footer() {
+function Footer() {
   return (
     <footer className="px-4 md:px-6" style={{
       background: '#12121A',
@@ -251,3 +251,5 @@ export default function Footer() {
     </footer>
   )
 }
+
+export default memo(Footer)

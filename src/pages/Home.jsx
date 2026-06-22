@@ -155,14 +155,21 @@ function NicheScrollReveal() {
   const [animationProgress, setAnimationProgress] = useState(0)
 
   useEffect(() => {
-    const onScroll = () => {
+    let ticking = false
+    const update = () => {
+      ticking = false
       if (!sectionRef.current) return
       const offsetTop     = sectionRef.current.offsetTop
       const relativeScroll = Math.max(0, window.scrollY - offsetTop + window.innerHeight * 0.1)
       setAnimationProgress(Math.min(relativeScroll / 350, 1))
     }
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(update)
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll() // seed on mount in case already scrolled
+    update() // seed on mount in case already scrolled
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
