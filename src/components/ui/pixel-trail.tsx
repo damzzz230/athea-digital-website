@@ -22,22 +22,32 @@ const PixelTrail: React.FC<PixelTrailProps> = React.memo(function PixelTrail({
   const containerRef = useRef<HTMLDivElement>(null)
   const dimensions = useDimensions(containerRef)
   const trailId = useRef(uuidv4())
+  const tickingRef = useRef(false)
+  const lastPointRef = useRef({ x: 0, y: 0 })
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!containerRef.current) return
+      lastPointRef.current = { x: e.clientX, y: e.clientY }
+      if (tickingRef.current) return
+      tickingRef.current = true
 
-      const rect = containerRef.current.getBoundingClientRect()
-      const x = Math.floor((e.clientX - rect.left) / pixelSize)
-      const y = Math.floor((e.clientY - rect.top) / pixelSize)
+      requestAnimationFrame(() => {
+        tickingRef.current = false
+        if (!containerRef.current) return
 
-      const pixelElement = document.getElementById(
-        `${trailId.current}-pixel-${x}-${y}`
-      )
-      if (pixelElement) {
-        const animatePixel = (pixelElement as any).__animatePixel
-        if (animatePixel) animatePixel()
-      }
+        const rect = containerRef.current.getBoundingClientRect()
+        const { x: clientX, y: clientY } = lastPointRef.current
+        const x = Math.floor((clientX - rect.left) / pixelSize)
+        const y = Math.floor((clientY - rect.top) / pixelSize)
+
+        const pixelElement = document.getElementById(
+          `${trailId.current}-pixel-${x}-${y}`
+        )
+        if (pixelElement) {
+          const animatePixel = (pixelElement as any).__animatePixel
+          if (animatePixel) animatePixel()
+        }
+      })
     },
     [pixelSize]
   )
@@ -93,9 +103,9 @@ const PixelDot: React.FC<PixelDotProps> = React.memo(
     const rafRef = useRef<number | null>(null)
 
     // Mutates the DOM directly (bypassing React state) so the "show" frame is
-    // guaranteed to paint before the fade-out transition starts — with
-    // delay/fadeDuration near 0, two state-driven re-renders can collapse
-    // into a single commit and the browser never registers the opacity flash.
+    // guaranteed to paint before the fade-out transition starts — the
+    // requestAnimationFrame boundary below already puts the opacity:1 write
+    // in an earlier frame than the fade-out, so no forced-reflow is needed.
     const animatePixel = useCallback(() => {
       const node = nodeRef.current
       if (!node) return
@@ -105,7 +115,6 @@ const PixelDot: React.FC<PixelDotProps> = React.memo(
 
       node.style.transition = 'none'
       node.style.opacity = '1'
-      void node.offsetHeight // force reflow so opacity:1 is registered before transitioning away
 
       rafRef.current = requestAnimationFrame(() => {
         node.style.transition = `opacity ${fadeDuration}ms ease`
