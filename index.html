@@ -10,6 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" />
 
+    <!-- Hero background video CDN: open the connection early so the first
+         HLS manifest request doesn't wait for JS to load before it can
+         even start the DNS/TLS handshake -->
+    <link rel="preconnect" href="https://stream.mux.com" crossorigin />
+
     <!-- Primary meta -->
     <title>Athea Digital — Premium Web Design, Johannesburg</title>
     <meta name="description" content="Athea Digital builds premium websites for Johannesburg businesses — salons, trades, restaurants, fitness, tattoo studios and more. See your site before you pay." />

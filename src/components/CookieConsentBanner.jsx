@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const CONSENT_KEY = 'athea_cookie_consent'
@@ -6,14 +6,10 @@ const CONSENT_KEY = 'athea_cookie_consent'
 // TODO: When GA Measurement ID is ready, initialise GA here only if athea_cookie_consent === "accepted"
 
 export default function CookieConsentBanner() {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
+  const [visible, setVisible] = useState(() => {
     const stored = localStorage.getItem(CONSENT_KEY)
-    if (stored !== 'accepted' && stored !== 'rejected') {
-      setVisible(true)
-    }
-  }, [])
+    return stored !== 'accepted' && stored !== 'rejected'
+  })
 
   function handleAccept() {
     localStorage.setItem(CONSENT_KEY, 'accepted')
