@@ -164,9 +164,14 @@ function NicheScrollReveal() {
     const update = () => {
       ticking = false
       if (!sectionRef.current) return
-      const offsetTop     = sectionRef.current.offsetTop
-      const relativeScroll = Math.max(0, window.scrollY - offsetTop + window.innerHeight * 0.1)
-      setAnimationProgress(Math.min(relativeScroll / 350, 1))
+      const offsetTop = sectionRef.current.offsetTop
+      // Reserve only the first 55% of the pinned scroll window for the
+      // burst animation itself — the remaining 45% holds the fully-formed
+      // result on screen (instead of unpinning right as it finishes).
+      const pinnedWindow  = sectionRef.current.offsetHeight - window.innerHeight
+      const animationSpan = Math.max(pinnedWindow * 0.55, 1)
+      const relativeScroll = Math.max(0, window.scrollY - offsetTop)
+      setAnimationProgress(Math.min(relativeScroll / animationSpan, 1))
     }
     const onScroll = () => {
       if (ticking) return
@@ -243,7 +248,7 @@ function NicheScrollReveal() {
     <section
       ref={sectionRef}
       className="hidden md:block"
-      style={{ height: '150vh', position: 'relative', marginBottom: '80px' }}
+      style={{ height: '130vh', position: 'relative', marginBottom: '80px' }}
     >
       {/* Sticky viewport-height panel */}
       <div style={{
