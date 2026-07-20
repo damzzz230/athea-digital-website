@@ -12,6 +12,12 @@ const pageLinks = [
   { label: 'Contact',   to: '/contact' },
 ]
 
+const legalLinks = [
+  { label: 'Privacy Policy', to: '/privacy' },
+  { label: 'Terms & Conditions', to: '/terms' },
+  { label: 'Refund Policy', to: '/refund-policy' },
+]
+
 const nicheItems = [
   'Hair Salons',
   'Restaurants & Cafés',
@@ -230,11 +236,32 @@ function Footer() {
           flexWrap: 'wrap',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '12px',
+          gap: '16px',
         }}>
           <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: 'rgba(154,154,154,0.5)' }}>
             © 2026 Athea Digital. Built in Johannesburg.
           </p>
+
+          <div className="justify-center" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '18px' }}>
+            {legalLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                style={{
+                  fontFamily: 'DM Sans, sans-serif',
+                  fontSize: '0.8rem',
+                  color: 'rgba(154,154,154,0.5)',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#9A9A9A' }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(154,154,154,0.5)' }}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
+
           <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', color: 'rgba(154,154,154,0.3)' }}>
             Designed & developed by Athea Digital
           </p>

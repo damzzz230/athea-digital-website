@@ -9,11 +9,14 @@ import CustomCursor from './components/CustomCursor'
 import CookieConsentBanner from './components/CookieConsentBanner'
 import Home from './pages/Home'
 
-const About     = lazy(() => import('./pages/About'))
-const Services  = lazy(() => import('./pages/Services'))
-const Portfolio = lazy(() => import('./pages/Portfolio'))
-const Pricing   = lazy(() => import('./pages/Pricing'))
-const Contact   = lazy(() => import('./pages/Contact'))
+const About        = lazy(() => import('./pages/About'))
+const Services     = lazy(() => import('./pages/Services'))
+const Portfolio    = lazy(() => import('./pages/Portfolio'))
+const Pricing      = lazy(() => import('./pages/Pricing'))
+const Contact      = lazy(() => import('./pages/Contact'))
+const Privacy      = lazy(() => import('./pages/Privacy'))
+const Terms        = lazy(() => import('./pages/Terms'))
+const RefundPolicy = lazy(() => import('./pages/RefundPolicy'))
 
 const SITE_URL = 'https://athea.digital'
 
@@ -24,6 +27,9 @@ const PAGE_TITLES = {
   '/portfolio': 'Our Work & Portfolio | Athea Digital',
   '/pricing':   'Web Design Pricing & Packages | Athea Digital',
   '/contact':   'Get a Quote | Athea Digital — Johannesburg Web Design',
+  '/privacy':   'Privacy Policy | Athea Digital',
+  '/terms':     'Website Terms & Conditions | Athea Digital',
+  '/refund-policy': 'Refund Policy | Athea Digital',
 }
 
 const PAGE_DESCRIPTIONS = {
@@ -33,6 +39,9 @@ const PAGE_DESCRIPTIONS = {
   '/portfolio': 'View Athea Digital\'s portfolio of premium websites built for Johannesburg local businesses. Real projects, real results.',
   '/pricing':   'Transparent, once-off web design pricing for Johannesburg businesses. Starter from R3,499 — no monthly fees, no hidden costs. You own your site outright.',
   '/contact':   'Get in touch with Athea Digital for a custom website quote. Based in Johannesburg — we respond within a few hours and have a direction ready within 24 hours.',
+  '/privacy':   'How Athea Digital collects, uses, and protects your personal information, in line with POPIA.',
+  '/terms':     'The terms and conditions governing your use of the Athea Digital website.',
+  '/refund-policy': 'How refunds work at each stage of the Athea Digital spec-build process — deposit, balance, and retainer.',
 }
 
 const pageVariants = {
@@ -121,6 +130,9 @@ export default function App() {
               <Route path="/portfolio" element={<PageWrapper><Portfolio /></PageWrapper>} />
               <Route path="/pricing"   element={<PageWrapper><Pricing   /></PageWrapper>} />
               <Route path="/contact"   element={<PageWrapper><Contact   /></PageWrapper>} />
+              <Route path="/privacy"        element={<PageWrapper><Privacy      /></PageWrapper>} />
+              <Route path="/terms"          element={<PageWrapper><Terms        /></PageWrapper>} />
+              <Route path="/refund-policy"  element={<PageWrapper><RefundPolicy /></PageWrapper>} />
             </Routes>
           </AnimatePresence>
         </Suspense>
