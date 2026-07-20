@@ -75,7 +75,7 @@ All sites are custom-built (not drag-and-drop builders like Wix or Squarespace).
 - Contact forms
 - Basic on-page SEO
 - Cloudflare hosting setup
-- Fast delivery (most sites presented within 5 working days)
+- Fast, fixed delivery (full build delivered within a 2–3 week lead time)
 
 **Niche-specific extras include:**
 - Online booking integrations (Hair Salons)
@@ -95,15 +95,15 @@ All packages are **once-off payments** — no monthly platform fees, no hidden c
 |---|---|---|
 | **Starter** | R3,499 once-off | 3-page site — ideal for trades and personal trainers |
 | **Standard** | R4,999 once-off | 5-page site — most popular, includes gallery, animations, contact form, 1 revision round |
-| **Retainer Add-on** | R499–R600/month | Monthly content updates, domain/hosting management, performance monitoring, same-day priority support |
+| **Retainer Add-on** | R499/month | Monthly content updates, domain/hosting management, performance monitoring, same-day priority support |
 
-The retainer is month-to-month with no lock-in. Cancel anytime with 7 days' notice.
+The retainer is month-to-month with no lock-in. Cancel anytime with 1 month's notice.
 
 ---
 
 ## 7. Brand Values
 
-**Speed** — Most sites are built and presented within 5 working days of initial contact. Fast, without cutting corners.
+**Speed** — Every project runs on a fixed 2–3 week lead time from kickoff. Fast, without cutting corners.
 
 **Quality** — Every site is responsive, fast-loading, and built on modern tech. Not a template. Not a builder.
 
@@ -190,7 +190,7 @@ When writing copy, content, or instructions for Athea Digital, always anchor bac
 
 1. **No upfront risk** — clients see the finished site before paying
 2. **Niche expertise** — not a generalist; built specifically for your industry
-3. **Speed** — live in days, not weeks
+3. **Speed** — fixed 2–3 week lead time, no endless back-and-forth
 4. **Ownership** — you own your site outright, no ongoing platform lock-in
 5. **Local** — Johannesburg-based, understands the local market
 

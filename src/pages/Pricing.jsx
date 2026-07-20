@@ -53,7 +53,7 @@ const tiers = [
   },
   {
     name: 'Retainer Add-on',
-    price: 'R499–R600',
+    price: 'R499',
     period: '/month',
     tagline: 'Keep your site fresh and current',
     recommended: false,
@@ -70,7 +70,7 @@ const tiers = [
 const faqs = [
   {
     q: 'How does payment work?',
-    a: 'We design your site first at no cost. Once you approve it, pay 50% to kick off. We deliver the full site within 7 days — balance due on completion.',
+    a: 'We design your site first at no cost. Once you approve it, pay 50% to kick off. We deliver the full site within 2–3 weeks — balance due on completion.',
   },
   {
     q: 'What do I need to provide?',
@@ -78,7 +78,7 @@ const faqs = [
   },
   {
     q: 'Can I cancel the retainer?',
-    a: 'Yes — the retainer is month-to-month with no lock-in. Cancel anytime with 7 days notice. Your site remains yours regardless of whether you keep the retainer.',
+    a: 'Yes — the retainer is month-to-month with no lock-in. Cancel anytime with 1 month\'s notice. Your site remains yours regardless of whether you keep the retainer.',
   },
 ]
 

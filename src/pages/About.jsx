@@ -316,7 +316,7 @@ export default function About() {
               Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
             </p>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
-              <strong style={{ color: '#F0EDE8' }}>We design your site first</strong> — layout, copy, features. Love it? Pay 50% to kick off. Full build delivered in 7 days, balance on completion.
+              <strong style={{ color: '#F0EDE8' }}>We design your site first</strong> — layout, copy, features. Love it? Pay 50% to kick off. Full build delivered in 2–3 weeks, balance on completion.
             </p>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8 }}>
               This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.

@@ -122,7 +122,7 @@ function Footer() {
               lineHeight: 1.6,
               maxWidth: '260px',
             }}>
-              Premium websites for Johannesburg businesses. We design it first. 50% to kick off, full site in 7 days, balance on completion.
+              Premium websites for Johannesburg businesses. We design it first. 50% to kick off, full site in 2–3 weeks, balance on completion.
             </p>
 
             {/* Social icons */}

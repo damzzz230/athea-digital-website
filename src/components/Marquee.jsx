@@ -8,7 +8,7 @@ const ITEMS = [
   '✦',
   'Mobile-First',
   '✦',
-  'Delivered in Days',
+  '2–3 Week Delivery',
   '✦',
   'Custom Code',
   '✦',
@@ -16,7 +16,7 @@ const ITEMS = [
   '✦',
   'Local Business',
   '✦',
-  '50% To Start. Done In 7 Days.',
+  '50% To Start. Done In 2–3 Weeks.',
   '✦',
 ]
 
