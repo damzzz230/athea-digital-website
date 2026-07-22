@@ -160,11 +160,38 @@ function ValueCard({ value, direction, delay }) {
   )
 }
 
+const specSteps = [
+  {
+    title: 'Free concept',
+    body: 'From a short conversation, we design your homepage concept and send it to you on a private preview link — no cost, no obligation.',
+  },
+  {
+    title: 'You decide',
+    body: "Not for you? Walk away and it costs you nothing. Either way, the concept stays Athea's — it's only handed over once you pay to proceed.",
+  },
+  {
+    title: '50% deposit starts the build',
+    body: 'This deposit pays for the build — never for the design you\'ve already seen and approved.',
+  },
+  {
+    title: '2–3 week build',
+    body: 'The clock starts once your deposit clears and we have your content and assets in hand. Delays on your side push the timeline out — that\'s on you, not us.',
+  },
+  {
+    title: 'Review the live preview',
+    body: 'Standard includes one consolidated round of revisions. Starter covers minor text and image fixes — not a full redesign.',
+  },
+  {
+    title: 'Balance on approval',
+    body: 'Pay the remaining 50% and we go live on your domain — the site is yours outright, no lock-in.',
+  },
+]
+
 const values = [
   {
     icon: Zap,
     title: 'Speed',
-    body: 'We move fast without cutting corners. Most sites are built and presented within 5 working days of initial contact.',
+    body: 'We move fast without cutting corners. You see a working concept before any commitment, and get a full build within 2–3 weeks.',
   },
   {
     icon: Shield,
@@ -312,12 +339,42 @@ export default function About() {
             </h2>
           </FadeUp>
           <FadeUp delay={0.1}>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
+            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '28px' }}>
               Most agencies ask you to sign a contract, pay a deposit, and then wait weeks to see anything. We do the opposite.
             </p>
-            <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8, marginBottom: '20px' }}>
-              <strong style={{ color: '#F0EDE8' }}>We design your site first</strong> — layout, copy, features. Love it? Pay 50% to kick off. Full build delivered in 2–3 weeks, balance on completion.
-            </p>
+            <div style={{
+              textAlign: 'left',
+              maxWidth: '560px',
+              margin: '0 auto 28px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+            }}>
+              {specSteps.map((step, i) => (
+                <div key={step.title} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                  <span style={{
+                    flexShrink: 0,
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    background: 'rgba(139,92,246,0.12)',
+                    border: '1px solid rgba(139,92,246,0.4)',
+                    color: '#8B5CF6',
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700,
+                    fontSize: '0.8rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    {i + 1}
+                  </span>
+                  <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.7, margin: 0 }}>
+                    <strong style={{ color: '#F0EDE8' }}>{step.title}</strong> — {step.body}
+                  </p>
+                </div>
+              ))}
+            </div>
             <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', color: '#9A9A9A', lineHeight: 1.8 }}>
               This model works because we're confident in what we produce. It also means we only build sites we believe in — so you never end up with something we're not proud of.
             </p>
