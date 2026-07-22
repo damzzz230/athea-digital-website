@@ -6,6 +6,7 @@ import {
   ArrowRight, Zap, Smartphone, Clock, ChevronRight, ExternalLink
 } from 'lucide-react'
 import { gsap } from '../lib/gsap'
+import { lenisInstance } from '../lib/lenisInstance'
 import Marquee from '../components/Marquee'
 import BackgroundVideo from '../components/BackgroundVideo'
 import { BackgroundCircles } from '../components/ui/background-circles'
@@ -160,27 +161,48 @@ function NicheScrollReveal() {
   const isNearViewport = useInView(sectionRef, { margin: '300px' })
 
   useEffect(() => {
-    let ticking = false
-    const update = () => {
-      ticking = false
-      if (!sectionRef.current) return
-      const offsetTop = sectionRef.current.offsetTop
-      // Reserve only the first 55% of the pinned scroll window for the
-      // burst animation itself — the remaining 45% holds the fully-formed
-      // result on screen (instead of unpinning right as it finishes).
-      const pinnedWindow  = sectionRef.current.offsetHeight - window.innerHeight
-      const animationSpan = Math.max(pinnedWindow * 0.55, 1)
-      const relativeScroll = Math.max(0, window.scrollY - offsetTop)
-      setAnimationProgress(Math.min(relativeScroll / animationSpan, 1))
+    // Time-based: animation always plays for a fixed duration regardless of
+    // scroll speed. Lenis is stopped so the user cannot scroll past while
+    // the burst is still running — they have time to read labels and click.
+    const ANIMATE_MS = 1400  // burst plays out over 1.4 s
+    const HOLD_MS    = 1800  // fully-formed pause before unlocking scroll
+    let hasPlayed    = false
+    let rafId        = null
+    let holdTimeout  = null
+
+    const playSequence = () => {
+      hasPlayed = true
+      lenisInstance.current?.stop()
+      const start = performance.now()
+      const tick = (now) => {
+        const t = Math.min((now - start) / ANIMATE_MS, 1)
+        setAnimationProgress(t)
+        if (t < 1) {
+          rafId = requestAnimationFrame(tick)
+        } else {
+          holdTimeout = setTimeout(() => {
+            lenisInstance.current?.start()
+          }, HOLD_MS)
+        }
+      }
+      rafId = requestAnimationFrame(tick)
     }
+
     const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(update)
+      if (hasPlayed || !sectionRef.current) return
+      // Fire once the section's top edge reaches the viewport top
+      if (sectionRef.current.getBoundingClientRect().top <= 0) {
+        playSequence()
+      }
     }
+
     window.addEventListener('scroll', onScroll, { passive: true })
-    update() // seed on mount in case already scrolled
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId) cancelAnimationFrame(rafId)
+      if (holdTimeout) clearTimeout(holdTimeout)
+      lenisInstance.current?.start()
+    }
   }, [])
 
   const expandRadius   = animationProgress * 220
@@ -244,17 +266,14 @@ function NicheScrollReveal() {
       </div>
     </section>
 
-    {/* Desktop — orbital scroll-pinned reveal */}
+    {/* Desktop — orbital burst, scroll locked by Lenis during animation */}
     <section
       ref={sectionRef}
       className="hidden md:block"
-      style={{ height: '130vh', position: 'relative', marginBottom: '80px' }}
+      style={{ height: '100vh', position: 'relative', overflow: 'hidden', marginBottom: '80px' }}
     >
-      {/* Sticky viewport-height panel */}
       <div style={{
-        position: 'sticky',
-        top: 0,
-        height: '100vh',
+        height: '100%',
         overflow: 'hidden',
       }}>
 

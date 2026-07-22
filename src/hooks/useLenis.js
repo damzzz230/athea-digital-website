@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
 import { gsap, ScrollTrigger } from '../lib/gsap'
+import { lenisInstance } from '../lib/lenisInstance'
 
 /**
  * Initialises Lenis smooth scroll and wires it into GSAP's ticker so
@@ -23,6 +24,7 @@ export function useLenis() {
     })
 
     lenisRef.current = lenis
+    lenisInstance.current = lenis
 
     // Tell GSAP ScrollTrigger to re-check trigger positions on every Lenis tick
     lenis.on('scroll', ScrollTrigger.update)
@@ -36,6 +38,7 @@ export function useLenis() {
       gsap.ticker.remove(onTick)
       lenis.destroy()
       lenisRef.current = null
+      lenisInstance.current = null
     }
   }, [])
 
